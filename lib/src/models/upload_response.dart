@@ -6,25 +6,25 @@ String uploadResponseToJson(UploadResponse data) => json.encode(data.toJson());
 
 class UploadResponse {
     UploadResponse({
-        this.assetId,
-        this.publicId,
-        this.version,
-        this.versionId,
-        this.signature,
-        this.width,
-        this.height,
-        this.format,
-        this.resourceType,
-        this.createdAt,
-        this.bytes,
-        this.type,
-        this.etag,
-        this.placeholder,
-        this.url,
-        this.secureUrl,
-        this.context,
-        this.metadata,
-        this.originalFilename,
+        required this.assetId,
+        required this.publicId,
+        required this.version,
+        required this.versionId,
+        required this.signature,
+        required this.width,
+        required this.height,
+        required this.format,
+        required this.resourceType,
+        required this.createdAt,
+        required this.bytes,
+        required this.type,
+        required this.etag,
+        required this.placeholder,
+        required this.url,
+        required this.secureUrl,
+        required this.context,
+        required this.metadata,
+        required this.originalFilename,
     });
 
     String assetId;
@@ -65,7 +65,7 @@ class UploadResponse {
         url: json["url"],
         secureUrl: json["secure_url"],
         context: Context.fromJson(json["context"]),
-        // metadata: Metadata.fromJson(json["metadata"]),
+        metadata: Metadata.fromJson(json["metadata"]),
         originalFilename: json["original_filename"],
     );
 
@@ -87,7 +87,7 @@ class UploadResponse {
         "url": url,
         "secure_url": secureUrl,
         "context": context.toJson(),
-        // "metadata": metadata.toJson(),
+        "metadata": metadata.toJson(),
         "original_filename": originalFilename,
     };
 }
@@ -104,8 +104,8 @@ class Context {
 
 class Metadata {
     Metadata({
-        this.latitud,
-        this.lng,
+        required this.latitud,
+        required this.lng,
     });
 
     String latitud;

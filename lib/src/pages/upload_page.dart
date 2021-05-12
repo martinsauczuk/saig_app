@@ -41,8 +41,8 @@ class _UploadPageState extends State<UploadPage> {
       builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
         if (snapshot.hasData) {
         // Position position = snapshot.data;
-          double latitude = snapshot.data.latitude;
-          double longitude = snapshot.data.longitude;
+          double latitude = snapshot.data!.latitude;
+          double longitude = snapshot.data!.longitude;
 
           return Column(
             children: <Widget>[

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UploadPage extends StatefulWidget {
   @override
@@ -13,21 +16,43 @@ Future<Position> getPosition() async {
     }
 
 class _UploadPageState extends State<UploadPage> {
+
+
+  final ImagePicker _picker = ImagePicker();
+  PickedFile? _imageFile;
+  dynamic _pickImageError;
+
+
   @override
   Widget build(BuildContext context) {
     
-
     return Scaffold(
         appBar: AppBar(
-          title: Text('Carga de imagenes y coordenadas'),
+          title: Text('Carga de imagen y coordenadas'),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: Icon(Icons.add),
-        ),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 16.0),
+              child: FloatingActionButton(
+                onPressed: () => _onUplodButtonPressed(ImageSource.gallery, context),
+                child: Icon(Icons.photo_library),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 16.0),
+              child: FloatingActionButton(
+                onPressed: () => _onUplodButtonPressed(ImageSource.camera, context),
+                child: Icon(Icons.camera_alt),
+              ),
+            )
+          ],
+        ), 
         body: Column(
           children: <Widget>[
             uploadItem(),
+            _previewImage()
           ],
         ));
   }
@@ -35,7 +60,7 @@ class _UploadPageState extends State<UploadPage> {
   ///
   ///
   ///
-  Widget coordenadasData() {
+  Widget _coordenadasData() {
     return FutureBuilder<Position>(
       future: getPosition(),
       builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
@@ -57,16 +82,37 @@ class _UploadPageState extends State<UploadPage> {
     );
   }
 
+
   ///
   ///
+  ///
+  Widget _previewImage() {
+    // final Text? retrieveError = _getRetrieveErrorWidget();
+    if (_imageFile != null) {
+      
+      return Image.file( 
+        File( _imageFile!.path),
+        fit: BoxFit.cover,
+        height: 400.0,
+      );
+
+    } else {
+      return Container(child: Text('Esperando carga de imagen desde galeria o cámara') );
+    }
+  
+  }
+  
+  
+  ///
+  /// 
   ///
   Widget uploadItem() {
     return Container(
-      color: Colors.green,
+      color: Colors.lightBlue.shade50,
       child: Row(children: <Widget>[
-        FlutterLogo(size: 100),
-        Text('Un icono'),
-        coordenadasData(),
+        Icon(Icons.location_pin),
+        _coordenadasData(),
+        Expanded(child: Container() ),
         IconButton(
           onPressed: () {
               setState(() {
@@ -83,35 +129,28 @@ class _UploadPageState extends State<UploadPage> {
     );
   }
 
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text('Position'),
-  //     ),
-  //     body: Column(
-  //       children: <Widget> [
-  //         DefaultTextStyle(
-  //           style: Theme.of(context).textTheme.headline2,
-  //           child: FutureBuilder<Position> (
-  //             future: getPosition(),
-  //             builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+  ///
+  /// Cargar una imagen desde camara o galeria
+  ///
+  ///
+  void _onUplodButtonPressed(ImageSource source, BuildContext context) async {
+    
+    try {
+      final pickedFile = await _picker.getImage(
+        source: source,
+        // maxWidth: maxWidth,
+        // maxHeight: maxHeight,
+        // imageQuality: quality,
+      );
+      setState(() {
+        _imageFile = pickedFile;
+       });
+    } catch (e) {
+      setState(() {
+         _pickImageError = e;
+      });
+    }
+  }
 
-  //               if (snapshot.hasData) {
 
-  //                 Position position = snapshot.data;
-  //                 double latitude = snapshot.data.latitude;
-  //                 double longitude = snapshot.data.longitude;
-
-  //                 return Text(latitude.toString());
-
-  //               } else {
-  //                 return CircularProgressIndicator();
-  //               }
-  //             },
-  //           ),
-  //         )
-
-  //       ],
-  //     )
-  //   );
-  // }
 }

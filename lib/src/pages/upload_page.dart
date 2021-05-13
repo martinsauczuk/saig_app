@@ -112,7 +112,6 @@ class _UploadPageState extends State<UploadPage> {
       child: Row(children: <Widget>[
         Icon(Icons.location_pin),
         _coordenadasData(),
-        Expanded(child: Container() ),
         IconButton(
           onPressed: () {
               setState(() {
@@ -120,6 +119,15 @@ class _UploadPageState extends State<UploadPage> {
               });
             },
           icon: Icon(Icons.refresh),
+        ),
+        Expanded(child: Container() ),
+        IconButton(
+          onPressed: () {
+              setState(() {
+                _imageFile = null;
+              });
+            },
+          icon: Icon(Icons.delete_forever),
         ),
         IconButton(
           onPressed: () { },

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:saig_app/src/providers/upload_provider.dart';
 
 class UploadPage extends StatefulWidget {
   @override
@@ -21,6 +22,8 @@ class _UploadPageState extends State<UploadPage> {
   final ImagePicker _picker = ImagePicker();
   PickedFile? _imageFile;
   dynamic _pickImageError;
+
+  final _uploadProvider = new UploadProvider();
 
 
   @override
@@ -130,7 +133,11 @@ class _UploadPageState extends State<UploadPage> {
           icon: Icon(Icons.delete_forever),
         ),
         IconButton(
-          onPressed: () { },
+          onPressed: () {
+            setState(() {
+              _uploadProvider.uploadImage(_imageFile!);  
+            });
+          }, 
           icon: Icon(Icons.upload_sharp),
         ),
       ]),

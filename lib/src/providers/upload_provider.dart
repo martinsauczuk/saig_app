@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -17,7 +18,9 @@ class UploadProvider {
   final String _folder = 'postman_uploads';
 
 
-  
+  ///
+  /// Obtener todas las imagenes de Cloudinay
+  ///
   Future<SearchResponse> getAllImages() async {
 
     final Uri uri = Uri.https('$_basePath', '/v1_1/$_cloudName/resources/search', {
@@ -35,22 +38,22 @@ class UploadProvider {
     );
 
     if( response.statusCode == HttpStatus.ok ) {
-      
       return SearchResponse.fromJson( jsonDecode(response.body) );
     } else {
+      print( response.statusCode );
       throw Exception('Failed to load response');
     }
-    // print(response.body);
-    
-
-    // return response;
-
   }
 
   ///
   /// Subir imagen
+  /// Con archivo y coordenadas
   ///
-  Future<String> uploadImage(PickedFile pickedFile) async {
+  Future<String> uploadImage(PickedFile pickedFile, double lat, double lng) async {
+
+    String coord_lat = lat.toString();
+    String coord_lng = lng.toString();
+
 
     final Uri uri = Uri.https('$_basePath', '/v1_1/$_cloudName/image/upload', {
       'upload_preset' : '$_uploadPreset'
@@ -68,6 +71,8 @@ class UploadProvider {
       contentType: MediaType( mimeType[0], mimeType[1] )
     );
     imageUploadRequest.fields['folder'] = 'postman_uploads';
+    imageUploadRequest.fields['metadata'] = 'coord_lat=$coord_lat|coord_lng=$coord_lng';
+    
     imageUploadRequest.files.add(file);
 
     final streamResponse = await imageUploadRequest.send();
@@ -80,9 +85,9 @@ class UploadProvider {
     }
 
     final respData = json.decode(resp.body);
-    print(respData);
+    // print(respData);
 
-    return respData['secure_url'];
+    return respData['public_id'];
     
   }
 

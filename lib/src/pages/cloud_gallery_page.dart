@@ -46,7 +46,7 @@ class _CloudGalleryPageState extends State<CloudGalleryPage> {
               ),
             );
           } else {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
           
         },

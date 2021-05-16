@@ -12,9 +12,7 @@ class _MapaPageState extends State<MapPage> {
 
   Completer<GoogleMapController> _controller = Completer();
   MapType mapType = MapType.normal;
-
-
-
+  
   @override
   Widget build(BuildContext context) {
   

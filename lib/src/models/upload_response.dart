@@ -69,6 +69,8 @@ class UploadResponse {
         originalFilename: json["original_filename"],
     );
 
+    
+
     Map<String, dynamic> toJson() => {
         "asset_id": assetId,
         "public_id": publicId,

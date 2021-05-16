@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:saig_app/src/providers/upload_provider.dart';
+import 'package:saig_app/src/widgets/menu_widget.dart';
 
 class UploadPage extends StatefulWidget {
   @override
@@ -33,6 +34,7 @@ class _UploadPageState extends State<UploadPage> {
         appBar: AppBar(
           title: Text('Carga de imagen y coordenadas'),
         ),
+        drawer: MenuWidget(),
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[

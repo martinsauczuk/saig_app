@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:saig_app/src/widgets/menu_widget.dart';
 
 class HomePage extends StatelessWidget {
 
@@ -9,6 +10,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Subida de imagenes'),
       ),
+      drawer: MenuWidget(),
       body: Container(
         child: Center(
           child: Text('subiendo'),

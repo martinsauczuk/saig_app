@@ -172,7 +172,7 @@ class _UploadPageState extends State<UploadPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget> [
               Text('Subiendo imagen con coordenadas a Cloudinary'),
-              Icon(Icons.sync, size: 60.0)
+              CircularProgressIndicator()
             ]
           ),
         );

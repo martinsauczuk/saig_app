@@ -9,40 +9,59 @@ class MenuWidget extends StatelessWidget {
         padding: EdgeInsets.zero,
           children: <Widget> [
           DrawerHeader(
+            child: Container(
+              child: Column(
+                children: [
+                  Image.asset('assets/plantapp-logo.png', height: 100, width: 100),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Plant',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w400
+                      ),
+                      children: <TextSpan> [
+                        TextSpan(
+                          text: 'App',
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w800
+                          )
+                        )  
+                      ],
+                    )
+                  ),
+                ],
+            )), 
             decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text(
-              'SAIG App',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.teal,
+                  Colors.tealAccent
+                ] 
+              )
             ),
           ),
-          
+          // Image.asset('assets/icon/icon.png'),
           ListTile(
-            leading: Icon(Icons.sync, color: Colors.pink),
+            leading: Icon(Icons.sync, color: Colors.cyan),
             title: Text('Carga de imágenes'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, 'upload');
-            },
+            onTap: () => Navigator.pushReplacementNamed(context, 'upload')
           ),
-          
           ListTile(
-            leading: Icon(Icons.cloud, color: Colors.pink),
+            leading: Icon(Icons.cloud, color: Colors.cyan),
             title: Text('Contenido de la nube'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, 'cloud');
-            },
+            onTap: () => Navigator.pushReplacementNamed(context, 'cloud')
           ),
-          
-          // ListTile(
-          //   leading: Icon(Icons.settings, color: Colors.blue),
-          //   title: Text('Settings'),
-          //   onTap: () => Navigator.pushReplacementNamed(context, SettingsPage.routeName),
-          // ),
-
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16),
+            //   child: Divider(),
+            // ),
+          ListTile(
+            leading: Icon(Icons.info_outlined, color: Colors.cyan),
+            title: Text('Información'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'info')
+          ),
         ],
       )
     );

@@ -12,7 +12,7 @@ class InfoPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text('Esta aplicación forma parte del plan de trabajo dentro del convenio de Investigación y desarrollo entre la Universidad Nacional de Quilmes y la Facultad de Agronomía de la Universidad de Buenos Aires'),
+          Text('Esta aplicación forma parte del plan de trabajo del convenio de investigación y desarrollo entre la Universidad Nacional de Quilmes y la Facultad de Agronomía de la Universidad de Buenos Aires.'),
           Divider(),
           Image(image: AssetImage('assets/unq-logo.png')),
           Image(image: AssetImage('assets/fauba-logo.png')),

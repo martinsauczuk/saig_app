@@ -189,8 +189,9 @@ class _UploadPageState extends State<UploadPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget> [
-              Text('Subiendo imagen con coordenadas a Cloudinary'),
-              CircularProgressIndicator()
+              Text('Subiendo imagen a la nube, este proceso puede tardar varios minutos dependiendo de su conexión.'),
+              Divider(),
+              LinearProgressIndicator()
             ]
           ),
         );

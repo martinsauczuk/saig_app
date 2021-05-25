@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:saig_app/src/providers/cloudinary_provider.dart';
+import 'package:saig_app/src/widgets/loading_alert_dialog.dart';
 import 'package:saig_app/src/widgets/menu_widget.dart';
 
 class UploadPage extends StatefulWidget {
@@ -152,7 +153,7 @@ class _UploadPageState extends State<UploadPage> {
           TextField(
             decoration: InputDecoration(
               icon: Icon(Icons.description),
-              labelText: 'Ingrese una descripción para la imagen',
+              labelText: 'Descripción para la imagen (opcional)',
             ),
             onChanged: (value) {
               print(value);
@@ -182,40 +183,34 @@ class _UploadPageState extends State<UploadPage> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog (
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text('Cargando'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget> [
-              Text('Subiendo imagen a la nube, este proceso puede tardar varios minutos dependiendo de su conexión.'),
-              Divider(),
-              LinearProgressIndicator()
-            ]
-          ),
-        );
-      },
+      builder: (_) => LoadingAlertDialog(),
     );
 
     _uploadProvider.uploadImage(_imageFile!, _lat, _lng, _descripcion)
       .then( (id) {
-          print('ok url >' + id);
-          this._imageFile = null;
-          // Navigator.pop(context);
-          // Navigator.pushNamed(context, 'cloud');
-          Navigator.pushReplacementNamed(context, 'cloud');
-          final snackBar = SnackBar(content: Text('Imagen $id subida ok'));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-      )
-      .onError( (error, stackTrace) {
+        print('ok url >' + id);
+        Navigator.pop(context);
+        _clean();
+        final snackBar = SnackBar(content: Text('Imagen $id subida ok'), duration: Duration(milliseconds: 5000),);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }).onError( (error, stackTrace) {
         print(error);
         Navigator.pop(context);
         final snackBar = SnackBar(content: Text('Error al subir imagen'), backgroundColor: Colors.red,);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       });
 
+  }
+
+
+  ///
+  /// Limpiar imagen y descripcion
+  ///
+  void _clean() {
+    setState(() {
+      this._imageFile = null;
+      this._descripcion = '';
+    });
   }
 
 

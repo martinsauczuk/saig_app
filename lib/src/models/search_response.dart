@@ -80,9 +80,9 @@ class Resource {
     dynamic uploadedBy;
 
 
-    String getUrlThumb() {
-      return 'https://res.cloudinary.com/dmhk3tifm/image/upload/c_thumb,w_200,g_face/$publicId.$format';
-    }
+    // String getUrlThumb() {
+    //   return 'https://res.cloudinary.com/dmhk3tifm/image/upload/c_thumb,w_200,g_face/$publicId.$format';
+    // }
 
 
     factory Resource.fromJson(Map<String, dynamic> json) => Resource(
@@ -119,18 +119,22 @@ class CloudinaryMetadata {
     CloudinaryMetadata({
         required this.coordLat,
         required this.coordLng,
+        required this.descripcion
     });
 
     String coordLat;
     String coordLng;
+    String descripcion;
 
     factory CloudinaryMetadata.fromJson(Map<String, dynamic> json) => CloudinaryMetadata(
         coordLat: json["coord_lat"],
         coordLng: json["coord_lng"],
+        descripcion: json["desc"]
     );
 
     Map<String, dynamic> toJson() => {
         "coord_lat": coordLat,
         "coord_lng": coordLng,
+        "descripcion": descripcion
     };
 }

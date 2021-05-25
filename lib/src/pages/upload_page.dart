@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:saig_app/src/providers/upload_provider.dart';
+import 'package:saig_app/src/providers/cloudinary_provider.dart';
 import 'package:saig_app/src/widgets/menu_widget.dart';
 
 class UploadPage extends StatefulWidget {
@@ -20,14 +20,16 @@ Future<Position> getPosition() async {
 
 class _UploadPageState extends State<UploadPage> {
 
+  // final _formKey = GlobalKey<FormState>();
+
   final ImagePicker _picker = ImagePicker();
   PickedFile? _imageFile;
   dynamic _pickImageError;
   double _lat = 0;
   double _lng = 0;
 
-  final _uploadProvider = new UploadProvider();
-
+  final _uploadProvider = new CloudinaryProvider();
+  String _descripcion = '';
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class _UploadPageState extends State<UploadPage> {
   Widget _coordenadasDisplay() {
 
     return Container(
-      color: Colors.blueGrey.shade50,
+      // color: Colors.blueGrey.shade50,
       child: Row(
         children: <Widget>[
           Icon(Icons.location_pin),
@@ -98,7 +100,7 @@ class _UploadPageState extends State<UploadPage> {
 
     if( _imageFile == null ) {
       return Container(
-        color: Colors.amber,
+        // color: Colors.amber,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -116,7 +118,7 @@ class _UploadPageState extends State<UploadPage> {
     }
 
     return Container(
-      color: Colors.amber,
+      // color: Colors.amber,
       child: Image.file( 
         File( _imageFile!.path),
         fit: BoxFit.cover,
@@ -128,37 +130,53 @@ class _UploadPageState extends State<UploadPage> {
   
   ///
   /// Cuadro de upload con imagen y coordenadas
+  /// Widget principal
   ///
   Widget _uploadItem(BuildContext context) {
     return Container(
-      color: Colors.teal.shade100,
-      child: Column(children: <Widget>[
-        _coordenadasDisplay(),
-        Expanded(child: _previewImage() ),
-        IconButton(
-          onPressed: _imageFile == null 
-            ? null 
-            : ( ) {
+      // color: Colors.teal.shade100,
+      child: Column(
+        children: <Widget> [
+          _coordenadasDisplay(),
+          Expanded(child: _previewImage() ),
+          IconButton(
+            onPressed: _imageFile == null 
+              ? null 
+              : ( ) {
+                setState(() {
+                  _imageFile = null;
+                });
+              },
+            icon: Icon(Icons.delete_forever),
+          ),
+          TextField(
+            decoration: InputDecoration(
+              icon: Icon(Icons.description),
+              labelText: 'Ingrese una descripción para la imagen',
+            ),
+            onChanged: (value) {
+              print(value);
+              this._descripcion = value;
               setState(() {
-                _imageFile = null;
+                //
               });
-            },
-          icon: Icon(Icons.delete_forever),
-        ),
-        IconButton(
-          icon: Icon(Icons.upload_sharp),
-          onPressed: _imageFile == null
-            ? null
-            : () => _uploadImage() 
-        ),
-      ])
+            }
+          ),
+          IconButton(
+            icon: Icon(Icons.upload_sharp),
+            onPressed: _imageFile == null
+              ? null
+              : () => _onPressUpload()
+          ),
+        ]
+      )
     );
   }
 
   ///
   /// Subir imagen
   ///
-  void _uploadImage() {
+  void _onPressUpload() {
     print('subiendo...');
 
     showDialog(
@@ -171,28 +189,32 @@ class _UploadPageState extends State<UploadPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget> [
-              Text('Subiendo imagen con coordenadas a Cloudinary'),
-              CircularProgressIndicator()
+              Text('Subiendo imagen a la nube, este proceso puede tardar varios minutos dependiendo de su conexión.'),
+              Divider(),
+              LinearProgressIndicator()
             ]
           ),
         );
       },
     );
 
-    _uploadProvider.uploadImage(_imageFile!, _lat, _lng)
-      
-      .then(
-        (id) {
+    _uploadProvider.uploadImage(_imageFile!, _lat, _lng, _descripcion)
+      .then( (id) {
           print('ok url >' + id);
           this._imageFile = null;
-          Navigator.pop(context);
-          setState(() {
-            
-          });
+          // Navigator.pop(context);
+          // Navigator.pushNamed(context, 'cloud');
+          Navigator.pushReplacementNamed(context, 'cloud');
           final snackBar = SnackBar(content: Text('Imagen $id subida ok'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
-      );
+      )
+      .onError( (error, stackTrace) {
+        print(error);
+        Navigator.pop(context);
+        final snackBar = SnackBar(content: Text('Error al subir imagen'), backgroundColor: Colors.red,);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      });
 
   }
 

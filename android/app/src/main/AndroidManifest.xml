@@ -6,10 +6,10 @@
    <uses-permission android:name="android.permission.INTERNET"/>
 
    <application
-        android:label="SAIG App"
+        android:label="PlantApp"
         android:icon="@mipmap/launcher_icon">
-        <meta-data android:name="com.google.android.geo.API_KEY"
-                   android:value="AIzaSyCpXazbB6k-TZgijVAAs3aGbITBdZrrpU4"/>
+        <!-- <meta-data android:name="com.google.android.geo.API_KEY"
+                   android:value="AIzaSyCpXazbB6k-TZgijVAAs3aGbITBdZrrpU4"/> -->
         
 
         <activity

@@ -49,7 +49,7 @@ class _UploadPageState extends State<UploadPage> {
   ///
   /// Cuadro con las coordenadas
   ///
-  Widget _coordenadasDisplay() {
+  Widget _buildCoordenadasDisplay() {
 
     return Container(
       // color: Colors.blueGrey.shade50,
@@ -138,7 +138,7 @@ class _UploadPageState extends State<UploadPage> {
       // color: Colors.teal.shade100,
       child: Column(
         children: <Widget> [
-          _coordenadasDisplay(),
+          _buildCoordenadasDisplay(),
           Expanded(child: _previewImage() ),
           IconButton(
             onPressed: _imageFile == null 

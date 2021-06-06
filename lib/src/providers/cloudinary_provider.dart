@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:saig_app/src/models/search_response.dart';
+import 'package:saig_app/src/models/upload_item_model.dart';
 
 
 class CloudinaryProvider {
@@ -23,7 +24,7 @@ class CloudinaryProvider {
   // final String _apiSecret = 'hKS6oO8RmkQbduJgXq-5xWouDlY';
   final String _apiSecret = 'QICgLfzwYPkvnMy2Xk2PH4SdgHM';
     
-  // final String _folder = 'postman_uploads';
+  // final String _folder = 'Simulation';
   final String _folder = 'AndroidAppV1';
 
 
@@ -54,11 +55,23 @@ class CloudinaryProvider {
     }
   }
 
+
+  /// 
+  /// TODO: Refactorizar 
+  /// Procesar y subir archivo y metadata
   ///
+  Future<String> uploadItem(UploadItemModel item) {
+    
+    return uploadImage(item.pickedFile, item.lat, item.lng, item.descripcion);
+
+  }
+
+  /// 
+  /// TODO: Refactorizar
   /// Subir imagen
   /// Con archivo y coordenadas
   ///
-  Future<String> uploadImage(PickedFile pickedFile, double lat, double lng, String descripcion) async {
+  Future<String> uploadImage(PickedFile? pickedFile, double lat, double lng, String descripcion) async {
 
     String coord_lat = lat.toString();
     String coord_lng = lng.toString();
@@ -72,7 +85,7 @@ class CloudinaryProvider {
       'upload_preset' : '$_uploadPreset'
     });
 
-    final imagen = File(pickedFile.path);
+    final imagen = File(pickedFile!.path);
 
     final mimeType = mime(imagen.path)!.split('/');
 
@@ -83,7 +96,6 @@ class CloudinaryProvider {
       imagen.path, 
       contentType: MediaType( mimeType[0], mimeType[1] )
     );
-    imageUploadRequest.fields['folder'] = 'postman_uploads';
     imageUploadRequest.fields['metadata'] = 'coord_lat=$coord_lat|coord_lng=$coord_lng|desc=$descripcion';
     
     imageUploadRequest.files.add(file);
@@ -102,7 +114,10 @@ class CloudinaryProvider {
     final respData = json.decode(resp.body);
     // print(respData);
 
-    return respData['public_id'];
+    print('upload ok');
+    final publicId = respData['public_id'];
+
+    return publicId;
     
   }
 

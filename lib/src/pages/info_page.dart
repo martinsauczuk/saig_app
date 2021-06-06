@@ -19,7 +19,7 @@ class InfoPage extends StatelessWidget {
           Divider(),
           Text('Desarrollada por Martin Sauczuk', style: Theme.of(context).textTheme.subtitle1 ),
           Text('martin.sauczuk@gmail.com', style: Theme.of(context).textTheme.subtitle2 ),
-          Text('v1.1.0', style: Theme.of(context).textTheme.button),
+          Text('v1.2.0', style: Theme.of(context).textTheme.button),
         ]
       )
     );

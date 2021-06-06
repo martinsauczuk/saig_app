@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
-
-
-///
-/// Estado de subida
-///
-enum UploadStatus{
-  pending,
-  uploading,
-  error,
-  done,
-}
+import 'package:saig_app/src/enums/upload_status.dart';
 
 
 class UploadButton extends StatelessWidget {
@@ -17,92 +7,66 @@ class UploadButton extends StatelessWidget {
   UploadButton({
     Key? key,
     required this.uploadStatus,
-    required this.onUpload,
+    required this.onPending,
     this.transitionDuration = const Duration(milliseconds: 500),
   }) : super(key: key);
 
   final UploadStatus uploadStatus;
   final Duration transitionDuration;
-  final VoidCallback onUpload;
+  final VoidCallback onPending;
 
+  // bool get _isPending => uploadStatus == UploadStatus.pending;
   bool get _isUploading => uploadStatus == UploadStatus.uploading;
-
-  bool get _isDone => uploadStatus == UploadStatus.done;
+  // bool get _isError => uploadStatus == UploadStatus.error;
+  // bool get _isDone => uploadStatus == UploadStatus.done;
 
   @override
   Widget build(BuildContext context) {
-    
-    return IconButton(
-      onPressed: onUpload,
-      icon: _buildIcon(),
-    );
-     
+    return Stack(children: [
+      _buildUploadingProgress(),
+      AnimatedContainer(
+        duration: Duration(milliseconds: 2000),
+        curve: Curves.ease,
+        width: double.infinity,
+        child: _buildIconButton(),
+      ),
+    ]);
   }
 
-  Widget _buildIcon() {
+  Widget _buildIconButton() {
     switch (uploadStatus) {
       case UploadStatus.pending:
-        return Icon(Icons.pending);
+        return IconButton(
+          onPressed: onPending,
+          icon: Icon(Icons.upload)
+        );
       case UploadStatus.uploading:
-        return Icon(Icons.arrow_circle_up_outlined);
+        return Container();
       case UploadStatus.done:
-        return Icon(Icons.done);
+        return IconButton(onPressed: null, icon: Icon(Icons.done, color: Colors.green));
       case UploadStatus.error:
-        return Icon(Icons.error);
+        return IconButton(onPressed: null, icon: Icon(Icons.error));
     }
   }
+
+  _buildUploadingProgress() {
+    return Positioned.fill(
+      child: AnimatedOpacity(
+        duration: Duration(milliseconds: 1000),
+        opacity: _isUploading ? 1.0 : 0.0,
+        curve: Curves.ease,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            CircularProgressIndicator(
+              backgroundColor: Colors.white.withOpacity(0.0),
+              valueColor: AlwaysStoppedAnimation(Colors.lightBlue),
+              strokeWidth: 2.0,
+              value: null,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
-  ///
-  // Widget _buildButtonShape({
-  //   required Widget child,
-  // }) {
-  //   return AnimatedContainer(
-  //     duration: widget.transitionDuration,
-  //     curve: Curves.ease,
-  //     width: double.infinity,
-  //     decoration: ShapeDecoration(
-  //       shape: const CircleBorder(),
-  //       color: Colors.lightBlueAccent,
-  //     ),
-  //     child: child,
-  //   );
-  // }
-
-
-//   _buildUploadingProgress() {
-    
-//     return Positioned.fill(
-//      child: AnimatedOpacity(
-//        duration: widget.transitionDuration,
-//        opacity: 1.0,
-//       //  opacity: _isDownloading || _isFetching ? 1.0 : 0.0,
-//        curve: Curves.ease,
-//        child: Stack(
-//          alignment: Alignment.center,
-//          children: [
-//             _buildProgressIndicator(),
-//             const Icon(
-//                Icons.stop,
-//                size: 14.0,
-//                color: Colors.lightBlueAccent,
-//              ),
-//          ],
-//        ),
-//      ),
-//     );
-//   }
-
-
-//   Widget _buildProgressIndicator() {
-//    return AspectRatio(
-//      aspectRatio: 1.0,
-//      child: CircularProgressIndicator(
-//        backgroundColor: Colors.white.withOpacity(0.0),
-//        valueColor: AlwaysStoppedAnimation(
-//          Colors.lightBlue
-//        ),
-//        strokeWidth: 2.0,
-//        value: null,
-//      ),
-//    );
-//  }

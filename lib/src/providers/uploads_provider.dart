@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:saig_app/src/enums/upload_status.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
 import 'package:saig_app/src/providers/cloudinary_provider.dart';
+import 'package:saig_app/src/providers/db_provider.dart';
 
 class UploadsProvider extends ChangeNotifier {
+  
   List<UploadItemModel> _items = [];
 
-  List<UploadItemModel> getItems() {
+  Future<List<UploadItemModel>> getItems() async {
+
+    final items = await DBProvider.db.getAll();
+
+    _items = items;
+
     return _items;
   }
 
@@ -18,20 +25,38 @@ class UploadsProvider extends ChangeNotifier {
   void upload(UploadItemModel item) async {
     print(item);
     item.status = UploadStatus.uploading;
-    notifyListeners();
+    updateItem(item);
+    // notifyListeners();
     _cloudinaryProvider.uploadItem(item).then((value) {
       item.publicId = value;
       item.status = UploadStatus.done;
-      notifyListeners();
+      // notifyListeners();
+      updateItem(item);
     });
   }
 
   ///
   /// Agregar nuevo item a la lista
   ///
-  void addItem(UploadItemModel item) {
+  void addItem(UploadItemModel item) async {
     print('add $item');
-    _items.add(item);
+
+    await DBProvider.db.insertItem(item);
+
+    // _items.add(item);
     notifyListeners();
   }
+
+
+  void updateItem(UploadItemModel item) async {
+    print('add $item');
+
+    await DBProvider.db.updateItem(item);
+
+    // _items.add(item);
+    notifyListeners();
+  }
+
+
+
 }

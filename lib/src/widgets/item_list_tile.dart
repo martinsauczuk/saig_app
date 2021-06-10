@@ -20,17 +20,17 @@ class ItemListTile extends StatelessWidget {
     
     return ListTile(
       leading: Image.file(
-        File(item.pickedFile!.path),
+        File(item.path!),
         fit: BoxFit.cover,
         // height: 20.0,
       ),
-      title: Text(item.descripcion),
+      title: Text(item.descripcion!),
       subtitle: _buildSubtitle(),
       isThreeLine: true,
       trailing: SizedBox(
         width: 96.0,
         child: UploadButton(
-          uploadStatus: item.status,
+          uploadStatus: item.status!,
           onPending: onPress,
         ),
       ),
@@ -40,15 +40,15 @@ class ItemListTile extends StatelessWidget {
 
   Widget _buildSubtitle() {
 
-    switch (item.status) {
+    switch (item.status!) {
       case UploadStatus.pending:
-        return Text('Subida pendiente');
+        return Text('Subida pendiente - ${item.path}');
       case UploadStatus.uploading:
         return Text('Subiendo a la nube...');
       case UploadStatus.error:
         return Text('Error al subir');
       case UploadStatus.done:
-        return Text('${item.publicId}');
+        return Text('${item.publicId} - ${item.path}');
     }
 
   }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:saig_app/src/models/search_response.dart';
@@ -12,20 +11,20 @@ class CloudinaryProvider {
 
   final String _basePath = 'api.cloudinary.com';
 
-  // final String _cloudName = 'dmhk3tifm';
-  final String _cloudName = 'saig';
+  final String _cloudName = 'dmhk3tifm';
+  // final String _cloudName = 'saig';
   
-  // final String _uploadPreset = 'sebpnwqa';
-  final String _uploadPreset = 'fwaycgn1';
+  final String _uploadPreset = 'sebpnwqa';
+  // final String _uploadPreset = 'fwaycgn1';
 
-  // final String _apiKey = '796339495941157';
-  final String _apiKey = '618569586983735';
+  final String _apiKey = '796339495941157';
+  // final String _apiKey = '618569586983735';
 
-  // final String _apiSecret = 'hKS6oO8RmkQbduJgXq-5xWouDlY';
-  final String _apiSecret = 'QICgLfzwYPkvnMy2Xk2PH4SdgHM';
+  final String _apiSecret = 'hKS6oO8RmkQbduJgXq-5xWouDlY';
+  // final String _apiSecret = 'QICgLfzwYPkvnMy2Xk2PH4SdgHM';
     
-  // final String _folder = 'Simulation';
-  final String _folder = 'AndroidAppV1';
+  final String _folder = 'develop';
+  // final String _folder = 'AndroidAppV1';
 
 
   ///
@@ -62,7 +61,8 @@ class CloudinaryProvider {
   ///
   Future<String> uploadItem(UploadItemModel item) {
     
-    return uploadImage(item.pickedFile, item.lat, item.lng, item.descripcion);
+
+    return uploadImage(item.path!, item.lat!, item.lng!, item.descripcion!);
 
   }
 
@@ -71,7 +71,7 @@ class CloudinaryProvider {
   /// Subir imagen
   /// Con archivo y coordenadas
   ///
-  Future<String> uploadImage(PickedFile? pickedFile, double lat, double lng, String descripcion) async {
+  Future<String> uploadImage(String path, double lat, double lng, String descripcion) async {
 
     String coord_lat = lat.toString();
     String coord_lng = lng.toString();
@@ -85,7 +85,7 @@ class CloudinaryProvider {
       'upload_preset' : '$_uploadPreset'
     });
 
-    final imagen = File(pickedFile!.path);
+    final imagen = File(path);
 
     final mimeType = mime(imagen.path)!.split('/');
 
@@ -126,7 +126,7 @@ class CloudinaryProvider {
   ///
   String getThumbUrl(Resource resource) {
 
-    return 'https://res.cloudinary.com/$_cloudName/image/upload/c_thumb,w_200,g_face/${resource.publicId}.${resource.format}';
+    return 'https://res.cloudinary.com/$_cloudName/image/upload/c_thumb,w_200/${resource.publicId}.${resource.format}';
 
   }
 

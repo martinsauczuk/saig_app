@@ -21,7 +21,7 @@ class UploadItemModel {
   double? lng; 
   String? descripcion = 'sin descripcion';
   UploadStatus? status = UploadStatus.pending;
-  String? publicId;
+  String? publicId = '';
 
   @override
   String toString() {
@@ -34,6 +34,7 @@ class UploadItemModel {
     lng         =  map['lng']         as double;
     descripcion =  map['descripcion'] as String;
     path        =  map['path']        as String;
+    publicId    =  map['public_id']   as String;
     status      =  UploadStatus.values[ map['status'] as int ]; 
   }
 
@@ -42,11 +43,13 @@ class UploadItemModel {
   /// Convertir a map para usar en base de datos
   ///
   Map<String, Object?> toMap() => {
+    'id'          : id,
     'lat'         : lat,
     'lng'         : lng,
     'descripcion' : descripcion,
     'status'      : status!.index,
-    'path'        : path
+    'path'        : path,
+    'public_id'   : publicId!,
   };
   
 

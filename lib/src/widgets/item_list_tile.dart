@@ -24,7 +24,7 @@ class ItemListTile extends StatelessWidget {
         fit: BoxFit.cover,
         // height: 20.0,
       ),
-      title: Text(item.descripcion!),
+      title: Text('${item.id.toString()} - ${item.descripcion!}'),
       subtitle: _buildSubtitle(),
       isThreeLine: true,
       trailing: SizedBox(
@@ -46,7 +46,7 @@ class ItemListTile extends StatelessWidget {
       case UploadStatus.uploading:
         return Text('Subiendo a la nube...');
       case UploadStatus.error:
-        return Text('Error al subir');
+        return Text('Error al subir - puede reintentar', style: TextStyle(color: Colors.red),);
       case UploadStatus.done:
         return Text('${item.publicId} - ${item.path}');
     }

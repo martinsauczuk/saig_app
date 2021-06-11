@@ -41,10 +41,10 @@ class _UploadPageState extends State<UploadPage> {
               itemBuilder: (context, index) {
                 final item = items[index];
                 return ItemListTile(
-                    item: item,
-                    onPress: () {
-                      uploadsProvider.upload(item);
-                    });
+                  item: item,
+                  onPress: () {
+                    uploadsProvider.upload(item);
+                  });
               },
             );
           }

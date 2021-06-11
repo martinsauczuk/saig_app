@@ -30,8 +30,11 @@ class UploadsProvider extends ChangeNotifier {
     _cloudinaryProvider.uploadItem(item).then((value) {
       item.publicId = value;
       item.status = UploadStatus.done;
-      // notifyListeners();
       updateItem(item);
+    }).onError((error, stackTrace) {
+      item.status = UploadStatus.error;
+      updateItem(item);
+      print(error);
     });
   }
 

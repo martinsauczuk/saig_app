@@ -45,7 +45,10 @@ class UploadButton extends StatelessWidget {
       case UploadStatus.done:
         return IconButton(onPressed: null, icon: Icon(Icons.done, color: Colors.green));
       case UploadStatus.error:
-        return IconButton(onPressed: null, icon: Icon(Icons.error));
+        return IconButton(
+          onPressed: onPending,
+          icon: Icon(Icons.replay)
+        );
     }
   }
 

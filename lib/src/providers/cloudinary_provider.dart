@@ -11,20 +11,20 @@ class CloudinaryProvider {
 
   final String _basePath = 'api.cloudinary.com';
 
-  final String _cloudName = 'dmhk3tifm';
-  // final String _cloudName = 'saig';
+  // final String _cloudName = 'dmhk3tifm';
+  final String _cloudName = 'saig';
   
-  final String _uploadPreset = 'sebpnwqa';
-  // final String _uploadPreset = 'fwaycgn1';
+  // final String _uploadPreset = 'sebpnwqa';
+  final String _uploadPreset = 'fwaycgn1';
 
-  final String _apiKey = '796339495941157';
-  // final String _apiKey = '618569586983735';
+  // final String _apiKey = '796339495941157';
+  final String _apiKey = '618569586983735';
 
-  final String _apiSecret = 'hKS6oO8RmkQbduJgXq-5xWouDlY';
-  // final String _apiSecret = 'QICgLfzwYPkvnMy2Xk2PH4SdgHM';
+  // final String _apiSecret = 'hKS6oO8RmkQbduJgXq-5xWouDlY';
+  final String _apiSecret = 'QICgLfzwYPkvnMy2Xk2PH4SdgHM';
     
-  final String _folder = 'develop';
-  // final String _folder = 'AndroidAppV1';
+  // final String _folder = 'develop';
+  final String _folder = 'AndroidAppV1';
 
 
   ///

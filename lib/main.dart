@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:saig_app/src/pages/cloud_gallery_page.dart';
 import 'package:saig_app/src/pages/info_page.dart';
@@ -6,7 +7,10 @@ import 'package:saig_app/src/pages/precarga_page.dart';
 import 'package:saig_app/src/pages/upload_page.dart';
 import 'package:saig_app/src/providers/uploads_provider.dart';
 
-void main() {
+void main() async {
+
+  await dotenv.load(fileName: ".env");
+
   runApp(
     MultiProvider(
       providers: [

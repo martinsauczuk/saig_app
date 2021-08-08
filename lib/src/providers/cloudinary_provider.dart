@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime_type/mime_type.dart';
 import 'package:http_parser/http_parser.dart';
@@ -9,23 +10,13 @@ import 'package:saig_app/src/models/upload_item_model.dart';
 
 class CloudinaryProvider {
 
-  final String _basePath = 'api.cloudinary.com';
-
-  // final String _cloudName = 'dmhk3tifm';
-  final String _cloudName = 'saig';
-  
-  // final String _uploadPreset = 'sebpnwqa';
-  final String _uploadPreset = 'fwaycgn1';
-
-  // final String _apiKey = '796339495941157';
-  final String _apiKey = '618569586983735';
-
-  // final String _apiSecret = 'hKS6oO8RmkQbduJgXq-5xWouDlY';
-  final String _apiSecret = 'QICgLfzwYPkvnMy2Xk2PH4SdgHM';
-    
-  // final String _folder = 'develop';
-  final String _folder = 'AndroidAppV1';
-
+  // Constantes para el servicio
+  final String _basePath      = dotenv.env['BASE_PATH'].toString();
+  final String _cloudName     = dotenv.env['CLOUD_NAME'].toString();
+  final String _uploadPreset  = dotenv.env['UPLOAD_PRESET'].toString();
+  final String _apiKey        = dotenv.env['API_KEY'].toString();
+  final String _apiSecret     = dotenv.env['API_SECRET'].toString();
+  final String _folder        = dotenv.env['FOLDER'].toString();
 
   ///
   /// Obtener todas las imagenes de Cloudinay

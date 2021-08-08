@@ -27,6 +27,7 @@ class _UploadPageState extends State<UploadPage> {
         builder: (BuildContext context, AsyncSnapshot<List<UploadItemModel>> snapshot) {
           
           if (snapshot.hasData) {
+            
             final items = snapshot.data;
 
             if ( items!.isEmpty ) {

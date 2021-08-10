@@ -12,19 +12,24 @@ class UploadPage extends StatefulWidget {
 }
 
 class _UploadPageState extends State<UploadPage> {
+  
+  
   @override
   Widget build(BuildContext context) {
+    
     final UploadsProvider uploadsProvider = context.watch<UploadsProvider>();
+    // uploadsProvider.init();
+
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Carga de imagen y coordenadas'),
       ),
       drawer: MenuWidget(),
-      body: FutureBuilder<List<UploadItemModel>>(
+      body: FutureBuilder<List<UploadItemModel>?>(
         future: uploadsProvider.getItems(),
-        initialData: [],
-        builder: (BuildContext context, AsyncSnapshot<List<UploadItemModel>> snapshot) {
+        // initialData: [],
+        builder: (BuildContext context, AsyncSnapshot<List<UploadItemModel>?> snapshot) {
           
           if (snapshot.hasData) {
             
@@ -55,8 +60,10 @@ class _UploadPageState extends State<UploadPage> {
               child: Text(snapshot.error.toString()),
             );
           }
-
-          return CircularProgressIndicator();
+          
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

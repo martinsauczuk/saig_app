@@ -26,6 +26,7 @@ class _PrecargaPageState extends State<PrecargaPage> {
 
   dynamic _pickImageError;
  
+ 
   @override
   Widget build(BuildContext context) {
     
@@ -169,7 +170,7 @@ class _PrecargaPageState extends State<PrecargaPage> {
   }
 
   ///
-  /// Subir imagen
+  /// Preparar imagen para ser subida desde la pagina de carga
   ///
   void _onPressSave() {
 

@@ -5,7 +5,6 @@ import 'package:saig_app/src/providers/cloudinary_provider.dart';
 import 'package:saig_app/src/providers/db_provider.dart';
 
 class UploadsProvider extends ChangeNotifier {
-  
   List<UploadItemModel>? _items;
   CloudinaryProvider _cloudinaryProvider = new CloudinaryProvider();
 
@@ -25,8 +24,7 @@ class UploadsProvider extends ChangeNotifier {
   /// Si se cargan como Uploading quiere decir que no se subieron correctamente
   ///
   Future<List<UploadItemModel>?> getItems() async {
-
-    if( _items == null ) {
+    if (_items == null) {
       final items = await DBProvider.db.getAll();
       _items = items;
     }
@@ -34,8 +32,8 @@ class UploadsProvider extends ChangeNotifier {
     // final items = await DBProvider.db.getAll();
 
     // Procesar de manera individual cada uno de los items
-    // items.forEach((item) { 
-      // _cleanUpdateItem(item);
+    // items.forEach((item) {
+    // _cleanUpdateItem(item);
     // });
 
     // _items = items;
@@ -56,7 +54,6 @@ class UploadsProvider extends ChangeNotifier {
 
     return item;
   }
-
 
   ///
   /// Procesar y subir item
@@ -83,12 +80,12 @@ class UploadsProvider extends ChangeNotifier {
   void addItem(UploadItemModel item) async {
     print('add $item');
 
-    await DBProvider.db.insertItem(item);
+    item.id = await DBProvider.db.insertItem(item);
 
-    // _items.add(item);
+    // _items!.add(item);
+    _items!.insert(0, item);
     notifyListeners();
   }
-
 
   void updateItemDB(UploadItemModel item) async {
     print('add $item');
@@ -98,7 +95,4 @@ class UploadsProvider extends ChangeNotifier {
     // _items.add(item);
     notifyListeners();
   }
-
-
-
 }

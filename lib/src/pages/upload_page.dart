@@ -12,14 +12,10 @@ class UploadPage extends StatefulWidget {
 }
 
 class _UploadPageState extends State<UploadPage> {
-  
-  
   @override
   Widget build(BuildContext context) {
-    
     final UploadsProvider uploadsProvider = context.watch<UploadsProvider>();
     // uploadsProvider.init();
-
 
     return Scaffold(
       appBar: AppBar(
@@ -29,13 +25,12 @@ class _UploadPageState extends State<UploadPage> {
       body: FutureBuilder<List<UploadItemModel>?>(
         future: uploadsProvider.getItems(),
         // initialData: [],
-        builder: (BuildContext context, AsyncSnapshot<List<UploadItemModel>?> snapshot) {
-          
+        builder: (BuildContext context,
+            AsyncSnapshot<List<UploadItemModel>?> snapshot) {
           if (snapshot.hasData) {
-            
             final items = snapshot.data;
 
-            if ( items!.isEmpty ) {
+            if (items!.isEmpty) {
               return Center(
                 child: Text('No hay elementos'),
               );
@@ -47,10 +42,10 @@ class _UploadPageState extends State<UploadPage> {
               itemBuilder: (context, index) {
                 final item = items[index];
                 return ItemListTile(
-                  item: item,
-                  onPress: () {
-                    uploadsProvider.upload(item);
-                  });
+                    item: item,
+                    onPress: () {
+                      uploadsProvider.upload(item);
+                    });
               },
             );
           }
@@ -60,12 +55,13 @@ class _UploadPageState extends State<UploadPage> {
               child: Text(snapshot.error.toString()),
             );
           }
-          
+
           return Center(
             child: CircularProgressIndicator(),
           );
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {

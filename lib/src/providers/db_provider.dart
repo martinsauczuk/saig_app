@@ -4,38 +4,32 @@ import 'package:path_provider/path_provider.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
 import 'package:sqflite/sqflite.dart';
 
-
 class DBProvider {
-
   static Database? _database;
   static final DBProvider db = DBProvider._();
 
   DBProvider._();
 
   Future<Database?> get database async {
-
-    if( _database != null ) return _database;
+    if (_database != null) return _database;
     _database = await initDB();
     return _database;
-
   }
-
 
   ///
   ///
   ///
   Future<Database> initDB() async {
-
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join( documentsDirectory.path, 'ScansDB.db' );
+    final path = join(documentsDirectory.path, 'ScansDB.db');
 
-    print('Path a DB: $path' );
+    print('Path a DB: $path');
 
     return await openDatabase(
       path,
       version: 5,
       onOpen: (db) {
-        //  
+        //
       },
       onCreate: (Database db, int version) async {
         await db.execute('''
@@ -50,108 +44,67 @@ class DBProvider {
         ''');
       },
     );
-
   }
 
   ///
   ///
   ///
-  Future<int> insertItem( UploadItemModel nuevoItem ) async {
-
+  Future<int> insertItem(UploadItemModel nuevoItem) async {
     nuevoItem.path = nuevoItem.pickedFile!.path;
 
     print(nuevoItem);
 
     final db = await database;
 
-    final id = await db!.insert('Items', nuevoItem.toMap() );
+    final id = await db!.insert('Items', nuevoItem.toMap());
     return id;
   }
-
-  // nuevoScan( ScanModel nuevoScan ) async {
-
-  //   final db = await database;
-  //   final res = await db.insert('Scans', nuevoScan.toJson() );
-  //   return res;
-
-  // }
-
-  // Future<ScanModel> getScanId( int id) async {
-    
-  //   final db = await database;
-  //   final res = await db.query('Scans', where: 'id = ?', whereArgs: [id] );
-  //   return res.isNotEmpty ? ScanModel.fromJson( res.first ) : null;
-
-  // }
 
   ///
   /// Obtener todos
   ///
-  Future<List<UploadItemModel>> getAll() async{
-
+  Future<List<UploadItemModel>> getAll() async {
     final db = await database;
-    final res = await db!.query('Items');
+    final res = await db!.query('Items', orderBy: 'id desc');
 
-    List<UploadItemModel> list = res.isNotEmpty 
+    List<UploadItemModel> list = res.isNotEmpty
         ? res.map((e) => UploadItemModel.fromMap(e)).toList()
         : [];
 
     return list;
-
   }
-
-  // ///
-  // /// Buscar por tipo
-  // ///
-  // Future<List<ScanModel>> getByTipo(String tipo) async{
-
-  //   final db = await database;
-  //   final res = await db.rawQuery('''
-  //     SELECT * FROM Scans WHERE tipo='$tipo'
-  //   ''');
-
-  //   List<ScanModel> list = res.isNotEmpty 
-  //       ? res.map((e) => ScanModel.fromJson(e)).toList()
-  //       : [];
-
-  //   return list;
-    
-  // }
 
   // ///
   // /// Update
   // ///
-  updateItem( UploadItemModel item ) async {
-
+  updateItem(UploadItemModel item) async {
     final db = await database;
-    final res = await db!.update('Items', item.toMap(), where: 'id = ?', whereArgs: [item.id] );
+    final res = await db!
+        .update('Items', item.toMap(), where: 'id = ?', whereArgs: [item.id]);
 
     return res;
-
   }
 
   // ///
   // /// Eliminar
   // ///
   // Future<int> deleteScan( int id ) async {
-    
+
   //   final db = await database;
   //   final res = await db.delete('Scans', where: 'id = ?', whereArgs: [id] );
   //   return res;
 
   // }
 
-
   // ///
   // /// Delete all
   // ///
   // Future<int> deleteAll( ) async {
-    
+
   //   final db = await database;
   //   final res = await db.rawDelete('DELETE FROM Scans');
   //   return res;
-    
-  // }
 
+  // }
 
 }

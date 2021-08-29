@@ -6,7 +6,7 @@
    <uses-permission android:name="android.permission.INTERNET"/>
 
    <application
-        android:label="PlantApp"
+        android:label="PlantAr"
         android:icon="@mipmap/launcher_icon">
         <!-- <meta-data android:name="com.google.android.geo.API_KEY"
                    android:value="AIzaSyCpXazbB6k-TZgijVAAs3aGbITBdZrrpU4"/> -->

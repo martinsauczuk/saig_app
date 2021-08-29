@@ -22,7 +22,7 @@ class MenuWidget extends StatelessWidget {
                       ),
                       children: <TextSpan> [
                         TextSpan(
-                          text: 'App',
+                          text: 'Ar',
                           style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w800

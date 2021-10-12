@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:saig_app/src/enums/upload_status.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
@@ -41,6 +43,21 @@ class UploadsProvider extends ChangeNotifier {
     return _items;
   }
 
+
+  ///
+  /// Obtener solo los que se muestran en el listView. 
+  /// Todos los estados menos archived
+  ///
+  Future<List<UploadItemModel>?> getVisibles() async {
+    if (_items == null) {
+      final items = await DBProvider.db.getVisibles();
+      _items = items;
+    }
+    print( _items!.length );
+    return _items;
+  }
+
+
   ///
   ///
   ///
@@ -63,16 +80,48 @@ class UploadsProvider extends ChangeNotifier {
     item.status = UploadStatus.uploading; // Uploading no actualiza en DB
     // updateItem(item);
     notifyListeners();
-    _cloudinaryProvider.uploadItem(item).then((value) {
-      item.publicId = value;
-      item.status = UploadStatus.done;
-      updateItemDB(item);
-    }).onError((error, stackTrace) {
-      item.status = UploadStatus.error;
-      updateItemDB(item);
-      print(error);
-    });
+    _cloudinaryProvider.uploadImage( File(item.path!), item.lat!, item.lng!, item.descripcion!)
+      .then((value) {
+        item.publicId = value;
+        item.status = UploadStatus.done;
+        updateItemDB(item);
+        procesarSubidoOk(item);
+      })
+      .onError((error, stackTrace) {
+        item.status = UploadStatus.error;
+        updateItemDB(item);
+        print(error);
+      });
   }
+
+  void wait(item) async {
+    await Future.delayed(Duration(seconds: 4));
+    item.status = UploadStatus.archived;
+
+
+
+    
+  }
+
+  ///
+  /// Una vez subido esperar unos segundos para visualizar y luego pasar
+  /// a archived y eliminar el archivo de la cache
+  ///
+  void procesarSubidoOk(UploadItemModel item) {
+
+    Future.delayed(Duration(seconds: 3))
+      .then((value) { 
+        item.status = UploadStatus.archived;
+        deleteItem(item);
+        try {
+          File(item.path!).delete();
+        } catch (e) {
+          throw Exception('error al eliminar');
+        }
+        updateItemDB(item);
+      });
+  }
+
 
   ///
   /// Agregar nuevo item con PENDING a la lista de precarga
@@ -87,6 +136,9 @@ class UploadsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///
+  ///
+  ///
   void updateItemDB(UploadItemModel item) async {
     print('add $item');
 
@@ -95,4 +147,15 @@ class UploadsProvider extends ChangeNotifier {
     // _items.add(item);
     notifyListeners();
   }
+
+
+  ///
+  /// Eliminar item de la lista
+  ///
+  void deleteItem(UploadItemModel item) async {
+    print('delete $item');
+    _items!.remove(item);
+    notifyListeners();
+  }
+
 }

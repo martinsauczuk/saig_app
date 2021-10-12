@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:saig_app/src/enums/upload_status.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -21,13 +22,13 @@ class DBProvider {
   ///
   Future<Database> initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'ScansDB.db');
+    final path = join(documentsDirectory.path, 'PlantAr.db');
 
     print('Path a DB: $path');
 
     return await openDatabase(
       path,
-      version: 5,
+      version: 1,
       onOpen: (db) {
         //
       },
@@ -84,6 +85,27 @@ class DBProvider {
 
     return res;
   }
+
+
+  ///
+  /// Obtener todos lo que no son archived
+  ///
+  Future<List<UploadItemModel>> getVisibles() async {
+    int index = UploadStatus.archived.index;
+    final db = await database;
+    final res = await db!.query(
+      'Items', 
+      where: 'status != $index',
+      orderBy: 'id desc'
+    );
+
+    List<UploadItemModel> list = res.isNotEmpty
+        ? res.map((e) => UploadItemModel.fromMap(e)).toList()
+        : [];
+
+    return list;
+  }
+
 
   // ///
   // /// Eliminar

@@ -49,6 +49,11 @@ class UploadButton extends StatelessWidget {
           onPressed: onPending,
           icon: Icon(Icons.replay)
         );
+      case UploadStatus.archived:
+        return IconButton(
+          onPressed: onPending,
+          icon: Icon(Icons.done),
+        );
     }
   }
 

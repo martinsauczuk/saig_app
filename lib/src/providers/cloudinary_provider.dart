@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime_type/mime_type.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:saig_app/src/models/search_response.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
 
@@ -49,9 +50,9 @@ class CloudinaryProvider {
   /// TODO: Refactorizar
   /// Procesar y subir archivo y metadata
   ///
-  Future<String> uploadItem(UploadItemModel item) {
-    return uploadImage(item.path!, item.lat!, item.lng!, item.descripcion!);
-  }
+  // Future<String> uploadItem(UploadItemModel item) {
+  //   return uploadImage(item.path!, item.lat!, item.lng!, item.descripcion!);
+  // }
 
   ///
   /// TODO: Refactorizar
@@ -59,9 +60,9 @@ class CloudinaryProvider {
   /// Con archivo y coordenadas
   ///
   Future<String> uploadImage(
-      String path, double lat, double lng, String descripcion) async {
-    String coord_lat = lat.toString();
-    String coord_lng = lng.toString();
+      File imagen, double lat, double lng, String descripcion) async {
+    String coordLat = lat.toString();
+    String coordLng = lng.toString();
 
     // Validacion a mejorar con form
     if (descripcion.isEmpty) {
@@ -71,7 +72,7 @@ class CloudinaryProvider {
     final Uri uri = Uri.https('$_basePath', '/v1_1/$_cloudName/image/upload',
         {'upload_preset': '$_uploadPreset'});
 
-    final imagen = File(path);
+    // final imagen = File(path);
 
     final mimeType = mime(imagen.path)!.split('/');
 
@@ -80,7 +81,7 @@ class CloudinaryProvider {
     final file = await http.MultipartFile.fromPath('file', imagen.path,
         contentType: MediaType(mimeType[0], mimeType[1]));
     imageUploadRequest.fields['metadata'] =
-        'coord_lat=$coord_lat|coord_lng=$coord_lng|desc=$descripcion';
+        'coord_lat=$coordLat|coord_lng=$coordLng|desc=$descripcion';
 
     imageUploadRequest.files.add(file);
 
@@ -90,6 +91,7 @@ class CloudinaryProvider {
     if (resp.statusCode != 200 && resp.statusCode != 201) {
       print("Error al subir imagen");
       print(resp.body);
+
       // return "Algo salio mal";
       throw Exception('error al subir');
     }
@@ -99,6 +101,19 @@ class CloudinaryProvider {
 
     print('upload ok');
     final publicId = respData['public_id'];
+    
+    final directory = await getApplicationDocumentsDirectory();
+    print('ApplicationDocumentsDirectory: $directory');
+
+    // try {
+    //   imagen.delete();
+    // } catch (e) {
+    //   throw Exception('error al eliminar');
+    // }
+    
+    print(imagen);
+    // print('path: $path');
+
 
     return publicId;
   }

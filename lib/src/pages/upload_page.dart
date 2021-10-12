@@ -23,7 +23,8 @@ class _UploadPageState extends State<UploadPage> {
       ),
       drawer: MenuWidget(),
       body: FutureBuilder<List<UploadItemModel>?>(
-        future: uploadsProvider.getItems(),
+        // future: uploadsProvider.getItems(),
+        future: uploadsProvider.getVisibles(),
         // initialData: [],
         builder: (BuildContext context,
             AsyncSnapshot<List<UploadItemModel>?> snapshot) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:saig_app/src/enums/upload_status.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
 import 'package:saig_app/src/providers/uploads_provider.dart';
 import 'package:saig_app/src/widgets/item_list_tile.dart';
@@ -15,7 +14,6 @@ class _UploadPageState extends State<UploadPage> {
   @override
   Widget build(BuildContext context) {
     final UploadsProvider uploadsProvider = context.watch<UploadsProvider>();
-    // uploadsProvider.init();
 
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +21,8 @@ class _UploadPageState extends State<UploadPage> {
       ),
       drawer: MenuWidget(),
       body: FutureBuilder<List<UploadItemModel>?>(
-        future: uploadsProvider.getItems(),
+        // future: uploadsProvider.getItems(),
+        future: uploadsProvider.getVisibles(),
         // initialData: [],
         builder: (BuildContext context,
             AsyncSnapshot<List<UploadItemModel>?> snapshot) {

@@ -55,7 +55,7 @@ class _InfoPageState extends State<InfoPage> {
             Divider(),
             Column(
               children: [
-                Text('Desarrollada por Martin Sauczuk', style: Theme.of(context).textTheme.subtitle1 ),
+                Text('Desarrollo: Ing Martin Sauczuk', style: Theme.of(context).textTheme.subtitle1 ),
                 Text('martin.sauczuk@gmail.com', style: Theme.of(context).textTheme.subtitle2 ),
                 Text('Version: ${_packageInfo.version}', style: Theme.of(context).textTheme.button),
                 Text('Build: ${_packageInfo.buildNumber}', style: Theme.of(context).textTheme.button),

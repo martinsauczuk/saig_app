@@ -49,6 +49,8 @@ class ItemListTile extends StatelessWidget {
         return Text('Error al subir - puede reintentar', style: TextStyle(color: Colors.red),);
       case UploadStatus.done:
         return Text('${item.publicId} - ${item.path}');
+      case UploadStatus.archived:
+        return Text('Subido ok / eliminar de esta lista');
     }
 
   }

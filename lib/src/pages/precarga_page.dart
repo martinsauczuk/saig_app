@@ -90,21 +90,24 @@ class _PrecargaPageState extends State<PrecargaPage> {
   ///
   /// Imagen y botones de carga
   ///
-  Widget _previewImage() {
+  Widget _buildPreviewImage() {
     // final Text? retrieveError = _getRetrieveErrorWidget();
 
     if( _item.pickedFile == null ) {
       return Container(
-        // color: Colors.amber,
-        child: Row(
+        color: Colors.blueGrey,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.photo_library), 
+            FloatingActionButton.extended(
+              icon: const Icon(Icons.photo_library),
+              label: Text('Desde galeria'),
               onPressed: () => _onLoadButtonPressed(ImageSource.gallery, context),
             ),
-            IconButton(
-              icon: Icon(Icons.camera_alt), 
+            FloatingActionButton.extended(
+              icon: const Icon(Icons.camera_alt),
+              label: Text('Abrir cámara'),
               onPressed: () => _onLoadButtonPressed(ImageSource.camera, context),
             ),
           ],
@@ -133,7 +136,7 @@ class _PrecargaPageState extends State<PrecargaPage> {
       child: Column(
         children: <Widget> [
           _buildCoordenadasDisplay(),
-          Expanded(child: _previewImage() ),
+          Expanded(child: _buildPreviewImage() ),
           IconButton(
             onPressed: _item.pickedFile == null 
               ? null 

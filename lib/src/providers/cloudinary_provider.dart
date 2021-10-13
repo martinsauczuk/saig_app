@@ -97,23 +97,9 @@ class CloudinaryProvider {
     }
 
     final respData = json.decode(resp.body);
-    // print(respData);
 
     print('upload ok');
     final publicId = respData['public_id'];
-    
-    final directory = await getApplicationDocumentsDirectory();
-    print('ApplicationDocumentsDirectory: $directory');
-
-    // try {
-    //   imagen.delete();
-    // } catch (e) {
-    //   throw Exception('error al eliminar');
-    // }
-    
-    print(imagen);
-    // print('path: $path');
-
 
     return publicId;
   }

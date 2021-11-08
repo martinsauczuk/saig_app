@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:saig_app/src/pages/cloud_gallery_page.dart';
 import 'package:saig_app/src/pages/info_page.dart';
 import 'package:saig_app/src/pages/precarga_page.dart';
+import 'package:saig_app/src/pages/sensors_test.dart';
 import 'package:saig_app/src/pages/upload_page.dart';
 import 'package:saig_app/src/providers/uploads_provider.dart';
 
@@ -36,10 +37,11 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.deepOrange,
         ),
         routes: {
-          'upload': (BuildContext context) => UploadPage(),
-          'cloud': (BuildContext context) => CloudGalleryPage(),
-          'info': (BuildContext context) => InfoPage(),
-          'precarga': (BuildContext context) => PrecargaPage(),
+          'upload'    : (BuildContext context) => UploadPage(),
+          'cloud'     : (BuildContext context) => CloudGalleryPage(),
+          'info'      : (BuildContext context) => InfoPage(),
+          'precarga'  : (BuildContext context) => PrecargaPage(),
+          'sensors'   : (BuildContext context) => SensorsTestPage()
         },
         initialRoute: 'upload',
       ),

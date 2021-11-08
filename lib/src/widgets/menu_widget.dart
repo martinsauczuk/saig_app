@@ -53,10 +53,11 @@ class MenuWidget extends StatelessWidget {
             title: Text('Contenido de la nube'),
             onTap: () => Navigator.pushReplacementNamed(context, 'cloud')
           ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 16),
-            //   child: Divider(),
-            // ),
+          ListTile(
+            leading: Icon(Icons.settings_remote, color: Colors.cyan),
+            title: Text('Prueba de sensores'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'sensors')
+          ),
           ListTile(
             leading: Icon(Icons.info_outlined, color: Colors.cyan),
             title: Text('Información'),

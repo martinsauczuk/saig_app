@@ -29,7 +29,7 @@ class _SensorsTestPageState extends State<SensorsTestPage> {
   Widget build(BuildContext context) {
 
     final accelerometer =
-        _accelerometerValues?.map((double v) => v.toStringAsFixed(1)).toList();
+        _accelerometerValues?.map((double v) => v.toString()).toList();
     final gyroscope =
         _gyroscopeValues?.map((double v) => v.toStringAsFixed(1)).toList();
     final userAccelerometer = _userAccelerometerValues
@@ -64,10 +64,14 @@ class _SensorsTestPageState extends State<SensorsTestPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Accelerometer: $accelerometer'),
+                Text('Accelerometer'),
+                Text('${accelerometer?.elementAt(0)}'),
+                Text('${accelerometer?.elementAt(1)}'),
+                Text('${accelerometer?.elementAt(2)}'),
               ],
             ),
           ),

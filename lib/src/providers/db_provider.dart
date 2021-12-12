@@ -28,7 +28,7 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onOpen: (db) {
         //
       },
@@ -41,6 +41,9 @@ class DBProvider {
             path TEXT,
             lat REAL,
             lng REAL,
+            accelerometerX REAL,
+            accelerometerY REAL,
+            accelerometerZ REAL,
             public_id TEXT)
         ''');
       },

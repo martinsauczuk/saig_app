@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -46,6 +45,8 @@ class UploadsProvider extends ChangeNotifier {
   /// Pasa a status archive y elimina archivos
   /// Si quedo alguno como Uploaded, por ejemplo al cerrar
   /// la app sin haber cumplido el tiempo
+  /// 
+
   ///
   void limpiarSubidosOk() {
     _items!
@@ -63,7 +64,7 @@ class UploadsProvider extends ChangeNotifier {
     print('subiendo item $item');
     item.status = UploadStatus.uploading; // Uploading no actualiza en DB pero si notifica
     notifyListeners();
-    _cloudinaryProvider.uploadImage( File(item.path!), item.lat!, item.lng!, item.descripcion!)
+    _cloudinaryProvider.uploadItem( item )
       .then((value) {
         item.publicId = value;
         item.status = UploadStatus.done;

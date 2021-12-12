@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           'cloud'     : (BuildContext context) => CloudGalleryPage(),
           'info'      : (BuildContext context) => InfoPage(),
           'precarga'  : (BuildContext context) => PrecargaPage(),
-          'sensors'   : (BuildContext context) => SensorsTestPage()
+          'sensors'   : (BuildContext context) => SensorsTestPage(),
         },
         initialRoute: 'upload',
       ),

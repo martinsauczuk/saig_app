@@ -18,7 +18,10 @@ class UploadItemModel {
   PickedFile? pickedFile;
   String? path;
   double? lat;
-  double? lng; 
+  double? lng;
+  double? accelerometerX;
+  double? accelerometerY;
+  double? accelerometerZ;
   String? descripcion = 'sin descripcion';
   UploadStatus? status = UploadStatus.pending;
   String? publicId = '';
@@ -29,13 +32,16 @@ class UploadItemModel {
   }
 
   UploadItemModel.fromMap( Map<String, Object?> map ) {
-    id          =  map['id']          as int;
-    lat         =  map['lat']         as double;
-    lng         =  map['lng']         as double;
-    descripcion =  map['descripcion'] as String;
-    path        =  map['path']        as String;
-    publicId    =  map['public_id']   as String;
-    status      =  UploadStatus.values[ map['status'] as int ]; 
+    id              =  map['id']              as int;
+    lat             =  map['lat']             as double;
+    lng             =  map['lng']             as double;
+    accelerometerX  =  map['accelerometerX']  as double;
+    accelerometerY  =  map['accelerometerY']  as double;
+    accelerometerZ  =  map['accelerometerZ']  as double;
+    descripcion     =  map['descripcion']     as String;
+    path            =  map['path']            as String;
+    publicId        =  map['public_id']       as String;
+    status          =  UploadStatus.values[ map['status'] as int ]; 
   }
 
 
@@ -43,13 +49,16 @@ class UploadItemModel {
   /// Convertir a map para usar en base de datos
   ///
   Map<String, Object?> toMap() => {
-    'id'          : id,
-    'lat'         : lat,
-    'lng'         : lng,
-    'descripcion' : descripcion,
-    'status'      : status!.index,
-    'path'        : path,
-    'public_id'   : publicId!,
+    'id'              : id,
+    'lat'             : lat,
+    'lng'             : lng,
+    'accelerometerX'  : accelerometerX,
+    'accelerometerY'  : accelerometerY,
+    'accelerometerZ'  : accelerometerZ,
+    'descripcion'     : descripcion,
+    'status'          : status!.index,
+    'path'            : path,
+    'public_id'       : publicId!,
   };
   
 

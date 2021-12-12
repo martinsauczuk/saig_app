@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:saig_app/src/enums/upload_status.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
 import 'package:saig_app/src/providers/uploads_provider.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 class PrecargaPage extends StatefulWidget {
   @override
@@ -23,7 +25,8 @@ class _PrecargaPageState extends State<PrecargaPage> {
 
   final ImagePicker _picker = ImagePicker();
   final UploadItemModel _item = new UploadItemModel();
-
+  List<double>? _accelerometerValues;
+  final _streamSubscriptions = <StreamSubscription<dynamic>>[];
   dynamic _pickImageError;
  
  
@@ -38,6 +41,29 @@ class _PrecargaPageState extends State<PrecargaPage> {
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    for (final subscription in _streamSubscriptions) {
+      subscription.cancel();
+    }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    print('initState');
+    _streamSubscriptions.add(
+      accelerometerEvents.listen(
+        (AccelerometerEvent event) {
+          setState(() {
+            _accelerometerValues = <double>[event.x, event.y, event.z];
+          });
+        },
+      ),
+    );
+  }
 
 
   ///
@@ -88,6 +114,46 @@ class _PrecargaPageState extends State<PrecargaPage> {
 
 
   ///
+  /// Cuadro con la info de los sensores
+  ///
+  Widget _buildSensoresDisplay() {
+
+    return Container(
+      // color: Colors.blueGrey.shade50,
+      child: Row(
+        children: <Widget>[
+          Icon(Icons.border_inner),
+          // FutureBuilder<Position>(
+          //   future: getPosition(),
+          //   builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+          //     if (snapshot.hasData) {
+          //     // Position position = snapshot.data;
+          //       _item.accelerometerX = 1.11;
+          //       _item.accelerometerY = 2.22;
+          //       _item.accelerometerZ = 3.33;
+
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                    children: <Widget>[
+                      Text(_accelerometerValues!.elementAt(0).toStringAsFixed(4)),
+                      Text(_accelerometerValues!.elementAt(1).toStringAsFixed(4)),
+                      Text(_accelerometerValues!.elementAt(2).toStringAsFixed(4)),
+                    ],
+                  ),
+                ),
+              // } else {
+              //   return CircularProgressIndicator();
+              // }
+            // }
+          // ),
+        ],
+      ),
+    );
+  }
+
+  ///
   /// Imagen y botones de carga
   ///
   Widget _buildPreviewImage() {
@@ -100,11 +166,6 @@ class _PrecargaPageState extends State<PrecargaPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            FloatingActionButton.extended(
-              icon: const Icon(Icons.photo_library),
-              label: Text('Desde galeria'),
-              onPressed: () => _onLoadButtonPressed(ImageSource.gallery, context),
-            ),
             FloatingActionButton.extended(
               icon: const Icon(Icons.camera_alt),
               label: Text('Abrir cámara'),
@@ -136,6 +197,7 @@ class _PrecargaPageState extends State<PrecargaPage> {
       child: Column(
         children: <Widget> [
           _buildCoordenadasDisplay(),
+          _buildSensoresDisplay(),
           Expanded(child: _buildPreviewImage() ),
           IconButton(
             onPressed: _item.pickedFile == null 

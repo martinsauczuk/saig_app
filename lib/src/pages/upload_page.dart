@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
 import 'package:saig_app/src/providers/uploads_provider.dart';
 import 'package:saig_app/src/widgets/item_list_tile.dart';
@@ -11,6 +12,13 @@ class UploadPage extends StatefulWidget {
 }
 
 class _UploadPageState extends State<UploadPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    Future<Position> position = Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
   @override
   Widget build(BuildContext context) {
     final UploadsProvider uploadsProvider = context.watch<UploadsProvider>();
@@ -21,9 +29,7 @@ class _UploadPageState extends State<UploadPage> {
       ),
       drawer: MenuWidget(),
       body: FutureBuilder<List<UploadItemModel>?>(
-        // future: uploadsProvider.getItems(),
         future: uploadsProvider.getVisibles(),
-        // initialData: [],
         builder: (BuildContext context,
             AsyncSnapshot<List<UploadItemModel>?> snapshot) {
           if (snapshot.hasData) {

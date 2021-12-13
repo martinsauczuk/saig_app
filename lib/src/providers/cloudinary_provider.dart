@@ -4,7 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime_type/mime_type.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:saig_app/src/models/search_response.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
 
@@ -47,26 +46,20 @@ class CloudinaryProvider {
   }
 
   ///
-  /// TODO: Refactorizar
-  /// Procesar y subir archivo y metadata
+  /// Subir imagen con archivo y metadata
   ///
-  // Future<String> uploadItem(UploadItemModel item) {
-  //   return uploadImage(item.path!, item.lat!, item.lng!, item.descripcion!);
-  // }
-
-  ///
-  /// TODO: Refactorizar
-  /// Subir imagen
-  /// Con archivo y coordenadas
-  ///
-  Future<String> uploadImage(
-      File imagen, double lat, double lng, String descripcion) async {
-    String coordLat = lat.toString();
-    String coordLng = lng.toString();
+  Future<String> uploadItem(UploadItemModel item) async {
+  // Future<String> uploadItem(
+  //     File imagen, double lat, double lng, String descripcion, double accelerometerX, double accelerometerY, double accelerometerZ) async {
+    // String coordLat = lat.toString();
+    // String coordLng = lng.toString();
 
     // Validacion a mejorar con form
-    if (descripcion.isEmpty) {
+    String descripcion;
+    if (item.descripcion!.isEmpty) {
       descripcion = 'Imagen sin descripción';
+    } else {
+      descripcion = item.descripcion!;
     }
 
     final Uri uri = Uri.https('$_basePath', '/v1_1/$_cloudName/image/upload',
@@ -74,14 +67,14 @@ class CloudinaryProvider {
 
     // final imagen = File(path);
 
-    final mimeType = mime(imagen.path)!.split('/');
+    final mimeType = mime(item.path)!.split('/');
 
     final imageUploadRequest = new http.MultipartRequest('POST', uri);
 
-    final file = await http.MultipartFile.fromPath('file', imagen.path,
+    final file = await http.MultipartFile.fromPath('file', item.path!,
         contentType: MediaType(mimeType[0], mimeType[1]));
     imageUploadRequest.fields['metadata'] =
-        'coord_lat=$coordLat|coord_lng=$coordLng|desc=$descripcion';
+        'coord_lat=${item.lat}|coord_lng=${item.lng}|desc=$descripcion|accelerometerX=${item.accelerometerX}|accelerometerY=${item.accelerometerY}|accelerometerZ=${item.accelerometerZ}';
 
     imageUploadRequest.files.add(file);
 

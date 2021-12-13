@@ -40,10 +40,10 @@ android {
 
     defaultConfig {
         applicationId "com.sauczuk.saig_app"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
-        versionCode 12
-        versionName "1.4.1"
+        versionCode 14
+        versionName "1.6.0"
     }
 
     signingConfigs {

@@ -28,7 +28,7 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onOpen: (db) {
         //
       },
@@ -41,6 +41,9 @@ class DBProvider {
             path TEXT,
             lat REAL,
             lng REAL,
+            accelerometerX REAL,
+            accelerometerY REAL,
+            accelerometerZ REAL,
             public_id TEXT)
         ''');
       },
@@ -51,7 +54,6 @@ class DBProvider {
   ///
   ///
   Future<int> insertItem(UploadItemModel nuevoItem) async {
-    nuevoItem.path = nuevoItem.pickedFile!.path;
 
     print(nuevoItem);
 

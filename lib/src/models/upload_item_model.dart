@@ -1,21 +1,10 @@
-import 'package:image_picker/image_picker.dart';
 import 'package:saig_app/src/enums/upload_status.dart';
 
 class UploadItemModel {
 
   UploadItemModel(); 
 
-  // UploadItemModel({
-  //   this.id,
-  //   required this.lat,
-  //   required this.lng,
-  //   required this.descripcion,
-  //   // required this.status
-  // });
-
-
   int? id;
-  PickedFile? pickedFile;
   String? path;
   double? lat;
   double? lng;

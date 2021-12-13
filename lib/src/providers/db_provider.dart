@@ -54,7 +54,6 @@ class DBProvider {
   ///
   ///
   Future<int> insertItem(UploadItemModel nuevoItem) async {
-    nuevoItem.path = nuevoItem.pickedFile!.path;
 
     print(nuevoItem);
 

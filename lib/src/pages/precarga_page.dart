@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:saig_app/src/enums/upload_status.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
@@ -10,6 +9,10 @@ import 'package:saig_app/src/providers/uploads_provider.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 class PrecargaPage extends StatefulWidget {
+  final List<CameraDescription> cameras;
+
+  const PrecargaPage({Key? key, required this.cameras}) : super(key: key);
+
   @override
   _PrecargaPageState createState() => _PrecargaPageState();
 }
@@ -21,23 +24,97 @@ Future<Position> getPosition() async {
 }
 
 class _PrecargaPageState extends State<PrecargaPage> {
-  
 
-  final ImagePicker _picker = ImagePicker();
+  late CameraController _controller;
+  late Future<void> _initializeControllerFuture;
   final UploadItemModel _item = new UploadItemModel();
   List<double>? _accelerometerValues;
   final _streamSubscriptions = <StreamSubscription<dynamic>>[];
-  dynamic _pickImageError;
- 
- 
+
   @override
   Widget build(BuildContext context) {
-    
+
+    final UploadsProvider uploadsProvider = context.read<UploadsProvider>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Pre carga de imagen'),
       ),
-      body: _uploadItem(context),
+      body: Stack(
+        children: [
+          FutureBuilder<void>(
+            future: _initializeControllerFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return CameraPreview(_controller);
+              } else {
+                // Otherwise, display a loading indicator.
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+          Column(
+            children: [
+              FutureBuilder(
+                future: getPosition(),
+                builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+                  if (snapshot.hasData) {
+                    _item.lat = snapshot.data!.latitude;
+                    _item.lng = snapshot.data!.longitude;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text('lat: ${snapshot.data!.latitude.toStringAsFixed(7)}'),
+                        Text('lng: ${snapshot.data!.longitude.toStringAsFixed(7)}'),
+                      ],
+                    );
+                  }
+                  return Text('Cargando coordenadas...');
+                },
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text(
+                      'X: ${_accelerometerValues!.elementAt(0).toStringAsFixed(7)}'),
+                  Text(
+                      'Y: ${_accelerometerValues!.elementAt(1).toStringAsFixed(7)}'),
+                  Text(
+                      'Z: ${_accelerometerValues!.elementAt(2).toStringAsFixed(7)}'),
+                ],
+              )
+            ],
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        // Provide an onPressed callback.
+        onPressed: () async {
+          // Take the Picture in a try / catch block. If anything goes wrong,
+          // catch the error.
+          try {
+            // Ensure that the camera is initialized.
+            await _initializeControllerFuture;
+
+            // Attempt to take a picture and get the file `image`
+            // where it was saved.
+            final image = await _controller.takePicture();
+            _item.path = image.path;
+            _item.accelerometerX = _accelerometerValues!.elementAt(0);
+            _item.accelerometerY = _accelerometerValues!.elementAt(1);
+            _item.accelerometerZ = _accelerometerValues!.elementAt(2);
+            _item.descripcion = 'sin_descripcion';
+            _item.status = UploadStatus.pending;
+            print('$_item');
+            uploadsProvider.addItem(_item);
+            Navigator.pop(context);
+          } catch (e) {
+            // If an error occurs, log the error to the console.
+            print(e);
+          }
+        },
+        child: const Icon(Icons.camera_alt),
+      ),
     );
   }
 
@@ -49,11 +126,23 @@ class _PrecargaPageState extends State<PrecargaPage> {
     }
   }
 
-
   @override
   void initState() {
     super.initState();
     print('initState');
+
+    // To display the current output from the Camera,
+    // create a CameraController.
+    _controller = CameraController(
+      // Get a specific camera from the list of available cameras.
+      widget.cameras.first,
+      // Define the resolution to use.
+      ResolutionPreset.max,
+    );
+
+    // Next, initialize the controller. This returns a Future.
+    _initializeControllerFuture = _controller.initialize();
+
     _streamSubscriptions.add(
       accelerometerEvents.listen(
         (AccelerometerEvent event) {
@@ -63,207 +152,6 @@ class _PrecargaPageState extends State<PrecargaPage> {
         },
       ),
     );
-  }
-
-
-  ///
-  /// Cuadro con las coordenadas
-  ///
-  Widget _buildCoordenadasDisplay() {
-
-    return Container(
-      // color: Colors.blueGrey.shade50,
-      child: Row(
-        children: <Widget>[
-          Icon(Icons.location_pin),
-          FutureBuilder<Position>(
-            future: getPosition(),
-            builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
-              if (snapshot.hasData) {
-              // Position position = snapshot.data;
-                _item.lat = snapshot.data!.latitude;
-                _item.lng = snapshot.data!.longitude;
-
-                return Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                    children: <Widget>[
-                      Text(_item.lat.toString()),
-                      Text(_item.lng.toString()),
-                    ],
-                  ),
-                );
-              } else {
-                return CircularProgressIndicator();
-              }
-            }
-          ),
-          IconButton(
-            onPressed: () {
-                setState(() {
-                  getPosition();
-                });
-              },
-            icon: Icon(Icons.refresh),
-          ),
-        ],
-      ),
-    );
-  }
-
-
-  ///
-  /// Cuadro con la info de los sensores
-  ///
-  Widget _buildSensoresDisplay() {
-
-    return Container(
-      // color: Colors.blueGrey.shade50,
-      child: Row(
-        children: <Widget>[
-          Icon(Icons.border_inner),
-          // FutureBuilder<Position>(
-          //   future: getPosition(),
-          //   builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
-          //     if (snapshot.hasData) {
-          //     // Position position = snapshot.data;
-          //       _item.accelerometerX = 1.11;
-          //       _item.accelerometerY = 2.22;
-          //       _item.accelerometerZ = 3.33;
-
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                    children: <Widget>[
-                      Text(_accelerometerValues!.elementAt(0).toStringAsFixed(4)),
-                      Text(_accelerometerValues!.elementAt(1).toStringAsFixed(4)),
-                      Text(_accelerometerValues!.elementAt(2).toStringAsFixed(4)),
-                    ],
-                  ),
-                ),
-              // } else {
-              //   return CircularProgressIndicator();
-              // }
-            // }
-          // ),
-        ],
-      ),
-    );
-  }
-
-  ///
-  /// Imagen y botones de carga
-  ///
-  Widget _buildPreviewImage() {
-    // final Text? retrieveError = _getRetrieveErrorWidget();
-
-    if( _item.pickedFile == null ) {
-      return Container(
-        color: Colors.blueGrey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            FloatingActionButton.extended(
-              icon: const Icon(Icons.camera_alt),
-              label: Text('Abrir cámara'),
-              onPressed: () => _onLoadButtonPressed(ImageSource.camera, context),
-            ),
-          ],
-        )
-      );
-    }
-
-    return Container(
-      // color: Colors.amber,
-      child: Image.file( 
-        File( _item.pickedFile!.path),
-        fit: BoxFit.cover,
-        height: 400.0,
-      ),
-    );
-  }
-  
-  
-  ///
-  /// Cuadro de upload con imagen y coordenadas
-  /// Widget principal
-  ///
-  Widget _uploadItem(BuildContext context) {
-    return Container(
-      // color: Colors.teal.shade100,
-      child: Column(
-        children: <Widget> [
-          _buildCoordenadasDisplay(),
-          _buildSensoresDisplay(),
-          Expanded(child: _buildPreviewImage() ),
-          IconButton(
-            onPressed: _item.pickedFile == null 
-              ? null 
-              : ( ) {
-                setState(() {
-                  _item.pickedFile = null;
-                });
-              },
-            icon: Icon(Icons.delete_forever),
-          ),
-          TextField(
-            decoration: InputDecoration(
-              icon: Icon(Icons.description),
-              labelText: 'Descripción para la imagen (opcional)',
-            ),
-            onChanged: (value) {
-              print(value);
-              _item.descripcion = value;
-              setState(() {
-                //
-              });
-            }
-          ),
-          ElevatedButton.icon(
-            icon: Icon(Icons.save_sharp),
-            label: Text('Guardar pre carga'), 
-            onPressed: _item.pickedFile == null
-              ? null
-              : () => _onPressSave()
-          ),
-        ]
-      )
-    );
-  }
-
-  ///
-  /// Preparar imagen para ser subida desde la pagina de carga
-  ///
-  void _onPressSave() {
-
-    final UploadsProvider uploadsProvider = context.read<UploadsProvider>();
-    print('$_item');
-
-    _item.status = UploadStatus.pending;
-    uploadsProvider.addItem(_item);
-    Navigator.pop(context);
-  }
-
-  ///
-  /// Cargar una imagen desde camara o galeria
-  ///
-  void _onLoadButtonPressed(ImageSource source, BuildContext context) async {
-    
-    try {
-      final pickedFile = await _picker.getImage(
-        source: source,
-      );
-      setState(() {
-        _item.pickedFile = pickedFile;
-       });
-    } catch (e) {
-      setState(() {
-         _pickImageError = e;
-      });
-    }
   }
 
 }

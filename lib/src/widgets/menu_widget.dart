@@ -59,6 +59,11 @@ class MenuWidget extends StatelessWidget {
             onTap: () => Navigator.pushReplacementNamed(context, 'sensors')
           ),
           ListTile(
+            leading: Icon(Icons.camera_alt, color: Colors.cyan),
+            title: Text('Prueba de cámara'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'camera')
+          ),
+          ListTile(
             leading: Icon(Icons.info_outlined, color: Colors.cyan),
             title: Text('Información'),
             onTap: () => Navigator.pushReplacementNamed(context, 'info')

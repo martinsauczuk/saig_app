@@ -17,7 +17,7 @@ class UploadItemModel {
 
   @override
   String toString() {
-    return 'desc:$descripcion|lat:$lat|lng:$lng';
+    return 'desc:$descripcion|lat:$lat|lng:$lng|accX:$accelerometerX|accY:$accelerometerY|accZ:$accelerometerZ';
   }
 
   UploadItemModel.fromMap( Map<String, Object?> map ) {

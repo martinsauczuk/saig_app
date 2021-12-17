@@ -11,13 +11,20 @@ class UploadPage extends StatefulWidget {
   _UploadPageState createState() => _UploadPageState();
 }
 
+Future<Position> getPosition() async {
+  Future<Position> position =
+      Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  return position;
+}
+
+
 class _UploadPageState extends State<UploadPage> {
 
-  @override
-  void initState() {
-    super.initState();
-    Future<Position> position = Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future<Position> position = Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +33,17 @@ class _UploadPageState extends State<UploadPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Carga de imagen y coordenadas'),
+        // leading: FutureBuilder(
+        //   future: getPosition(),
+        //   builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+        //     if (snapshot.hasData) {
+        //       // _item.lat = snapshot.data!.latitude;
+        //       // _item.lng = snapshot.data!.longitude;
+        //       return Icon(Icons.my_location_sharp);
+        //     }
+        //     return Icon(Icons.location_disabled_sharp);
+        //   },
+        // )
       ),
       drawer: MenuWidget(),
       body: FutureBuilder<List<UploadItemModel>?>(
@@ -69,7 +87,8 @@ class _UploadPageState extends State<UploadPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
+        onPressed: () async {
+          await getPosition().then((value) => print( value ));
           Navigator.pushNamed(context, 'precarga');
         },
       ),

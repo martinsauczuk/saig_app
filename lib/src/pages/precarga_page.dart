@@ -55,23 +55,23 @@ class _PrecargaPageState extends State<PrecargaPage> {
           ),
           Column(
             children: [
-              FutureBuilder(
-                future: getPosition(),
-                builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
-                  if (snapshot.hasData) {
-                    _item.lat = snapshot.data!.latitude;
-                    _item.lng = snapshot.data!.longitude;
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Text('lat: ${snapshot.data!.latitude.toStringAsFixed(7)}'),
-                        Text('lng: ${snapshot.data!.longitude.toStringAsFixed(7)}'),
-                      ],
-                    );
-                  }
-                  return Text('Cargando coordenadas...');
-                },
-              ),
+              // FutureBuilder(
+              //   future: getPosition(),
+              //   builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+              //     if (snapshot.hasData) {
+              //       _item.lat = snapshot.data!.latitude;
+              //       _item.lng = snapshot.data!.longitude;
+              //       return Row(
+              //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //         children: <Widget>[
+              //           Text('lat: ${snapshot.data!.latitude.toStringAsFixed(7)}'),
+              //           Text('lng: ${snapshot.data!.longitude.toStringAsFixed(7)}'),
+              //         ],
+              //       );
+              //     }
+              //     return Text('Cargando coordenadas...');
+              //   },
+              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -95,7 +95,11 @@ class _PrecargaPageState extends State<PrecargaPage> {
           try {
             // Ensure that the camera is initialized.
             await _initializeControllerFuture;
-
+            await getPosition().then((value) => {
+              print(value),
+              _item.lat = value.latitude,
+              _item.lng = value.longitude
+            });
             // Attempt to take a picture and get the file `image`
             // where it was saved.
             final image = await _controller.takePicture();
@@ -124,6 +128,7 @@ class _PrecargaPageState extends State<PrecargaPage> {
     for (final subscription in _streamSubscriptions) {
       subscription.cancel();
     }
+    _controller.dispose();
   }
 
   @override

@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'PlantAr',
-        debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: true,
         theme: Theme.of(context).copyWith(
           primaryColor: Colors.teal,
           accentColor: Colors.deepOrange,

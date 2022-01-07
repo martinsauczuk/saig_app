@@ -19,7 +19,7 @@ class _SensorsTestPageState extends State<SensorsTestPage> {
   List<double>? _userAccelerometerValues;
   List<double>? _gyroscopeValues;
   List<double>? _magnetometerValues;
-  static const SIZE = 100; // Cantidad de valores a promediar
+  static const SIZE = 10; // Cantidad de valores a promediar
   
 
   Queue<double> _magnetometerQueueX = Queue.of(List.filled(SIZE, 0));
@@ -30,8 +30,6 @@ class _SensorsTestPageState extends State<SensorsTestPage> {
 
   Queue<double> _magnetometerQueueZ = Queue.of(List.filled(SIZE, 0));
   double _magnetometerMeanZ = 0;
-  // List<double>? _magnetometerY;
-  // List<double>? _magnetometerZ;
   
 
   final _streamSubscriptions = <StreamSubscription<dynamic>>[];
@@ -93,16 +91,16 @@ class _SensorsTestPageState extends State<SensorsTestPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text('Magnetometer mean: [ ${_magnetometerMeanX.toStringAsFixed(3)} ${_magnetometerMeanY.toStringAsFixed(3)} ${_magnetometerMeanZ.toStringAsFixed(3)} ]'),
-                Text('[10]: [ ${_magnetometerQueueX.elementAt(10).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(10).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(10).toStringAsFixed(3)} ]' ),
-                Text('[20]: [ ${_magnetometerQueueX.elementAt(20).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(20).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(20).toStringAsFixed(3)} ]' ),
-                Text('[30]: [ ${_magnetometerQueueX.elementAt(30).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(30).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(30).toStringAsFixed(3)} ]' ),
-                Text('[40]: [ ${_magnetometerQueueX.elementAt(40).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(40).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(40).toStringAsFixed(3)} ]' ),
-                Text('[50]: [ ${_magnetometerQueueX.elementAt(50).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(50).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(50).toStringAsFixed(3)} ]' ),
-                Text('[60]: [ ${_magnetometerQueueX.elementAt(60).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(60).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(60).toStringAsFixed(3)} ]' ),
-                Text('[70]: [ ${_magnetometerQueueX.elementAt(70).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(70).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(70).toStringAsFixed(3)} ]' ),
-                Text('[80]: [ ${_magnetometerQueueX.elementAt(80).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(80).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(80).toStringAsFixed(3)} ]' ),
-                Text('[90]: [ ${_magnetometerQueueX.elementAt(90).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(90).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(90).toStringAsFixed(3)} ]' ),
-                Text('[99]: [ ${_magnetometerQueueX.elementAt(99).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(99).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(99).toStringAsFixed(3)} ]' ),
+                Text('[00]: [ ${_magnetometerQueueX.elementAt(0).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(0).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(0).toStringAsFixed(3)} ]' ),
+                Text('[01]: [ ${_magnetometerQueueX.elementAt(1).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(1).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(1).toStringAsFixed(3)} ]' ),
+                Text('[02]: [ ${_magnetometerQueueX.elementAt(2).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(2).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(2).toStringAsFixed(3)} ]' ),
+                Text('[03]: [ ${_magnetometerQueueX.elementAt(3).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(3).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(3).toStringAsFixed(3)} ]' ),
+                Text('[04]: [ ${_magnetometerQueueX.elementAt(4).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(4).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(4).toStringAsFixed(3)} ]' ),
+                Text('[05]: [ ${_magnetometerQueueX.elementAt(5).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(5).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(5).toStringAsFixed(3)} ]' ),
+                Text('[06]: [ ${_magnetometerQueueX.elementAt(6).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(6).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(6).toStringAsFixed(3)} ]' ),
+                Text('[07]: [ ${_magnetometerQueueX.elementAt(7).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(7).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(7).toStringAsFixed(3)} ]' ),
+                Text('[08]: [ ${_magnetometerQueueX.elementAt(8).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(8).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(8).toStringAsFixed(3)} ]' ),
+                Text('[09]: [ ${_magnetometerQueueX.elementAt(9).toStringAsFixed(3)}, ${_magnetometerQueueY.elementAt(9).toStringAsFixed(3)}, ${_magnetometerQueueZ.elementAt(9).toStringAsFixed(3)} ]' ),
                 Text('Magnetometer current: $magnetometer'),
               ],
             ),

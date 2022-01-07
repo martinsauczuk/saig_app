@@ -11,13 +11,16 @@ class UploadItemModel {
   double? accelerometerX;
   double? accelerometerY;
   double? accelerometerZ;
+  double? magnetometerX;
+  double? magnetometerY;
+  double? magnetometerZ;
   String? descripcion = 'sin descripcion';
   UploadStatus? status = UploadStatus.pending;
   String? publicId = '';
 
   @override
   String toString() {
-    return 'desc:$descripcion|lat:$lat|lng:$lng|accX:$accelerometerX|accY:$accelerometerY|accZ:$accelerometerZ';
+    return 'desc:$descripcion|lat:$lat|lng:$lng|accX:$accelerometerX|accY:$accelerometerY|accZ:$accelerometerZ|magX:$magnetometerX|magY:$magnetometerY|magZ:$magnetometerZ';
   }
 
   UploadItemModel.fromMap( Map<String, Object?> map ) {
@@ -27,6 +30,9 @@ class UploadItemModel {
     accelerometerX  =  map['accelerometerX']  as double;
     accelerometerY  =  map['accelerometerY']  as double;
     accelerometerZ  =  map['accelerometerZ']  as double;
+    magnetometerX   =  map['magnetometerX']   as double;
+    magnetometerY   =  map['magnetometerY']   as double;
+    magnetometerZ   =  map['magnetometerZ']   as double;
     descripcion     =  map['descripcion']     as String;
     path            =  map['path']            as String;
     publicId        =  map['public_id']       as String;
@@ -44,6 +50,9 @@ class UploadItemModel {
     'accelerometerX'  : accelerometerX,
     'accelerometerY'  : accelerometerY,
     'accelerometerZ'  : accelerometerZ,
+    'magenetometerX'  : magnetometerX,
+    'magenetometerY'  : magnetometerY,
+    'magenetometerZ'  : magnetometerZ,
     'descripcion'     : descripcion,
     'status'          : status!.index,
     'path'            : path,

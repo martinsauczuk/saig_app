@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -28,7 +29,28 @@ class _PrecargaPageState extends State<PrecargaPage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   final UploadItemModel _item = new UploadItemModel();
-  List<double>? _accelerometerValues;
+
+  static const SIZE = 10; // Cantidad de valores a promediar
+
+  Queue<double> _accelerometerQueueX = Queue.of(List.filled(SIZE, 0));
+  double _accelerometerMeanX = 0;
+
+  Queue<double> _accelerometerQueueY = Queue.of(List.filled(SIZE, 0));
+  double _accelerometerMeanY = 0;
+
+  Queue<double> _accelerometerQueueZ = Queue.of(List.filled(SIZE, 0));
+  double _accelerometerMeanZ = 0;
+
+
+  Queue<double> _magnetometerQueueX = Queue.of(List.filled(SIZE, 0));
+  double _magnetometerMeanX = 0;
+
+  Queue<double> _magnetometerQueueY = Queue.of(List.filled(SIZE, 0));
+  double _magnetometerMeanY = 0;
+
+  Queue<double> _magnetometerQueueZ = Queue.of(List.filled(SIZE, 0));
+  double _magnetometerMeanZ = 0;
+
   final _streamSubscriptions = <StreamSubscription<dynamic>>[];
 
   @override
@@ -72,17 +94,30 @@ class _PrecargaPageState extends State<PrecargaPage> {
               //     return Text('Cargando coordenadas...');
               //   },
               // ),
+              Text('Acelerometro'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Text(
-                      'X: ${_accelerometerValues!.elementAt(0).toStringAsFixed(7)}'),
+                      'X: ${_accelerometerMeanX.toStringAsFixed(7)}'),
                   Text(
-                      'Y: ${_accelerometerValues!.elementAt(1).toStringAsFixed(7)}'),
+                      'Y: ${_accelerometerMeanY.toStringAsFixed(7)}'),
                   Text(
-                      'Z: ${_accelerometerValues!.elementAt(2).toStringAsFixed(7)}'),
+                      'Z: ${_accelerometerMeanZ.toStringAsFixed(7)}'),
                 ],
-              )
+              ),
+              Text('Magenetometro'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text(
+                      'X: ${_magnetometerMeanX.toStringAsFixed(7)}'),
+                  Text(
+                      'Y: ${_magnetometerMeanY.toStringAsFixed(7)}'),
+                  Text(
+                      'Z: ${_magnetometerMeanZ.toStringAsFixed(7)}'),
+                ],
+              ),
             ],
           ),
         ],
@@ -104,9 +139,17 @@ class _PrecargaPageState extends State<PrecargaPage> {
             // where it was saved.
             final image = await _controller.takePicture();
             _item.path = image.path;
-            _item.accelerometerX = _accelerometerValues!.elementAt(0);
-            _item.accelerometerY = _accelerometerValues!.elementAt(1);
-            _item.accelerometerZ = _accelerometerValues!.elementAt(2);
+
+            // Acceleronmeter
+            _item.accelerometerX = _accelerometerMeanX;
+            _item.accelerometerY = _accelerometerMeanY;
+            _item.accelerometerZ = _accelerometerMeanZ;
+            
+            // Magnetometer
+            _item.magnetometerX = _magnetometerMeanX;
+            _item.magnetometerY = _magnetometerMeanY;
+            _item.magnetometerZ = _magnetometerMeanZ;
+
             _item.descripcion = 'sin_descripcion';
             _item.status = UploadStatus.pending;
             print('$_item');
@@ -148,15 +191,65 @@ class _PrecargaPageState extends State<PrecargaPage> {
     // Next, initialize the controller. This returns a Future.
     _initializeControllerFuture = _controller.initialize();
 
+
+
+    // Acelerometro
     _streamSubscriptions.add(
       accelerometerEvents.listen(
         (AccelerometerEvent event) {
           setState(() {
-            _accelerometerValues = <double>[event.x, event.y, event.z];
+            // Eje x
+            _accelerometerQueueX.addFirst(event.x);
+            _accelerometerQueueX.removeLast();
+            double accelerometerSumX = _accelerometerQueueX.reduce((value, element) => value + element );
+            _accelerometerMeanX = accelerometerSumX / SIZE;
+            
+            // Eje Y
+            _accelerometerQueueY.addFirst(event.y);
+            _accelerometerQueueY.removeLast();
+            double accelerometerSumY = _accelerometerQueueY.reduce((value, element) => value + element );
+            _accelerometerMeanY = accelerometerSumY / SIZE;
+
+            // Eje Z
+            _accelerometerQueueZ.addFirst(event.z);
+            _accelerometerQueueZ.removeLast();
+            double accelerometerSumZ = _accelerometerQueueZ.reduce((value, element) => value + element );
+            _accelerometerMeanZ = accelerometerSumZ / SIZE;
           });
         },
       ),
     );
+
+    // Magnetometro
+    _streamSubscriptions.add(
+      magnetometerEvents.listen(
+        (MagnetometerEvent event) {
+          setState(() {
+
+            // Eje x
+            _magnetometerQueueX.addFirst(event.x);
+            _magnetometerQueueX.removeLast();
+            double magnetometerSumX = _magnetometerQueueX.reduce((value, element) => value + element );
+            _magnetometerMeanX = magnetometerSumX / SIZE;
+            
+            // Eje Y
+            _magnetometerQueueY.addFirst(event.y);
+            _magnetometerQueueY.removeLast();
+            double magnetometerSumY = _magnetometerQueueY.reduce((value, element) => value + element );
+            _magnetometerMeanY = magnetometerSumY / SIZE;
+
+            // Eje Z
+            _magnetometerQueueZ.addFirst(event.z);
+            _magnetometerQueueZ.removeLast();
+            double magnetometerSumZ = _magnetometerQueueZ.reduce((value, element) => value + element );
+            _magnetometerMeanZ = magnetometerSumZ / SIZE;
+
+          });
+        },
+      ),
+    );
+
+
   }
 
 }

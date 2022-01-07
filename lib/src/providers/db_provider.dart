@@ -28,7 +28,7 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onOpen: (db) {
         //
       },
@@ -44,6 +44,9 @@ class DBProvider {
             accelerometerX REAL,
             accelerometerY REAL,
             accelerometerZ REAL,
+            magenetometerX REAL,
+            magenetometerY REAL,
+            magenetometerZ REAL,
             public_id TEXT)
         ''');
       },
@@ -107,28 +110,5 @@ class DBProvider {
 
     return list;
   }
-
-
-  // ///
-  // /// Eliminar
-  // ///
-  // Future<int> deleteScan( int id ) async {
-
-  //   final db = await database;
-  //   final res = await db.delete('Scans', where: 'id = ?', whereArgs: [id] );
-  //   return res;
-
-  // }
-
-  // ///
-  // /// Delete all
-  // ///
-  // Future<int> deleteAll( ) async {
-
-  //   final db = await database;
-  //   final res = await db.rawDelete('DELETE FROM Scans');
-  //   return res;
-
-  // }
-
+  
 }

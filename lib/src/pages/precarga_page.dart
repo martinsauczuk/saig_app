@@ -94,7 +94,7 @@ class _PrecargaPageState extends State<PrecargaPage> {
               //     return Text('Cargando coordenadas...');
               //   },
               // ),
-              Text('Acelerometro'),
+              Text('Accelerometer'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -106,7 +106,7 @@ class _PrecargaPageState extends State<PrecargaPage> {
                       'Z: ${_accelerometerMeanZ.toStringAsFixed(7)}'),
                 ],
               ),
-              Text('Magenetometro'),
+              Text('Magnetometer'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[

@@ -64,11 +64,33 @@ class _UploadPageState extends State<UploadPage> {
               itemCount: items.length,
               itemBuilder: (context, index) {
                 final item = items[index];
-                return ItemListTile(
+                return Dismissible(
+                  key: Key(item.id.toString()), 
+                  child: ItemListTile(
                     item: item,
                     onPress: () {
                       uploadsProvider.upload(item);
-                    });
+                    }),
+                    background: Container(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          children: <Widget>[
+                            Icon( Icons.delete_forever ),
+                          ],
+                        ),
+                      ),
+                      color: Colors.red,
+                    ),
+                    direction: DismissDirection.startToEnd,
+                    onDismissed: (DismissDirection direction) => {
+                      uploadsProvider.deleteItem(item),
+                      ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(
+                          content: Text('${item.id} - ${item.descripcion} eliminado')
+                        ))
+                    },
+                );
               },
             );
           }

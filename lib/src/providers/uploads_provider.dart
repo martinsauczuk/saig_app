@@ -88,7 +88,7 @@ class UploadsProvider extends ChangeNotifier {
     Future.delayed(Duration(seconds: 3))
       .then((value) { 
         item.status = UploadStatus.archived;
-        deleteItem(item);
+        _items!.remove(item);
         deleteFile(item);
         updateItemDB(item);
       });
@@ -132,11 +132,13 @@ class UploadsProvider extends ChangeNotifier {
 
 
   ///
-  /// Eliminar item de la lista y notificar
+  /// Eliminar item de la lista y de la DB y notificar
   ///
   void deleteItem(UploadItemModel item) async {
     print('delete $item');
     _items!.remove(item);
+    await DBProvider.db.deleteItem(item);
+    deleteFile(item);
     notifyListeners();
   }
 

@@ -91,6 +91,20 @@ class DBProvider {
     return res;
   }
 
+  ///
+  /// Delete a item
+  ///
+  deleteItem(UploadItemModel item) async {
+
+    final db = await database;
+    final res = await db!
+        .delete('Items',
+          where: 'id = ?',
+          whereArgs: [item.id]
+        );
+    return res;
+  }
+
 
   ///
   /// Obtener todos lo que no son archived

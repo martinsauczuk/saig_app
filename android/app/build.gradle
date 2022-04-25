@@ -42,8 +42,8 @@ android {
         applicationId "com.sauczuk.saig_app"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 18
-        versionName "1.7.1"
+        versionCode 19
+        versionName "1.8.0"
     }
 
     signingConfigs {

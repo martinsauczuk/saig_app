@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:saig_app/src/enums/upload_status.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
 import 'package:saig_app/src/providers/uploads_provider.dart';
-// import 'package:sensors_plus/sensors_plus.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 class PrecargaPage extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -194,60 +194,60 @@ class _PrecargaPageState extends State<PrecargaPage> {
 
 
     // Acelerometro
-    // _streamSubscriptions.add(
-    //   accelerometerEvents.listen(
-    //     (AccelerometerEvent event) {
-    //       setState(() {
-    //         // Eje x
-    //         _accelerometerQueueX.addFirst(event.x);
-    //         _accelerometerQueueX.removeLast();
-    //         double accelerometerSumX = _accelerometerQueueX.reduce((value, element) => value + element );
-    //         _accelerometerMeanX = accelerometerSumX / SIZE;
+    _streamSubscriptions.add(
+      accelerometerEvents.listen(
+        (AccelerometerEvent event) {
+          setState(() {
+            // Eje x
+            _accelerometerQueueX.addFirst(event.x);
+            _accelerometerQueueX.removeLast();
+            double accelerometerSumX = _accelerometerQueueX.reduce((value, element) => value + element );
+            _accelerometerMeanX = accelerometerSumX / SIZE;
             
-    //         // Eje Y
-    //         _accelerometerQueueY.addFirst(event.y);
-    //         _accelerometerQueueY.removeLast();
-    //         double accelerometerSumY = _accelerometerQueueY.reduce((value, element) => value + element );
-    //         _accelerometerMeanY = accelerometerSumY / SIZE;
+            // Eje Y
+            _accelerometerQueueY.addFirst(event.y);
+            _accelerometerQueueY.removeLast();
+            double accelerometerSumY = _accelerometerQueueY.reduce((value, element) => value + element );
+            _accelerometerMeanY = accelerometerSumY / SIZE;
 
-    //         // Eje Z
-    //         _accelerometerQueueZ.addFirst(event.z);
-    //         _accelerometerQueueZ.removeLast();
-    //         double accelerometerSumZ = _accelerometerQueueZ.reduce((value, element) => value + element );
-    //         _accelerometerMeanZ = accelerometerSumZ / SIZE;
-    //       });
-    //     },
-    //   ),
-    // );
+            // Eje Z
+            _accelerometerQueueZ.addFirst(event.z);
+            _accelerometerQueueZ.removeLast();
+            double accelerometerSumZ = _accelerometerQueueZ.reduce((value, element) => value + element );
+            _accelerometerMeanZ = accelerometerSumZ / SIZE;
+          });
+        },
+      ),
+    );
 
     // Magnetometro
-    // _streamSubscriptions.add(
-    //   magnetometerEvents.listen(
-    //     (MagnetometerEvent event) {
-    //       setState(() {
+    _streamSubscriptions.add(
+      magnetometerEvents.listen(
+        (MagnetometerEvent event) {
+          setState(() {
 
-    //         // Eje x
-    //         _magnetometerQueueX.addFirst(event.x);
-    //         _magnetometerQueueX.removeLast();
-    //         double magnetometerSumX = _magnetometerQueueX.reduce((value, element) => value + element );
-    //         _magnetometerMeanX = magnetometerSumX / SIZE;
+            // Eje x
+            _magnetometerQueueX.addFirst(event.x);
+            _magnetometerQueueX.removeLast();
+            double magnetometerSumX = _magnetometerQueueX.reduce((value, element) => value + element );
+            _magnetometerMeanX = magnetometerSumX / SIZE;
             
-    //         // Eje Y
-    //         _magnetometerQueueY.addFirst(event.y);
-    //         _magnetometerQueueY.removeLast();
-    //         double magnetometerSumY = _magnetometerQueueY.reduce((value, element) => value + element );
-    //         _magnetometerMeanY = magnetometerSumY / SIZE;
+            // Eje Y
+            _magnetometerQueueY.addFirst(event.y);
+            _magnetometerQueueY.removeLast();
+            double magnetometerSumY = _magnetometerQueueY.reduce((value, element) => value + element );
+            _magnetometerMeanY = magnetometerSumY / SIZE;
 
-    //         // Eje Z
-    //         _magnetometerQueueZ.addFirst(event.z);
-    //         _magnetometerQueueZ.removeLast();
-    //         double magnetometerSumZ = _magnetometerQueueZ.reduce((value, element) => value + element );
-    //         _magnetometerMeanZ = magnetometerSumZ / SIZE;
+            // Eje Z
+            _magnetometerQueueZ.addFirst(event.z);
+            _magnetometerQueueZ.removeLast();
+            double magnetometerSumZ = _magnetometerQueueZ.reduce((value, element) => value + element );
+            _magnetometerMeanZ = magnetometerSumZ / SIZE;
 
-    //       });
-    //     },
-    //   ),
-    // );
+          });
+        },
+      ),
+    );
 
 
   }

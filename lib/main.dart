@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:saig_app/src/pages/camera_test.dart';
 import 'package:saig_app/src/pages/cloud_gallery_page.dart';
 import 'package:saig_app/src/pages/info_page.dart';
-// import 'package:saig_app/src/pages/map_test.dart';
+import 'package:saig_app/src/pages/map_test.dart';
 import 'package:saig_app/src/pages/precarga_page.dart';
-import 'package:saig_app/src/pages/sensors_test.dart';
+// import 'package:saig_app/src/pages/sensors_test.dart';
 import 'package:saig_app/src/pages/upload_page.dart';
 import 'package:saig_app/src/providers/uploads_provider.dart';
 
@@ -57,9 +57,9 @@ class MyApp extends StatelessWidget {
           'cloud'     : (BuildContext context) => CloudGalleryPage(),
           'info'      : (BuildContext context) => InfoPage(),
           'precarga'  : (BuildContext context) => PrecargaPage(cameras: cameras),
-          'sensors'   : (BuildContext context) => SensorsTestPage(),
+          // 'sensors'   : (BuildContext context) => SensorsTestPage(),
           'camera'    : (BuildContext context) => CameraTestPage(cameras: cameras),
-          // 'map'       : (BuildContext context) => MapTestPage()
+          'map'       : (BuildContext context) => MapTestPage()
         },
         initialRoute: 'info',
       ),

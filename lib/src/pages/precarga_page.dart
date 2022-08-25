@@ -77,23 +77,23 @@ class _PrecargaPageState extends State<PrecargaPage> {
           ),
           Column(
             children: [
-              // FutureBuilder(
-              //   future: getPosition(),
-              //   builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
-              //     if (snapshot.hasData) {
-              //       _item.lat = snapshot.data!.latitude;
-              //       _item.lng = snapshot.data!.longitude;
-              //       return Row(
-              //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //         children: <Widget>[
-              //           Text('lat: ${snapshot.data!.latitude.toStringAsFixed(7)}'),
-              //           Text('lng: ${snapshot.data!.longitude.toStringAsFixed(7)}'),
-              //         ],
-              //       );
-              //     }
-              //     return Text('Cargando coordenadas...');
-              //   },
-              // ),
+              FutureBuilder(
+                future: getPosition(),
+                builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+                  if (snapshot.hasData) {
+                    _item.lat = snapshot.data!.latitude;
+                    _item.lng = snapshot.data!.longitude;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text('lat: ${snapshot.data!.latitude.toStringAsFixed(7)}'),
+                        Text('lng: ${snapshot.data!.longitude.toStringAsFixed(7)}'),
+                      ],
+                    );
+                  }
+                  return Text('Cargando coordenadas...');
+                },
+              ),
               Text('Accelerometer'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

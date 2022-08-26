@@ -2,24 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:saig_app/src/widgets/menu_widget.dart';
 
-
 class MapTestPage extends StatefulWidget {
-  
   @override
   _MapTestPageState createState() => _MapTestPageState();
-  
 }
 
 class _MapTestPageState extends State<MapTestPage> {
-  
-
   static final CameraPosition _kInitialPosition = const CameraPosition(
     target: LatLng(-34.70624, -58.2784),
     zoom: 11.0,
   );
 
-  static const String ACCESS_TOKEN = 'pk.eyJ1IjoibXNhdWN6dWsiLCJhIjoiY2tqb3VkeTE3MTc5OTJxbjA3bDB5cDZ1dSJ9.No63VlJhfD9TLgRTTgSFwA';
-
+  static const String ACCESS_TOKEN =
+      'pk.eyJ1IjoibXNhdWN6dWsiLCJhIjoiY2tqb3VkeTE3MTc5OTJxbjA3bDB5cDZ1dSJ9.No63VlJhfD9TLgRTTgSFwA';
 
   MapboxMapController? mapController;
   CameraPosition _position = _kInitialPosition;
@@ -52,13 +47,8 @@ class _MapTestPageState extends State<MapTestPage> {
   List<Object>? _featureQueryFilter;
   Fill? _selectedFill;
 
-
-
-
   @override
   Widget build(BuildContext context) {
-
-
     final MapboxMap mapboxMap = MapboxMap(
       accessToken: ACCESS_TOKEN,
       // onMapCreated: onMapCreated,
@@ -122,57 +112,20 @@ class _MapTestPageState extends State<MapTestPage> {
     );
 
     // void onMapCreated(MapboxMapController controller) {
-      // mapController = controller;
-      // mapController!.addListener(_onMapChanged);
-      // _extractMapInfo();
+    // mapController = controller;
+    // mapController!.addListener(_onMapChanged);
+    // _extractMapInfo();
 
-      // mapController!.getTelemetryEnabled().then((isEnabled) => setState(() {
-      //       _telemetryEnabled = isEnabled;
-      //     }));
+    // mapController!.getTelemetryEnabled().then((isEnabled) => setState(() {
+    //       _telemetryEnabled = isEnabled;
+    //     }));
     // }
 
-
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Mapa'),
-      ),
-      drawer: MenuWidget(),
-      body: mapboxMap
-    );
-      // body: Stack(children: [
-        // SizedBox(
-          // height: MediaQuery.of(context).size.height * 0.8,
-          // Center(
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.center,
-          //     children:[
-          //       SizedBox(  
-          //         child: mapboxMap,
-          //         height: 400,
-          //         width: 200,
-          //       ),
-              
-              
-              
-          //   ]),
-          // )
-        // )
-      // );
-      //   // margin: EdgeInsetsDirectional.all(10),
-      //   // child: Column(
-      //     // mainAxisSize: MainAxisSize.min,
-      //     // children: [
-      //       // Center(
-      //         // child: SizedBox(
-      //           // width: 300.0,
-      //           // height: 500.0,
-                // mapboxMap,
-              // ),
-            // ),
-          // ],
-        // )
-      // );
-    // );
+        appBar: AppBar(
+          title: Text('Mapa'),
+        ),
+        drawer: MenuWidget(),
+        body: mapboxMap);
   }
 }

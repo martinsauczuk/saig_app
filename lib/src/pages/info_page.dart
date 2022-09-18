@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:package_info_plus/package_info_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:saig_app/src/widgets/menu_widget.dart';
 
 
@@ -12,27 +12,27 @@ class InfoPage extends StatefulWidget {
 
 class _InfoPageState extends State<InfoPage> {
   
-  // PackageInfo _packageInfo = PackageInfo(
-  //   appName: 'Unknown',
-  //   packageName: 'Unknown',
-  //   version: 'Unknown',
-  //   buildNumber: 'Unknown',
-  // );
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+  );
 
 
   @override
   void initState() { 
     super.initState();
-    // _initPackageInfo();
+    _initPackageInfo();
   
   }
   
-  // Future<void> _initPackageInfo() async {
-  //   final info = await PackageInfo.fromPlatform();
-  //   setState(() {
-  //     _packageInfo = info;
-  //   });
-  // }
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
+  }
 
 
   @override
@@ -57,8 +57,8 @@ class _InfoPageState extends State<InfoPage> {
               children: [
                 Text('Desarrollo: Ing Martin Sauczuk', style: Theme.of(context).textTheme.subtitle1 ),
                 Text('martin.sauczuk@gmail.com', style: Theme.of(context).textTheme.subtitle2 ),
-                // Text('Version: ${_packageInfo.version}', style: Theme.of(context).textTheme.button),
-                // Text('Build: ${_packageInfo.buildNumber}', style: Theme.of(context).textTheme.button),
+                Text('Version: ${_packageInfo.version}', style: Theme.of(context).textTheme.button),
+                Text('Build: ${_packageInfo.buildNumber}', style: Theme.of(context).textTheme.button),
               ],
             )
           ]

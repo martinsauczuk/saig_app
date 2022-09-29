@@ -52,6 +52,7 @@ class _PrecargaPageState extends State<PrecargaPage> {
   double _magnetometerMeanZ = 0;
 
   final _streamSubscriptions = <StreamSubscription<dynamic>>[];
+  String _description = 'sin descripcion';
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +119,22 @@ class _PrecargaPageState extends State<PrecargaPage> {
                       'Z: ${_magnetometerMeanZ.toStringAsFixed(7)}'),
                 ],
               ),
+              Expanded(child: Divider()),
+              TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Ingrese una descripción para la imagen',
+                ),
+                
+                onChanged: (value) {
+                  // print(value);
+                  // this._descripcion = value;
+                  _description = value;
+                  // setState(() {
+                  //   //
+                  // });
+                }
+              ),
             ],
           ),
         ],
@@ -150,7 +167,7 @@ class _PrecargaPageState extends State<PrecargaPage> {
             _item.magnetometerY = _magnetometerMeanY;
             _item.magnetometerZ = _magnetometerMeanZ;
 
-            _item.descripcion = 'sin_descripcion';
+            _item.descripcion = _description;
             _item.status = UploadStatus.pending;
             print('$_item');
             uploadsProvider.addItem(_item);

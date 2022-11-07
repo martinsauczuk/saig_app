@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:saig_app/src/pages/camera_test.dart';
 import 'package:saig_app/src/pages/cloud_gallery_page.dart';
 import 'package:saig_app/src/pages/info_page.dart';
+import 'package:saig_app/src/pages/location_test.dart';
 import 'package:saig_app/src/pages/map_test.dart';
 import 'package:saig_app/src/pages/precarga_page.dart';
 import 'package:saig_app/src/pages/sensors_test.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
           'info'      : (BuildContext context) => InfoPage(),
           'precarga'  : (BuildContext context) => PrecargaPage(cameras: cameras),
           'sensors'   : (BuildContext context) => SensorsTestPage(),
+          'location'  : (BuildContext context) => LocationTestPage(),
           'camera'    : (BuildContext context) => CameraTestPage(cameras: cameras),
           'map'       : (BuildContext context) => MapTestPage()
         },

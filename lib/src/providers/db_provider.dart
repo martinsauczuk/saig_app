@@ -28,7 +28,7 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onOpen: (db) {
         //
       },
@@ -47,6 +47,12 @@ class DBProvider {
             magnetometerX REAL,
             magnetometerY REAL,
             magnetometerZ REAL,
+            accuracy REAL,
+            heading REAL,
+            altitude REAL,
+            speed REAL,
+            speedAccuracy REAL,
+            timestamp TEXT,
             public_id TEXT)
         ''');
       },

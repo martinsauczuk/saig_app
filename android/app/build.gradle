@@ -41,7 +41,7 @@ android {
     defaultConfig {
         applicationId "com.sauczuk.saig_app"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 25
         versionName "1.11.0"
     }

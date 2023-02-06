@@ -74,7 +74,23 @@ class CloudinaryProvider {
     final file = await http.MultipartFile.fromPath('file', item.path!,
         contentType: MediaType(mimeType[0], mimeType[1]));
     imageUploadRequest.fields['metadata'] =
-        'coord_lat=${item.lat}|coord_lng=${item.lng}|desc=$descripcion|accelerometerX=${item.accelerometerX}|accelerometerY=${item.accelerometerY}|accelerometerZ=${item.accelerometerZ}|magnetometerX=${item.magnetometerX}|magnetometerY=${item.magnetometerY}|magnetometerZ=${item.magnetometerZ}';
+        '''
+          coord_lat=${item.lat}|
+          coord_lng=${item.lng}|
+          desc=$descripcion|
+          accelerometerX=${item.accelerometerX}|
+          accelerometerY=${item.accelerometerY}|
+          accelerometerZ=${item.accelerometerZ}|
+          magnetometerX=${item.magnetometerX}|
+          magnetometerY=${item.magnetometerY}|
+          magnetometerZ=${item.magnetometerZ}|
+          accuracy=${item.accuracy}|
+          heading=${item.heading}|
+          altitude=${item.altitude}|
+          speed=${item.speed}|
+          speedAccuracy=${item.speedAccuracy}|
+          timestamp=${item.timestamp}
+        ''';
 
     imageUploadRequest.files.add(file);
 

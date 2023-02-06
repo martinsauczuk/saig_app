@@ -150,7 +150,13 @@ class _PrecargaPageState extends State<PrecargaPage> {
             await getPosition().then((value) => {
               print(value),
               _item.lat = value.latitude,
-              _item.lng = value.longitude
+              _item.lng = value.longitude,
+              _item.accuracy = value.accuracy,
+              _item.heading = value.heading,
+              _item.altitude = value.altitude,
+              _item.speed = value.speed,
+              _item.speedAccuracy = value.speedAccuracy,
+              _item.timestamp = value.timestamp.toString()
             });
             // Attempt to take a picture and get the file `image`
             // where it was saved.

@@ -17,6 +17,7 @@ class _MapTestPageState extends State<MapTestPage> {
   static const String ACCESS_TOKEN =
       'pk.eyJ1IjoibXNhdWN6dWsiLCJhIjoiY2tqb3VkeTE3MTc5OTJxbjA3bDB5cDZ1dSJ9.No63VlJhfD9TLgRTTgSFwA';
 
+
   // MapboxMapController? mapController;
   // CameraPosition _position = _kInitialPosition;
   // bool _isMoving = false;

@@ -2,13 +2,13 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:saig_app/src/pages/camera_test.dart';
+import 'package:saig_app/src/test_pages/camera_test.dart';
 import 'package:saig_app/src/pages/cloud_gallery_page.dart';
 import 'package:saig_app/src/pages/info_page.dart';
-import 'package:saig_app/src/pages/location_test.dart';
-import 'package:saig_app/src/pages/map_test.dart';
+import 'package:saig_app/src/test_pages/location_test.dart';
+import 'package:saig_app/src/test_pages/map_test.dart';
 import 'package:saig_app/src/pages/precarga_page.dart';
-import 'package:saig_app/src/pages/sensors_test.dart';
+import 'package:saig_app/src/test_pages/sensors_test.dart';
 import 'package:saig_app/src/pages/upload_page.dart';
 import 'package:saig_app/src/providers/uploads_provider.dart';
 

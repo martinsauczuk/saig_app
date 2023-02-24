@@ -2,122 +2,86 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:saig_app/src/models/sensor_value.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 class SensorsProvider with ChangeNotifier {
+  
+  // Cantidad de valores a promediar
+  static const ACC_SIZE = 100; 
+
   final _streamSubscriptions = <StreamSubscription<dynamic>>[];
-  static const SIZE = 10; // Cantidad de valores a promediar
 
-  Queue<double> _accelerometerQueueX = Queue.of(List.filled(SIZE, 0));
-  double _accelerometerMeanX = 0;
+  // Accelerometer
+  SensorValue _accelerometerInstant = SensorValue(0, 0, 0);
+  SensorValue _accelerometerMean = SensorValue(0, 0, 0);
+  Queue<SensorValue> _accelerometerQueue =
+      Queue.of(List.filled(ACC_SIZE, SensorValue(0, 0, 0)));
 
-  Queue<double> _accelerometerQueueY = Queue.of(List.filled(SIZE, 0));
-  double _accelerometerMeanY = 0;
 
-  Queue<double> _accelerometerQueueZ = Queue.of(List.filled(SIZE, 0));
-  double _accelerometerMeanZ = 0;
-
-  Queue<double> _magnetometerQueueX = Queue.of(List.filled(SIZE, 0));
-  double _magnetometerMeanX = 0;
-
-  Queue<double> _magnetometerQueueY = Queue.of(List.filled(SIZE, 0));
-  double _magnetometerMeanY = 0;
-
-  Queue<double> _magnetometerQueueZ = Queue.of(List.filled(SIZE, 0));
-  double _magnetometerMeanZ = 0;
-
-  late int _counter;
-  late Timer timer1;
-
-  void startTimer() {
-    print('start timer');
-    _counter = 1;
-
-    timer1 = Timer.periodic(Duration(milliseconds: 3000), (timer) {
-      _counter++;
-      // print('increment counter $_counter');
-      notifyListeners();
-    });
-  }
+  SensorValue get accelerometerInstant => _accelerometerInstant;
+  SensorValue get accelerometerMean => _accelerometerMean;
 
   init() {
-    // Acelerometro
-    _streamSubscriptions.add(
-      accelerometerEvents.listen(
-        (AccelerometerEvent event) {
-          // Eje x
-          _accelerometerQueueX.addFirst(event.x);
-          _accelerometerQueueX.removeLast();
-          double accelerometerSumX =
-              _accelerometerQueueX.reduce((value, element) => value + element);
-          _accelerometerMeanX = accelerometerSumX / SIZE;
-
-          notifyListeners();
-          // print(_accelerometerMeanX);
-
-          // Eje Y
-          _accelerometerQueueY.addFirst(event.y);
-          _accelerometerQueueY.removeLast();
-          double accelerometerSumY =
-              _accelerometerQueueY.reduce((value, element) => value + element);
-          _accelerometerMeanY = accelerometerSumY / SIZE;
-
-          // Eje Z
-          _accelerometerQueueZ.addFirst(event.z);
-          _accelerometerQueueZ.removeLast();
-          double accelerometerSumZ =
-              _accelerometerQueueZ.reduce((value, element) => value + element);
-          _accelerometerMeanZ = accelerometerSumZ / SIZE;
-        },
-      ),
-    );
+    _listenAccelerometer();
 
     // Magnetometro
-    _streamSubscriptions.add(
-      magnetometerEvents.listen(
-        (MagnetometerEvent event) {
-          // Eje x
-          _magnetometerQueueX.addFirst(event.x);
-          _magnetometerQueueX.removeLast();
-          double magnetometerSumX =
-              _magnetometerQueueX.reduce((value, element) => value + element);
-          _magnetometerMeanX = magnetometerSumX / SIZE;
+    // _streamSubscriptions.add(
+    //   magnetometerEvents.listen(
+    //     (MagnetometerEvent event) {
+    //       // Eje x
+    //       _magnetometerQueueX.addFirst(event.x);
+    //       _magnetometerQueueX.removeLast();
+    //       double magnetometerSumX =
+    //           _magnetometerQueueX.reduce((value, element) => value + element);
+    //       _magnetometerMeanX = magnetometerSumX / ACC_SIZE;
 
-          // Eje Y
-          _magnetometerQueueY.addFirst(event.y);
-          _magnetometerQueueY.removeLast();
-          double magnetometerSumY =
-              _magnetometerQueueY.reduce((value, element) => value + element);
-          _magnetometerMeanY = magnetometerSumY / SIZE;
+    //       // Eje Y
+    //       _magnetometerQueueY.addFirst(event.y);
+    //       _magnetometerQueueY.removeLast();
+    //       double magnetometerSumY =
+    //           _magnetometerQueueY.reduce((value, element) => value + element);
+    //       _magnetometerMeanY = magnetometerSumY / ACC_SIZE;
 
-          // Eje Z
-          _magnetometerQueueZ.addFirst(event.z);
-          _magnetometerQueueZ.removeLast();
-          double magnetometerSumZ =
-              _magnetometerQueueZ.reduce((value, element) => value + element);
-          _magnetometerMeanZ = magnetometerSumZ / SIZE;
-        },
-      ),
-    );
+    //       // Eje Z
+    //       _magnetometerQueueZ.addFirst(event.z);
+    //       _magnetometerQueueZ.removeLast();
+    //       double magnetometerSumZ =
+    //           _magnetometerQueueZ.reduce((value, element) => value + element);
+    //       _magnetometerMeanZ = magnetometerSumZ / ACC_SIZE;
+    //     },
+    //   ),
+    // );
   }
 
-  double getMeanX() {
-    return _accelerometerMeanX;
+  void _listenAccelerometer() {
+    _streamSubscriptions
+        .add(accelerometerEvents.listen((AccelerometerEvent event) {
+
+      // register instant value
+      _accelerometerInstant = SensorValue(event.x, event.y, event.z);
+
+      // calculate mean
+      _accelerometerQueue.addFirst(SensorValue(event.x, event.y, event.z));
+      _accelerometerQueue.removeLast();
+      SensorValue sum = _accelerometerQueue.reduce((value, element) =>
+          SensorValue(
+              value.x + element.x, value.y + element.y, value.z + element.z));
+      _accelerometerMean =
+          SensorValue(sum.x / ACC_SIZE, sum.y / ACC_SIZE, sum.z / ACC_SIZE);
+
+      notifyListeners();
+    }));
   }
 
-  Future<String> delayedString() {
-    Future<String> myFuture = Future.delayed(Duration(seconds: 3), () {
-      return 'Hola Mundo';
-    });
 
-    return myFuture;
-  }
 
-  ///
-  /// timer example
-  ///
-  int timerString() {
-    print(_counter);
-    return _counter;
+  @override
+  void dispose() {
+    print("<<< disposing sensors provider>>");
+    super.dispose();
+    for (final subscription in _streamSubscriptions) {
+      subscription.cancel();
+    }
   }
 }

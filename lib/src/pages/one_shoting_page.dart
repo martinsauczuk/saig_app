@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:saig_app/src/enums/upload_status.dart';
+import 'package:saig_app/src/models/sensor_value.dart';
 import 'package:saig_app/src/models/upload_item_model.dart';
 import 'package:saig_app/src/providers/sensors_provider.dart';
 import 'package:saig_app/src/providers/uploads_provider.dart';
@@ -28,19 +29,17 @@ class _OneShotingPageState extends State<OneShotingPage> {
   late Future<void> _initializeControllerFuture;
   final UploadItemModel _item = new UploadItemModel();
 
-  final _streamSubscriptions = <StreamSubscription<dynamic>>[];
-
   String _description = 'sin descripcion';
-
-  // Pruebas
-  late Future<String> delayedString;
-  late final int counter;
 
   @override
   Widget build(BuildContext context) {
-    print('<<Build>>');
+    // print('<<Build>>');
     final UploadsProvider uploadsProvider = context.read<UploadsProvider>();
-    double meanX = context.watch<SensorsProvider>().getMeanX();
+
+    SensorValue accelerometer =
+        context.watch<SensorsProvider>().accelerometerMean;
+
+    // print(accelerometerInstant);
 
     return Scaffold(
       appBar: AppBar(
@@ -61,25 +60,13 @@ class _OneShotingPageState extends State<OneShotingPage> {
           ),
           Column(
             children: [
-              FutureBuilder(
-                  future: delayedString,
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    if (snapshot.hasData) {
-                      return Text(snapshot.data!);
-                    }
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
-              Text('Counter: $counter'),
               Text('Accelerometer'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text('X: $meanX'),
-                  // Text('Y: ${_accelerometerMeanY.toStringAsFixed(7)}'),
-                  // Text('Z: ${_accelerometerMeanZ.toStringAsFixed(7)}'),
+                  Text('X: ${accelerometer.x.toStringAsFixed(7)}'),
+                  Text('Y: ${accelerometer.y.toStringAsFixed(7)}'),
+                  Text('Z: ${accelerometer.z.toStringAsFixed(7)}'),
                 ],
               ),
               Text('Magnetometer'),
@@ -161,9 +148,6 @@ class _OneShotingPageState extends State<OneShotingPage> {
   @override
   void dispose() {
     super.dispose();
-    for (final subscription in _streamSubscriptions) {
-      subscription.cancel();
-    }
     _controller.dispose();
   }
 
@@ -171,13 +155,8 @@ class _OneShotingPageState extends State<OneShotingPage> {
   void initState() {
     super.initState();
     print('initState');
-    delayedString = context.read<SensorsProvider>().delayedString();
 
     context.read<SensorsProvider>().init();
-
-    // Pruebas
-    context.read<SensorsProvider>().startTimer();
-    counter = context.read<SensorsProvider>().timerString();
 
     // To display the current output from the Camera,
     // create a CameraController.

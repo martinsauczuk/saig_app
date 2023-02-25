@@ -25,22 +25,66 @@ Future<Position> getPosition() async {
 }
 
 class _OneShotingPageState extends State<OneShotingPage> {
+
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   final UploadItemModel _item = new UploadItemModel();
-
+    
   String _description = 'sin descripcion';
 
   @override
   Widget build(BuildContext context) {
-    // print('<<Build>>');
+    
     final UploadsProvider uploadsProvider = context.read<UploadsProvider>();
-
-    SensorValue accelerometer =
+    final SensorValue accelerometer =
         context.watch<SensorsProvider>().accelerometerMean;
+    final SensorValue magnetometer =
+        context.watch<SensorsProvider>().magnetometerMean;
 
-    // print(accelerometerInstant);
+    ///
+    /// Take Picture
+    ///
+    void onTakePictureButtonPressed() async {
+      print('taking Picture');
+      try {
+        // Ensure that the camera is initialized.
+        await _initializeControllerFuture;
+        await getPosition().then((value) => {
+              print(value),
+              _item.lat = value.latitude,
+              _item.lng = value.longitude,
+              _item.accuracy = value.accuracy,
+              _item.heading = value.heading,
+              _item.altitude = value.altitude,
+              _item.speed = value.speed,
+              _item.speedAccuracy = value.speedAccuracy,
+              _item.timestamp = value.timestamp.toString()
+            });
 
+        final image = await _controller.takePicture();
+        _item.path = image.path;
+
+        // Acceleronmeter
+        _item.accelerometerX = accelerometer.x;
+        _item.accelerometerY = accelerometer.y;
+        _item.accelerometerZ = accelerometer.z;
+
+        // // Magnetometer
+        _item.magnetometerX = magnetometer.x;
+        _item.magnetometerY = magnetometer.y;
+        _item.magnetometerZ = magnetometer.z;
+
+        _item.descripcion = _description;
+        _item.status = UploadStatus.pending;
+        print('$_item');
+        uploadsProvider.addItem(_item);
+        Navigator.pop(context);
+      } catch (e) {
+        // If an error occurs, log the error to the console.
+        print(e);
+      }
+    }
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Pre carga de imagen'),
@@ -73,9 +117,9 @@ class _OneShotingPageState extends State<OneShotingPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  // Text('X: ${_magnetometerMeanX.toStringAsFixed(7)}'),
-                  // Text('Y: ${_magnetometerMeanY.toStringAsFixed(7)}'),
-                  // Text('Z: ${_magnetometerMeanZ.toStringAsFixed(7)}'),
+                  Text('X: ${magnetometer.x.toStringAsFixed(7)}'),
+                  Text('Y: ${magnetometer.y.toStringAsFixed(7)}'),
+                  Text('Z: ${magnetometer.z.toStringAsFixed(7)}'),
                 ],
               ),
               Expanded(child: Divider()),
@@ -85,65 +129,19 @@ class _OneShotingPageState extends State<OneShotingPage> {
                     labelText: 'Ingrese una descripción para la imagen',
                   ),
                   onChanged: (value) {
-                    // print(value);
-                    // this._descripcion = value;
                     _description = value;
-                    // setState(() {
-                    //   //
-                    // });
                   }),
             ],
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        // Provide an onPressed callback.
-        onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
-          try {
-            // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
-            await getPosition().then((value) => {
-                  print(value),
-                  _item.lat = value.latitude,
-                  _item.lng = value.longitude,
-                  _item.accuracy = value.accuracy,
-                  _item.heading = value.heading,
-                  _item.altitude = value.altitude,
-                  _item.speed = value.speed,
-                  _item.speedAccuracy = value.speedAccuracy,
-                  _item.timestamp = value.timestamp.toString()
-                });
-            // Attempt to take a picture and get the file `image`
-            // where it was saved.
-            final image = await _controller.takePicture();
-            _item.path = image.path;
-
-            // Acceleronmeter
-            // _item.accelerometerX = _accelerometerMeanX;
-            // _item.accelerometerY = _accelerometerMeanY;
-            // _item.accelerometerZ = _accelerometerMeanZ;
-
-            // // Magnetometer
-            // _item.magnetometerX = _magnetometerMeanX;
-            // _item.magnetometerY = _magnetometerMeanY;
-            // _item.magnetometerZ = _magnetometerMeanZ;
-
-            _item.descripcion = _description;
-            _item.status = UploadStatus.pending;
-            print('$_item');
-            uploadsProvider.addItem(_item);
-            Navigator.pop(context);
-          } catch (e) {
-            // If an error occurs, log the error to the console.
-            print(e);
-          }
-        },
+        onPressed: onTakePictureButtonPressed,
         child: const Icon(Icons.camera_alt),
       ),
     );
   }
+
 
   @override
   void dispose() {

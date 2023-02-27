@@ -33,17 +33,6 @@ class _UploadPageState extends State<UploadPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Carga de imagen y coordenadas'),
-        // leading: FutureBuilder(
-        //   future: getPosition(),
-        //   builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
-        //     if (snapshot.hasData) {
-        //       // _item.lat = snapshot.data!.latitude;
-        //       // _item.lng = snapshot.data!.longitude;
-        //       return Icon(Icons.my_location_sharp);
-        //     }
-        //     return Icon(Icons.location_disabled_sharp);
-        //   },
-        // )
       ),
       drawer: MenuWidget(),
       body: FutureBuilder<List<UploadItemModel>?>(
@@ -106,13 +95,26 @@ class _UploadPageState extends State<UploadPage> {
           );
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () async {
-          await getPosition().then((value) => print( value ));
-          Navigator.pushNamed(context, 'precarga');
-        },
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'precarga',
+            child: Icon(Icons.add),
+            onPressed: () async {
+              await getPosition().then((value) => print( value ));
+              Navigator.pushNamed(context, 'precarga');
+            },
+          ),
+          FloatingActionButton(
+            heroTag: 'multi',
+            child: Icon(Icons.add_to_photos_sharp),
+            onPressed: () {
+              Navigator.pushNamed(context, 'multi');
+            }
+          )
+        ],
       ),
     );
   }

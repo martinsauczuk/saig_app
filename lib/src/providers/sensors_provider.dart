@@ -7,8 +7,8 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 class SensorsProvider with ChangeNotifier {
   // Cantidad de valores a promediar
-  static const ACC_SIZE = 100; // acelerometro
-  static const MAG_SIZE = 100; // magnetometro
+  static const ACC_SIZE = 10; // acelerometro
+  static const MAG_SIZE = 10; // magnetometro
 
   final _streamSubscriptions = <StreamSubscription<dynamic>>[];
 

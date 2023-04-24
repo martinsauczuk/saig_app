@@ -113,6 +113,13 @@ class _UploadPageState extends State<UploadPage> {
             onPressed: () {
               Navigator.pushNamed(context, 'multi');
             }
+          ),
+          FloatingActionButton(
+            heroTag: 'routing',
+            child: Icon(Icons.route_rounded),
+            onPressed: () {
+              Navigator.pushNamed(context, 'routing');
+            }
           )
         ],
       ),

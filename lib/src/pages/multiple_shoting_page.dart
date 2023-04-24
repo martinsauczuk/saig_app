@@ -10,6 +10,7 @@ import '../models/sensor_value.dart';
 import '../models/upload_item_model.dart';
 import '../providers/sensors_provider.dart';
 import '../providers/uploads_provider.dart';
+import '../widgets/camera_preview.dart';
 
 class MultipleShotingPage extends StatefulWidget {
   const MultipleShotingPage({super.key, required this.cameras});
@@ -251,39 +252,6 @@ class SensorsIndicatorsWidget extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-///
-/// Camera preview
-///
-class CameraPreviewWidget extends StatelessWidget {
-  const CameraPreviewWidget({
-    super.key,
-    required CameraController controller,
-  }) : _controller = controller;
-
-  final CameraController _controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          border: Border.all(
-            color: _controller.value.isTakingPicture
-                ? Colors.redAccent
-                : Colors.grey,
-            width: 3.0,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(1.0),
-          child: Center(child: CameraPreview(_controller)),
-        ),
-      ),
     );
   }
 }

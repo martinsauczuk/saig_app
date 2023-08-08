@@ -267,7 +267,7 @@ class _CameraTestPageState extends State<CameraTestPage>
     }
   }
 
-Widget _modeControlRowWidget() {
+  Widget _modeControlRowWidget() {
     return Column(
       children: <Widget>[
         Row(

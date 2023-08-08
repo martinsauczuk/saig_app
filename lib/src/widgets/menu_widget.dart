@@ -69,9 +69,9 @@ class MenuWidget extends StatelessWidget {
             onTap: () => Navigator.pushReplacementNamed(context, 'camera')
           ),
           ListTile(
-            leading: Icon(Icons.location_on, color: Colors.cyan),
-            title: Text('Mapa y ubicación'),
-            onTap: () => Navigator.pushReplacementNamed(context, 'map')
+            leading: Icon(Icons.volume_down_alt, color: Colors.cyan),
+            title: Text('Prueba de sonidos'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'sounds')
           ),
           ListTile(
             leading: Icon(Icons.info_outlined, color: Colors.cyan),

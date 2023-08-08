@@ -9,8 +9,9 @@ import 'package:saig_app/src/test_pages/camera_test.dart';
 import 'package:saig_app/src/pages/cloud_gallery_page.dart';
 import 'package:saig_app/src/pages/info_page.dart';
 import 'package:saig_app/src/test_pages/location_test.dart';
-import 'package:saig_app/src/test_pages/map_test.dart';
+import 'package:saig_app/src/pages/routing_shooting.dart';
 import 'package:saig_app/src/pages/one_shoting_page.dart';
+import 'package:saig_app/src/test_pages/play_sound_test.dart';
 import 'package:saig_app/src/test_pages/sensors_test.dart';
 import 'package:saig_app/src/pages/upload_page.dart';
 import 'package:saig_app/src/providers/uploads_provider.dart';
@@ -70,8 +71,9 @@ class MyApp extends StatelessWidget {
           'multi'     : (BuildContext context) => MultipleShotingPage(cameras: cameras),
           'sensors'   : (BuildContext context) => SensorsTestPage(),
           'location'  : (BuildContext context) => LocationTestPage(),
+          'sounds'    : (BuildContext context) => PlaySoundTest(),
           'camera'    : (BuildContext context) => CameraTestPage(cameras: cameras),
-          'map'       : (BuildContext context) => MapTestPage()
+          'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
         },
         initialRoute: 'upload',
       ),

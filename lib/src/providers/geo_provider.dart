@@ -10,24 +10,20 @@ class GeoProvider {
   ///
   /// Get from Github
   ///
-  Future<String> getExample() async {
+  Future<String> getJsonFile(String filename) async {
 
-    final namefile = 'camino_unq_01.js';
 
-    final uri =
-        Uri.https('raw.githubusercontent.com', '/martinsauczuk/plantar-geojson/main/$namefile');
-
+    final uri = Uri.https('raw.githubusercontent.com', '/martinsauczuk/plantar-geojson/main/$filename');
+    
     final response = await http.get(uri);
-    print(response);
-    return response.body;
-  }
 
-  Future<String> getJsonFile(String url) async {
-    final uri = Uri.https(url);
+    if(response.statusCode == 200) {
+      return response.body;
+    } else {
+      return "{ }";
+    }
 
-    final response = await http.get(uri);
-    print(response);
-    return response.body;
+    
   }
 
   ///

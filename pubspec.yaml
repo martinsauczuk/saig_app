@@ -38,6 +38,7 @@ dependencies:
   camera: ^0.10.3
   geojson: ^1.0.0
   geopoint: ^1.0.0
+  audioplayers: ^4.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:geojson/geojson.dart';
@@ -31,14 +32,18 @@ Future<Position> getPosition() async {
 class _RoutingShootingPageState extends State<RoutingShootingPage> {
   static const String ACCESS_TOKEN =
       'pk.eyJ1IjoibXNhdWN6dWsiLCJhIjoiY2tqb3VkeTE3MTc5OTJxbjA3bDB5cDZ1dSJ9.No63VlJhfD9TLgRTTgSFwA';
-  late MapboxMapController controller;
+  late MapboxMapController mapController;
   final _geoProvider = new GeoProvider();
   static final LatLng center = const LatLng(-34.645330358739, -58.35055075717234);
   late CameraController _controller;
   String status = 'Waiting nearby point...';
   int counter = 0;
-  bool enabled = false;
+  bool enabledTakePhoto = false;
   late Future<void> _initializeControllerFuture;
+
+  final playerCamera = AudioPlayer();
+
+  String _jsonFilename = '';
 
   // Initial position
   static final CameraPosition _kInitialPosition = CameraPosition(
@@ -46,16 +51,16 @@ class _RoutingShootingPageState extends State<RoutingShootingPage> {
     zoom: 14.0,
   );
 
-  Fill? fillReference;
+  Fill? circleSmall;
   late LatLng centerReference;
   double _currentSliderValue = 20;
-  late final String geojsonRaw;
+  late String geojsonRaw;
 
   List<PointTarget> pointsTarget = List.empty();
 
   bool _myLocationEnabled = false;
   void _onMapCreated(MapboxMapController controller) {
-    this.controller = controller;
+    this.mapController = controller;
   }
 
   ///
@@ -71,11 +76,10 @@ class _RoutingShootingPageState extends State<RoutingShootingPage> {
   ///
   /// Re dibujar circulo de referencia
   ///
-  updateReference(LatLng latLng, double radius) async {
-    if (fillReference != null) {
-      await controller.removeFill(fillReference!);
+  updateCircleSmall(LatLng latLng, double radius) async {
+    if (circleSmall != null) {
+      await mapController.removeFill(circleSmall!);
     }
-    // fillReference = null;
 
     GeoJsonPolygon polygonReference =
         _geoProvider.buildGeoJsonCircle(latLng, _currentSliderValue / 1000);
@@ -84,7 +88,7 @@ class _RoutingShootingPageState extends State<RoutingShootingPage> {
         .map((e) => LatLng(e.latitude, e.longitude))
         .toList();
 
-    fillReference = await controller.addFill(FillOptions(
+    circleSmall = await mapController.addFill(FillOptions(
       geometry: [geometry],
       fillColor: "#4e878c",
       fillOpacity: 0.5,
@@ -92,34 +96,48 @@ class _RoutingShootingPageState extends State<RoutingShootingPage> {
     ));
   }
 
-  void _onStyleLoadedCallback() async {
-    geojsonRaw = await _geoProvider.getExample();
+  void _onStyleLoadedCallback() {
+    // _onStyleLoadedCallback
+  }
+
+
+  ///
+  /// Load point from Github
+  ///
+  void loadPointsTarget() async {
+
+    await mapController.clearCircles();
+    
+    geojsonRaw = await _geoProvider.getJsonFile(_jsonFilename);
     final geo = GeoJson();
-    await geo.parse(geojsonRaw, verbose: true);
-    List<GeoJsonPoint> points = geo.points;
 
-    List<Future<PointTarget>> pointsTargetFuture = points.map((point) async {
-      Circle circle = await controller.addCircle(
-        CircleOptions(
-            geometry: LatLng(point.geoPoint.latitude, point.geoPoint.longitude),
-            circleColor: "#FF0000"),
-      );
+    try {
+      await geo.parse(geojsonRaw);
+      List<GeoJsonPoint> points = geo.points;
 
-      return PointTarget(point, circle);
-    }).toList();
+      List<Future<PointTarget>> pointsTargetFuture = points.map((point) async {
+        Circle circle = await mapController.addCircle(
+          CircleOptions(
+              geometry: LatLng(point.geoPoint.latitude, point.geoPoint.longitude),
+              circleColor: "#FF0000"),
+        );
+        return PointTarget(point, circle);
+      }).toList();
 
-    Future.wait(pointsTargetFuture).then((value) {
-      pointsTarget = value;
-    });
+      Future.wait(pointsTargetFuture).then((value) {
+        pointsTarget = value;
+      });
+      
+    } catch (e) {
+      print(e);
+    }
+
   }
 
   void takePicture() async {
     traceStatus('Shoting $counter ...');
     final UploadItemModel _item = new UploadItemModel();
     try {
-      // Ensure that the camera is initialized.
-      // await _initializeControllerFuture;
-
       await getPosition().then((value) => {
             print(value),
             _item.lat = value.latitude,
@@ -133,6 +151,7 @@ class _RoutingShootingPageState extends State<RoutingShootingPage> {
           });
 
       final image = await _controller.takePicture();
+      playerCamera.play(AssetSource('camera.wav'));
       _item.path = image.path;
 
       // Acceleronmeter
@@ -186,18 +205,12 @@ class _RoutingShootingPageState extends State<RoutingShootingPage> {
 
       takePicture();
 
-      controller.updateCircle(aPointTarget.circle, CircleOptions(circleColor: "#FF00FF"));
+      mapController.updateCircle(aPointTarget.circle, CircleOptions(circleColor: "#FF00FF"));
     }
   }
 
   @override
   void initState() {
-    // Future<Position> position =
-    //     Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    // position.then((value) => setState(() {
-    //       print("------location ok");
-    //       _myLocationEnabled = true;
-    //     }));
     getPosition().then((value) {
       traceStatus(value.toString());
       _myLocationEnabled = true;
@@ -220,21 +233,16 @@ class _RoutingShootingPageState extends State<RoutingShootingPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final UploadsProvider uploadsProvider = context.read<UploadsProvider>();
-    // final SensorValue accelerometer = context.watch<SensorsProvider>().accelerometerMean;
-    // final SensorValue magnetometer = context.watch<SensorsProvider>().magnetometerMean;
-
     ///
     /// Actualizar ubicacion
     ///
     void onUserLocationUpdated(UserLocation location) {
       traceStatus('>>Location updated ${location.position}');
-      updateReference(location.position, 100);
+      updateCircleSmall(location.position, 100);
 
-      if( enabled ) {
+      if (enabledTakePhoto) {
         searchPointDistance(location.position, 100);
       }
-      
     }
 
     final MapboxMap mapboxMap = MapboxMap(
@@ -259,11 +267,31 @@ class _RoutingShootingPageState extends State<RoutingShootingPage> {
       drawer: MenuWidget(),
       body: Column(
         children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  onChanged: (value) {
+                    _jsonFilename = value;
+                  }
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  loadPointsTarget();
+                }, 
+                icon: Icon(Icons.download)
+              )
+            ],
+          ),
+          SizedBox(
+            child: mapboxMap,
+            height: 200,
+          ),
           SizedBox(
               height: 400,
               // width: 400,
               child: CameraPreview(_controller)),
-          Expanded(child: mapboxMap),
           Row(
             children: [
               Expanded(
@@ -281,15 +309,16 @@ class _RoutingShootingPageState extends State<RoutingShootingPage> {
                 ),
               ),
               Switch(
-                value: enabled,
+                value: enabledTakePhoto,
                 onChanged: (value) {
                   setState(() {
-                    enabled = value;
+                    enabledTakePhoto = value;
                   });
                 },
               ),
             ],
           ),
+          Text(_jsonFilename),
           Text('$status\n\n', maxLines: 3, overflow: TextOverflow.ellipsis),
         ],
       ),
@@ -299,5 +328,6 @@ class _RoutingShootingPageState extends State<RoutingShootingPage> {
   @override
   void dispose() {
     super.dispose();
+    playerCamera.dispose();
   }
 }

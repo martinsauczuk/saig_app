@@ -69,10 +69,10 @@ class MenuWidget extends StatelessWidget {
             title: const Text('Prueba de cámara'),
             onTap: () => Navigator.pushReplacementNamed(context, 'camera')
           ),
-          const ListTile(
-            leading: Icon(Icons.volume_down_alt, color: Colors.cyan),
-            title: Text('Prueba de sonidos'),
-            // onTap: () => Navigator.pushReplacementNamed(context, 'sounds')
+          ListTile(
+            leading: const Icon(Icons.volume_down_alt, color: Colors.cyan),
+            title: const Text('Prueba de sonidos'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'sounds')
           ),
           ListTile(
             leading: const Icon(Icons.info_outlined, color: Colors.cyan),

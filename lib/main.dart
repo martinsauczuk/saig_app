@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:saig_app/presentation/screens/cloud_gallery_screen.dart';
 import 'package:saig_app/presentation/screens/info_screen.dart';
+import 'package:saig_app/presentation/screens/playground_screens/sound_playground_screen.dart';
 
 import 'presentation/screens/playground_screens/camera_playground_screen.dart';
 
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
         // 'multi'     : (BuildContext context) => MultipleShotingPage(cameras: cameras),
         // 'sensors'   : (BuildContext context) => SensorsTestPage(),
         // 'location'  : (BuildContext context) => LocationTestPage(),
-        // 'sounds'    : (BuildContext context) => PlaySoundTest(),
+        'sounds'       : (BuildContext context) => const SoundPlaygroundScreen(),
         'camera'       : (BuildContext context) => CameraPlatgroundScreen(cameras: cameras,),
         // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
       },

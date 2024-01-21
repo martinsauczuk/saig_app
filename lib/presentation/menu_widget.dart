@@ -49,10 +49,10 @@ class MenuWidget extends StatelessWidget {
             title: Text('Carga de imágenes'),
             // onTap: () => Navigator.pushReplacementNamed(context, 'upload')
           ),
-          const ListTile(
-            leading: Icon(Icons.cloud, color: Colors.cyan),
-            title: Text('Contenido de la nube'),
-            // onTap: () => Navigator.pushReplacementNamed(context, 'cloud')
+          ListTile(
+            leading: const Icon(Icons.cloud, color: Colors.cyan),
+            title: const Text('Contenido de la nube'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'cloud')
           ),
           const ListTile(
             leading: Icon(Icons.settings_remote, color: Colors.cyan),
@@ -64,10 +64,10 @@ class MenuWidget extends StatelessWidget {
             title: Text('Prueba de ubicación GPS'),
             // onTap: () => Navigator.pushReplacementNamed(context, 'location')
           ),
-          const ListTile(
-            leading: Icon(Icons.camera_alt, color: Colors.cyan),
-            title: Text('Prueba de cámara'),
-            // onTap: () => Navigator.pushReplacementNamed(context, 'camera')
+          ListTile(
+            leading: const Icon(Icons.camera_alt, color: Colors.cyan),
+            title: const Text('Prueba de cámara'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'camera')
           ),
           const ListTile(
             leading: Icon(Icons.volume_down_alt, color: Colors.cyan),

@@ -1,19 +1,17 @@
 import 'dart:io';
-
+import 'package:saig_app/presentation/menu_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:saig_app/src/widgets/menu_widget.dart';
 
-class CameraTestPage extends StatefulWidget {
+class CameraTestScreen extends StatefulWidget {
 
-  final List<CameraDescription> cameras;
-
-  const CameraTestPage({Key? key, required this.cameras}) : super(key: key);
+  const CameraTestScreen({Key? key}) : super(key: key);
 
   @override
-  _CameraTestPageState createState() => _CameraTestPageState();
+  _CameraTestScreenState createState() => _CameraTestScreenState();
+  
 
 }
 
@@ -35,8 +33,11 @@ IconData getCameraLensIcon(CameraLensDirection direction) {
   return Icons.camera;
 }
 
-class _CameraTestPageState extends State<CameraTestPage>
+class _CameraTestScreenState extends State<CameraTestScreen>
     with WidgetsBindingObserver, TickerProviderStateMixin {
+
+  late List<CameraDescription> cameras;
+
   CameraController? controller;
   XFile? imageFile;
   double _minAvailableExposureOffset = 0.0;
@@ -57,9 +58,11 @@ class _CameraTestPageState extends State<CameraTestPage>
   int _pointers = 0;
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
-     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
+      // Obtain a list of the available cameras on the device. 
+    cameras = await availableCameras();
 
     _flashModeControlRowAnimationController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -117,8 +120,8 @@ class _CameraTestPageState extends State<CameraTestPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Prueba de cámara')),
-      drawer: MenuWidget(),
+      appBar: AppBar(title: const Text('Prueba de cámara')),
+      drawer: const MenuWidget(),
       body: Column(
         children: <Widget>[
           Expanded(

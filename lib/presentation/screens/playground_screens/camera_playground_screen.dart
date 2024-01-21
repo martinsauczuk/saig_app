@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/scheduler.dart';
 
-class CameraTestScreen extends StatefulWidget {
+class CameraPlatgroundScreen extends StatefulWidget {
 
-  const CameraTestScreen({Key? key}) : super(key: key);
+  final List<CameraDescription> cameras;
+  const CameraPlatgroundScreen({
+    Key? key, 
+    required this.cameras
+  }) : super(key: key);
 
   @override
-  _CameraTestScreenState createState() => _CameraTestScreenState();
+  _CameraPlatgroundScreenState createState() => _CameraPlatgroundScreenState();
   
 
 }
@@ -33,7 +37,7 @@ IconData getCameraLensIcon(CameraLensDirection direction) {
   return Icons.camera;
 }
 
-class _CameraTestScreenState extends State<CameraTestScreen>
+class _CameraPlatgroundScreenState extends State<CameraPlatgroundScreen>
     with WidgetsBindingObserver, TickerProviderStateMixin {
 
   late List<CameraDescription> cameras;
@@ -58,11 +62,9 @@ class _CameraTestScreenState extends State<CameraTestScreen>
   int _pointers = 0;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-      // Obtain a list of the available cameras on the device. 
-    cameras = await availableCameras();
 
     _flashModeControlRowAnimationController = AnimationController(
       duration: const Duration(milliseconds: 300),

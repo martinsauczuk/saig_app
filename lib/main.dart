@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:saig_app/presentation/screens/cloud_gallery_screen.dart';
 import 'package:saig_app/presentation/screens/info_screen.dart';
 
-import 'presentation/screens/screen_tests/camera_test.dart';
+import 'presentation/screens/playground_screens/camera_playground_screen.dart';
 
 void main() async {
 
@@ -18,12 +18,14 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(const MyApp());
+  runApp( MyApp(cameras: cameras,) );
 }
 
 class MyApp extends StatelessWidget {
 
-  const MyApp({super.key});
+  final List<CameraDescription> cameras;
+  const MyApp({super.key, required this.cameras});
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class MyApp extends StatelessWidget {
         // 'sensors'   : (BuildContext context) => SensorsTestPage(),
         // 'location'  : (BuildContext context) => LocationTestPage(),
         // 'sounds'    : (BuildContext context) => PlaySoundTest(),
-        'camera'       : (BuildContext context) => const CameraTestScreen(),
+        'camera'       : (BuildContext context) => CameraPlatgroundScreen(cameras: cameras,),
         // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
       },
       initialRoute: 'info',

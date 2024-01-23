@@ -59,10 +59,10 @@ class MenuWidget extends StatelessWidget {
             title: Text('Prueba de sensores'),
             // onTap: () => Navigator.pushReplacementNamed(context, 'sensors')
           ),
-          const ListTile(
-            leading: Icon(Icons.satellite, color: Colors.cyan),
-            title: Text('Prueba de ubicación GPS'),
-            // onTap: () => Navigator.pushReplacementNamed(context, 'location')
+          ListTile(
+            leading: const Icon(Icons.satellite, color: Colors.cyan),
+            title: const Text('Prueba de ubicación GPS'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'location')
           ),
           ListTile(
             leading: const Icon(Icons.camera_alt, color: Colors.cyan),

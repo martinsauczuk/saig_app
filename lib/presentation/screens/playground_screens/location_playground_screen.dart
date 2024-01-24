@@ -5,11 +5,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:saig_app/presentation/menu_widget.dart';
 
 class LocationPlaygroundScreen extends StatefulWidget {
+
   const LocationPlaygroundScreen({super.key});
 
   @override
-  _LocationPlaygroundScreenState createState() =>
-      _LocationPlaygroundScreenState();
+  State<LocationPlaygroundScreen> createState() => _LocationPlaygroundScreenState();
+
 }
 
 Future<Position> _determinePosition() async {
@@ -49,12 +50,14 @@ Future<Position> _determinePosition() async {
   return await Geolocator.getCurrentPosition();
 }
 
+
 class _LocationPlaygroundScreenState extends State<LocationPlaygroundScreen> {
+
+  late Future<Position> position;
+
+
   @override
   Widget build(BuildContext context) {
-
-    Future<Position> position = _determinePosition();
-    //     Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Prueba de GPS')),
@@ -70,8 +73,6 @@ class _LocationPlaygroundScreenState extends State<LocationPlaygroundScreen> {
               onPressed: () {
                 setState(() {
                   position = _determinePosition();
-                  // position = Geolocator.getCurrentPosition(
-                  //     desiredAccuracy: LocationAccuracy.high);
                 });
               },
             ),
@@ -84,9 +85,7 @@ class _LocationPlaygroundScreenState extends State<LocationPlaygroundScreen> {
               children: <Widget>[
                 FutureBuilder<Position>(
                   future: position,
-                  // initialData: 'hola Mundo',
-                  builder:
-                      (BuildContext context, AsyncSnapshot<Position> snapshot) {
+                  builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
                     if (snapshot.hasData) {
                       Position position = snapshot.data!;
                       return Column(
@@ -104,9 +103,17 @@ class _LocationPlaygroundScreenState extends State<LocationPlaygroundScreen> {
                           Text('isMocked: ${position.isMocked}')
                         ],
                       );
-                    } else {
-                      return const Text('No data');
                     }
+
+                    if(snapshot.hasError) {
+                      return Center(
+                        child: Text( snapshot.error.toString() )
+                      );
+                    }
+
+                    return const Center(
+                      child: CircularProgressIndicator()
+                    );
                   },
                 )
               ],
@@ -125,6 +132,9 @@ class _LocationPlaygroundScreenState extends State<LocationPlaygroundScreen> {
   @override
   void initState() {
     super.initState();
+    position = _determinePosition();
+
+
     // _determinePosition();
     // Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }

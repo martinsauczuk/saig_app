@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
         'upload'       : (BuildContext context) => UploadsMainScreen(),
         'cloud'        : (BuildContext context) => CloudGalleryScreen(),
         'info'         : (BuildContext context) => const InfoScreen(),
-        'one_shoting'  : (BuildContext context) => const OneShotingScreen(),
+        'one_shoting'  : (BuildContext context) => OneShotingScreen(camera: cameras.first),
         // 'multi'     : (BuildContext context) => MultipleShotingPage(cameras: cameras),
         // 'sensors'   : (BuildContext context) => SensorsTestPage(),
         'location'     : (BuildContext context) => const LocationPlaygroundScreen(),

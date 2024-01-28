@@ -44,7 +44,7 @@ class UploadsMainScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = items[index];
                 return Dismissible(
-                  key: Key(item.id.toString()),
+                  key: UniqueKey(),
                     background: Container(
                       color: Colors.red,
                       child: Container(
@@ -58,7 +58,7 @@ class UploadsMainScreen extends StatelessWidget {
                     ),
                     direction: DismissDirection.startToEnd,
                     onDismissed: (DismissDirection direction) => { // TODO
-                      // repository.deleteItem(item),
+                      uploadsProvider.deleteItem(item),
                       // ScaffoldMessenger.of(context)
                       //   .showSnackBar(SnackBar(
                       //     content: Text('${item.id} - ${item.descripcion} eliminado')
@@ -107,9 +107,9 @@ class _FlotingActionButtons extends StatelessWidget {
           heroTag: 'precarga',
           child: const Icon(Icons.add),
           onPressed: () { //TODO
-            context.read<UploadsProvider>().newMockItem();
+            // context.read<UploadsProvider>().newMockItem();
             // await getPosition().then((value) => print( value ));
-            // Navigator.pushNamed(context, 'one_shoting'); //TODO
+            Navigator.pushNamed(context, 'one_shoting'); //TODO
           },
         ),
         // FloatingActionButton(

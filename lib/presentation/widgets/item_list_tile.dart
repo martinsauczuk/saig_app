@@ -21,11 +21,11 @@ class ItemListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     
     return ListTile(
-      // leading: Image.file(
-        // File(item.path!),
-        // fit: BoxFit.cover,
-        // height: 20.0,
-      // ),
+      leading: Image.file(
+        File(item.path!),
+        fit: BoxFit.cover,
+        height: 20.0,
+      ),
       title: Text('${item.id.toString()} - ${item.descripcion!}'),
       subtitle: _buildSubtitle(),
       isThreeLine: true,

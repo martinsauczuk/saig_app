@@ -1,15 +1,19 @@
+import 'dart:math';
+
 import 'package:saig_app/domain/datasources/uploads_local_datadource.dart';
 import 'package:saig_app/domain/entities/upload_item.dart';
 import 'package:saig_app/presentation/providers/uploads_provider.dart';
 
 class UploadsLocalMemoryDatasource implements UploadsLocalDatasource {
 
-  final List<UploadItem> items = [];
+  List<UploadItem> items = [];
 
   @override
   Future<int> deleteItem(UploadItem itemToDelete) {
-    // TODO: implement deleteItem
-    throw UnimplementedError();
+    
+    items = items.where((element) => element.id != itemToDelete.id ).toList();
+
+    return Future.delayed(Duration(seconds: 2), () => itemToDelete.id! );
   }
 
   @override
@@ -26,8 +30,9 @@ class UploadsLocalMemoryDatasource implements UploadsLocalDatasource {
 
   @override
   Future<int> insertItem(UploadItem newItem) {
+    newItem.id = Random().nextInt(1000);
     items.add(newItem);
-    return Future.value( newItem.id! );
+    return Future.value( newItem.id );
   }
 
   @override

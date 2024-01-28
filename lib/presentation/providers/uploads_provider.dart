@@ -43,5 +43,19 @@ class UploadsProvider extends ChangeNotifier {
   }
 
 
+  ///
+  /// Eliminar item de la lista y de la DB y notificar
+  ///
+  void deleteItem(UploadItem item) async {
+    print('delete $item');
+    
+
+    await _repository.deleteItem(item);
+    // await DBProvider.db.deleteItem(item); // TODO
+    // deleteFile(item); // TODO
+    notifyListeners();
+  }
+
+
 
 }

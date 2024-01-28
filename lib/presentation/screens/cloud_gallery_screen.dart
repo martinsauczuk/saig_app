@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:saig_app/domain/entities/gallery_item.dart';
-import 'package:saig_app/infrastructure/mock/mock_gallery_datasource_impl.dart';
+import 'package:saig_app/infrastructure/datasources/faker/mock_gallery_datasource_impl.dart';
 import 'package:saig_app/infrastructure/repositories/gallery_repository_impl.dart';
 import 'package:saig_app/presentation/menu_widget.dart';
 import 'package:saig_app/presentation/widgets/error_indicator_widget.dart';

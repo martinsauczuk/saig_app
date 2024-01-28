@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         // 'upload'    : (BuildContext context) => UploadPage(),
-        'cloud'        : (BuildContext context) => const CloudGalleryScreen(),
+        'cloud'        : (BuildContext context) => CloudGalleryScreen(),
         'info'         : (BuildContext context) => const InfoScreen(),
         // 'precarga'  : (BuildContext context) => OneShotingPage(cameras: cameras),
         // 'multi'     : (BuildContext context) => MultipleShotingPage(cameras: cameras),

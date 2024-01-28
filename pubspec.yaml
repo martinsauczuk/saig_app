@@ -35,6 +35,8 @@ dependencies:
   package_info_plus: ^5.0.1
   audioplayers: ^5.2.1
   geolocator: ^10.1.0
+  faker_dart: ^0.2.1
+  provider: ^6.1.1
 
 dev_dependencies:
   change_app_package_name: ^1.1.0

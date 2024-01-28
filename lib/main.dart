@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:saig_app/presentation/screens/cloud_gallery_screen.dart';
 import 'package:saig_app/presentation/screens/info_screen.dart';
 import 'package:saig_app/presentation/screens/playground_screens/location_playground_screen.dart';
@@ -8,7 +9,9 @@ import 'package:saig_app/presentation/screens/playground_screens/sound_playgroun
 
 import 'presentation/screens/playground_screens/camera_playground_screen.dart';
 
-void main() async {
+Future<void> main() async {
+
+  await dotenv.load(fileName: '.env');
 
   WidgetsFlutterBinding.ensureInitialized();
   

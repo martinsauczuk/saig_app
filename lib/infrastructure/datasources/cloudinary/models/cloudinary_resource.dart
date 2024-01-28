@@ -1,26 +1,8 @@
-import 'dart:convert';
 
-CloudinarySearchResponse searchResponseFromJson(String str) => CloudinarySearchResponse.fromJson(json.decode(str));
-
-class CloudinarySearchResponse {
-    CloudinarySearchResponse({
-        required this.totalCount,
-        required this.time,
-        required this.resources,
-    });
-
-    int totalCount;
-    int time;
-    List<CloudinaryResource> resources;
-
-    factory CloudinarySearchResponse.fromJson(Map<String, dynamic> json) => CloudinarySearchResponse(
-        totalCount: json["total_count"],
-        time: json["time"],
-        resources: List<CloudinaryResource>.from(json["resources"].map((x) => CloudinaryResource.fromJson(x))),
-    );
-}
+import 'package:saig_app/infrastructure/datasources/cloudinary/models/cloudinary_metadata.dart';
 
 class CloudinaryResource {
+  
     CloudinaryResource({
         required this.assetId,
         required this.publicId,
@@ -113,28 +95,4 @@ class CloudinaryResource {
         // uploadedBy: json["uploaded_by"], type: null,
     );
 
-}
-
-class CloudinaryMetadata {
-    CloudinaryMetadata({
-        required this.coordLat,
-        required this.coordLng,
-        required this.descripcion
-    });
-
-    String coordLat;
-    String coordLng;
-    String descripcion;
-
-    factory CloudinaryMetadata.fromJson(Map<String, dynamic> json) => CloudinaryMetadata(
-        coordLat: json["coord_lat"],
-        coordLng: json["coord_lng"],
-        descripcion: json["desc"]
-    );
-
-    Map<String, dynamic> toJson() => {
-        "coord_lat": coordLat,
-        "coord_lng": coordLng,
-        "descripcion": descripcion
-    };
 }

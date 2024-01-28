@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:saig_app/domain/entities/gallery_item.dart';
-import 'package:saig_app/infrastructure/datasources/faker/mock_gallery_datasource_impl.dart';
+import 'package:saig_app/infrastructure/datasources/cloudinary/datasources/cloudinary_gallery_datasource.dart';
+import 'package:saig_app/infrastructure/datasources/faker/mock_gallery_datasource.dart';
 import 'package:saig_app/infrastructure/repositories/gallery_repository_impl.dart';
 import 'package:saig_app/presentation/menu_widget.dart';
 import 'package:saig_app/presentation/widgets/error_indicator_widget.dart';
@@ -9,7 +10,9 @@ class CloudGalleryScreen extends StatelessWidget {
   
   CloudGalleryScreen({super.key});
 
-  final galleryRepository = GalleryRepositoryImpl( datasource: MockGalleryDatasource() );
+  // final galleryRepository = GalleryRepositoryImpl( datasource: MockGalleryDatasource() );
+  final galleryRepository = GalleryRepositoryImpl( datasource: CloudinaryGalleryDatasource() );
+
 
   @override
   Widget build(BuildContext context) {

@@ -43,11 +43,10 @@ class MenuWidget extends StatelessWidget {
               ],
                         ), 
           ),
-          // Image.asset('assets/icon/icon.png'),
-          const ListTile(
-            leading: Icon(Icons.sync, color: Colors.cyan),
-            title: Text('Carga de imágenes'),
-            // onTap: () => Navigator.pushReplacementNamed(context, 'upload')
+          ListTile(
+            leading: const Icon(Icons.sync, color: Colors.cyan),
+            title: const Text('Carga de imágenes'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'upload')
           ),
           ListTile(
             leading: const Icon(Icons.cloud, color: Colors.cyan),

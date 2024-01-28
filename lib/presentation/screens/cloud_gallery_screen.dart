@@ -42,6 +42,10 @@ class CloudGalleryScreen extends StatelessWidget {
   }
 }
 
+
+///
+/// Gallery items using ListView
+///
 class ListViewGalleryWidget extends StatelessWidget {
 
   final List<GalleryItem> items;
@@ -53,6 +57,9 @@ class ListViewGalleryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    if(items.isEmpty) {
+      return const Text('No items');
+    }
 
     return ListView.builder(
       itemCount: items.length,

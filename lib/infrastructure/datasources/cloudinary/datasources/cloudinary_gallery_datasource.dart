@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:saig_app/config/cloudinary/cloudinary_config.dart';
 
 import 'package:saig_app/domain/datasources/gallery_datasource.dart';
 import 'package:saig_app/domain/entities/gallery_item.dart';
@@ -13,11 +13,12 @@ import 'package:saig_app/infrastructure/datasources/cloudinary/models/cloudinary
 class CloudinaryGalleryDatasource implements GalleryDatasource {
   
   // Constantes para el servicio
-  final String _basePath = dotenv.env['BASE_PATH'].toString();
-  final String _cloudName = dotenv.env['CLOUD_NAME'].toString();
-  final String _apiKey = dotenv.env['API_KEY'].toString();
-  final String _apiSecret = dotenv.env['API_SECRET'].toString();
-  final String _folder = dotenv.env['FOLDER'].toString();
+  final String _basePath = CloudinaryConfig.basePath;
+  final String _cloudName = CloudinaryConfig.cloudinaryCloudName;
+  final String _apiKey = CloudinaryConfig.apiKey;
+  final String _apiSecret = CloudinaryConfig.apiSecret;
+  final String _folder = CloudinaryConfig.folder;
+  final int _maxResults = CloudinaryConfig.maxResults;
 
 
 
@@ -39,14 +40,12 @@ class CloudinaryGalleryDatasource implements GalleryDatasource {
   /// Obtener todas las imagenes de Cloudinary
   ///
   Future<CloudinarySearchResponse> getAllImages() async {
-    final Uri uri =
-        Uri.https( _basePath, '/v1_1/$_cloudName/resources/search', {
+    
+    final Uri uri = Uri.https( _basePath, '/v1_1/$_cloudName/resources/search', {
       'expression': 'resource_type:image AND folder:$_folder',
       'with_field': 'metadata',
-      'max_results': '500'
+      'max_results': '$_maxResults'
     });
-
-    print(uri.toString());
 
     final response = await http.get(
       uri,
@@ -59,7 +58,6 @@ class CloudinaryGalleryDatasource implements GalleryDatasource {
     if (response.statusCode == HttpStatus.ok) {
       return CloudinarySearchResponse.fromJson(jsonDecode(response.body));
     } else {
-      print(response.statusCode);
       throw Exception('Failed to load response');
     }
   }

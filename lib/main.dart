@@ -2,10 +2,14 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
+import 'package:saig_app/presentation/providers/uploads_provider.dart';
 import 'package:saig_app/presentation/screens/cloud_gallery_screen.dart';
 import 'package:saig_app/presentation/screens/info_screen.dart';
 import 'package:saig_app/presentation/screens/playground_screens/location_playground_screen.dart';
 import 'package:saig_app/presentation/screens/playground_screens/sound_playground_screen.dart';
+import 'package:saig_app/presentation/screens/uploads/one_shoting_screen.dart';
+import 'package:saig_app/presentation/screens/uploads/uploads_main_screen.dart';
 
 import 'presentation/screens/playground_screens/camera_playground_screen.dart';
 
@@ -23,7 +27,14 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp( MyApp(cameras: cameras,) );
+  runApp( 
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UploadsProvider()),
+      ],
+      child: MyApp(cameras: cameras),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -42,10 +53,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: false,
       ),
       routes: {
-        // 'upload'    : (BuildContext context) => UploadPage(),
+        'upload'       : (BuildContext context) => UploadsMainScreen(),
         'cloud'        : (BuildContext context) => CloudGalleryScreen(),
         'info'         : (BuildContext context) => const InfoScreen(),
-        // 'precarga'  : (BuildContext context) => OneShotingPage(cameras: cameras),
+        'one_shoting'  : (BuildContext context) => const OneShotingScreen(),
         // 'multi'     : (BuildContext context) => MultipleShotingPage(cameras: cameras),
         // 'sensors'   : (BuildContext context) => SensorsTestPage(),
         'location'     : (BuildContext context) => const LocationPlaygroundScreen(),
@@ -53,7 +64,7 @@ class MyApp extends StatelessWidget {
         'camera'       : (BuildContext context) => CameraPlatgroundScreen(cameras: cameras,),
         // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
       },
-      initialRoute: 'info',
+      initialRoute: 'upload',
     );
   }
 }

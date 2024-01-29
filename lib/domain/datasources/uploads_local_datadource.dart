@@ -9,7 +9,7 @@ abstract class UploadsLocalDatasource {
 
   Future<int> updateItem(UploadItem itemToUpdate);
 
-  Future<int> deleteItem(UploadItem itemToDelete);
+  Future<int> deleteItemById(int id);
 
   Future<List<UploadItem>> getVisibles();
   

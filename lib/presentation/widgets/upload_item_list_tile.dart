@@ -6,12 +6,12 @@ import 'package:saig_app/domain/enums/upload_status.dart';
 import 'package:saig_app/presentation/widgets/upload_button.dart';
 
 
-class ItemListTile extends StatelessWidget {
+class UploadItemListTile extends StatelessWidget {
   
   final UploadItem item;
   final VoidCallback onPress;
 
-  const ItemListTile({
+  const UploadItemListTile({
     super.key, 
     required this.item,
     required this.onPress,
@@ -24,7 +24,6 @@ class ItemListTile extends StatelessWidget {
       leading: Image.file(
         File(item.path!),
         fit: BoxFit.cover,
-        height: 20.0,
       ),
       title: Text('${item.id.toString()} - ${item.descripcion!}'),
       subtitle: _buildSubtitle(),

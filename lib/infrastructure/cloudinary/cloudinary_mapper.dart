@@ -1,6 +1,6 @@
 import 'package:saig_app/config/cloudinary/cloudinary_config.dart';
 import 'package:saig_app/domain/entities/gallery_item.dart';
-import 'package:saig_app/infrastructure/datasources/cloudinary/models/cloudinary_resource.dart';
+import 'package:saig_app/infrastructure/cloudinary/models/cloudinary_resource.dart';
 
 class CloudinaryMapper {
 

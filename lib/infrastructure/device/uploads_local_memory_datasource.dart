@@ -9,11 +9,19 @@ class UploadsLocalMemoryDatasource implements UploadsLocalDatasource {
   List<UploadItem> items = [];
 
   @override
-  Future<int> deleteItem(UploadItem itemToDelete) {
+  Future<int> deleteItemById(int id) {
     
-    items = items.where((element) => element.id != itemToDelete.id ).toList();
+    
+    final item = items.where((element) => element.id == id ).toList().first;
+    
+    print(item);
 
-    return Future.delayed(Duration(seconds: 2), () => itemToDelete.id! );
+    items.remove(item);
+
+    // items = items.where((element) => element.id != itemToDelete.id ).toList();
+
+
+    return Future.delayed(const Duration(seconds: 1), () => id );
   }
 
   @override

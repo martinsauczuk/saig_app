@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:saig_app/domain/entities/upload_item.dart';
 import 'package:saig_app/presentation/menu_widget.dart';
 import 'package:saig_app/presentation/providers/uploads_provider.dart';
-import 'package:saig_app/presentation/widgets/item_list_tile.dart';
+import 'package:saig_app/presentation/widgets/upload_item_list_tile.dart';
 
 class UploadsMainScreen extends StatelessWidget {
 
@@ -11,12 +11,13 @@ class UploadsMainScreen extends StatelessWidget {
   // final UploadsLocalRepository repository = UploadsLocalRepositoryImpl( datasource: UploadsLocalMemoryDatasource() );
 
   const UploadsMainScreen({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
 
-    final UploadsProvider uploadsProvider = context.watch<UploadsProvider>();
+    print('>>>>>>>>>>building......');
 
+    final UploadsProvider provider = context.watch<UploadsProvider>();
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +25,7 @@ class UploadsMainScreen extends StatelessWidget {
       ),
       drawer: const MenuWidget(),
       body: FutureBuilder<List<UploadItem>>(
-        future: uploadsProvider.getVisibles(),
+        future: provider.getVisibles(),
         builder: (BuildContext context,
             AsyncSnapshot<List<UploadItem>> snapshot) {
           
@@ -58,17 +59,18 @@ class UploadsMainScreen extends StatelessWidget {
                     ),
                     direction: DismissDirection.startToEnd,
                     onDismissed: (DismissDirection direction) => { // TODO
-                      uploadsProvider.deleteItem(item),
+                      provider.deleteItem(item),
                       // ScaffoldMessenger.of(context)
                       //   .showSnackBar(SnackBar(
                       //     content: Text('${item.id} - ${item.descripcion} eliminado')
                       //   ))
                     }, 
-                  child: ItemListTile(
+                  child: UploadItemListTile(
                     item: item,
                     onPress: () {
-                      // repository.upload(item); //TODO:
-                    }),
+                      onPressUploadButton(item);
+                    },
+                  )
                 );
               },
             );
@@ -89,9 +91,13 @@ class UploadsMainScreen extends StatelessWidget {
       floatingActionButton: const _FlotingActionButtons(),
     );
   }
+
+  void onPressUploadButton(UploadItem item) {
+    
+    print('uploading...$item');
+  }
+
 }
-
-
 
 
 class _FlotingActionButtons extends StatelessWidget {

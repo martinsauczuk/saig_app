@@ -10,7 +10,7 @@ class UploadsLocalRepositoryImpl implements UploadsLocalRepository {
 
   @override
   Future<int> deleteItem(UploadItem itemToDelete) {
-    return datasource.deleteItem(itemToDelete);
+    return datasource.deleteItemById(itemToDelete.id!);
   }
 
   @override

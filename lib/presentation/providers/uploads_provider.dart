@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:saig_app/domain/entities/upload_item.dart';
 import 'package:saig_app/domain/enums/upload_status.dart';
 import 'package:saig_app/domain/repositories/uploads_local_repository.dart';
-import 'package:saig_app/infrastructure/datasources/device/uploads_local_memory_datasource.dart';
+import 'package:saig_app/infrastructure/device/uploads_local_memory_datasource.dart';
 import 'package:saig_app/infrastructure/repositories/uploads_local_repository_impl.dart';
 
 class UploadsProvider extends ChangeNotifier {
@@ -23,9 +23,9 @@ class UploadsProvider extends ChangeNotifier {
 
   }
 
-  Future<List<UploadItem>> getVisibles() {
-    print('getVisibles');
-    return _repository.getVisibles();
+  Future<List<UploadItem>> getVisibles() async {
+    // print('getVisibles');
+    return await _repository.getVisibles();
   }
 
 
@@ -34,7 +34,7 @@ class UploadsProvider extends ChangeNotifier {
   ///
   void addItem(UploadItem item) async {
     
-    print('add $item');
+    // print('add $item');
 
     item.id = await _repository.insertItem(item);
 
@@ -47,9 +47,7 @@ class UploadsProvider extends ChangeNotifier {
   /// Eliminar item de la lista y de la DB y notificar
   ///
   void deleteItem(UploadItem item) async {
-    print('delete $item');
     
-
     await _repository.deleteItem(item);
     // await DBProvider.db.deleteItem(item); // TODO
     // deleteFile(item); // TODO

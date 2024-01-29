@@ -6,9 +6,9 @@ import 'package:saig_app/config/cloudinary/cloudinary_config.dart';
 
 import 'package:saig_app/domain/datasources/gallery_datasource.dart';
 import 'package:saig_app/domain/entities/gallery_item.dart';
-import 'package:saig_app/infrastructure/datasources/cloudinary/cloudinary_mapper.dart';
-import 'package:saig_app/infrastructure/datasources/cloudinary/models/cloudinary_resource.dart';
-import 'package:saig_app/infrastructure/datasources/cloudinary/models/cloudinary_search_response.dart';
+import 'package:saig_app/infrastructure/cloudinary/cloudinary_mapper.dart';
+import 'package:saig_app/infrastructure/cloudinary/models/cloudinary_resource.dart';
+import 'package:saig_app/infrastructure/cloudinary/models/cloudinary_search_response.dart';
 
 class CloudinaryGalleryDatasource implements GalleryDatasource {
   

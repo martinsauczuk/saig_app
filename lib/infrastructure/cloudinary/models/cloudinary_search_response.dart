@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:saig_app/infrastructure/datasources/cloudinary/models/cloudinary_resource.dart';
+import 'package:saig_app/infrastructure/cloudinary/models/cloudinary_resource.dart';
 
 
 CloudinarySearchResponse searchResponseFromJson(String str) => CloudinarySearchResponse.fromJson(json.decode(str));

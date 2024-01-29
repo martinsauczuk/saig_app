@@ -90,7 +90,6 @@ class _OneShotingScreenState extends State<OneShotingScreen> {
     UploadItem item = UploadItem();
 
     final image = await captureImageItem();
-    print(image);
 
     item.path = image.path;
     item.status = UploadStatus.pending;

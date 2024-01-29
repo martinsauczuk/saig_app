@@ -7,6 +7,7 @@ class CloudinaryConfig {
   static String apiKey = dotenv.env['API_KEY']!;
   static String apiSecret = dotenv.env['API_SECRET']!;
   static String folder = dotenv.env['FOLDER']!;
+  static String uploadPreset = dotenv.env['UPLOAD_PRESET']!;
 
   static int maxResults = 500;
 

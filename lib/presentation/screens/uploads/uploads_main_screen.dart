@@ -68,7 +68,7 @@ class UploadsMainScreen extends StatelessWidget {
                   child: UploadItemListTile(
                     item: item,
                     onPress: () {
-                      onPressUploadButton(item);
+                      onPressUploadButton(context, item);
                     },
                   )
                 );
@@ -92,12 +92,16 @@ class UploadsMainScreen extends StatelessWidget {
     );
   }
 
-  void onPressUploadButton(UploadItem item) {
-    
-    print('uploading...$item');
-  }
+}
+
+
+void onPressUploadButton(BuildContext context,  UploadItem item) {
+  
+  final UploadsProvider provider = context.read<UploadsProvider>();
+  provider.uploadItem(item);
 
 }
+
 
 
 class _FlotingActionButtons extends StatelessWidget {
@@ -113,8 +117,6 @@ class _FlotingActionButtons extends StatelessWidget {
           heroTag: 'precarga',
           child: const Icon(Icons.add),
           onPressed: () { //TODO
-            // context.read<UploadsProvider>().newMockItem();
-            // await getPosition().then((value) => print( value ));
             Navigator.pushNamed(context, 'one_shoting'); //TODO
           },
         ),

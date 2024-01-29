@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:saig_app/config/theme/app_theme.dart';
 import 'package:saig_app/presentation/providers/uploads_provider.dart';
 import 'package:saig_app/presentation/screens/cloud_gallery_screen.dart';
 import 'package:saig_app/presentation/screens/info_screen.dart';
@@ -48,12 +49,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'PlantAr',
       debugShowCheckedModeBanner: true,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppTheme().getTheme(),
       routes: {
-        'upload'       : (BuildContext context) => UploadsMainScreen(),
+        'upload'       : (BuildContext context) => const UploadsMainScreen(),
         'cloud'        : (BuildContext context) => CloudGalleryScreen(),
         'info'         : (BuildContext context) => const InfoScreen(),
         'one_shoting'  : (BuildContext context) => OneShotingScreen(camera: cameras.first),
@@ -61,7 +59,7 @@ class MyApp extends StatelessWidget {
         // 'sensors'   : (BuildContext context) => SensorsTestPage(),
         'location'     : (BuildContext context) => const LocationPlaygroundScreen(),
         'sounds'       : (BuildContext context) => const SoundPlaygroundScreen(),
-        'camera'       : (BuildContext context) => CameraPlatgroundScreen(cameras: cameras,),
+        'camera'       : (BuildContext context) => CameraPlatgroundScreen(cameras: cameras),
         // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
       },
       initialRoute: 'upload',

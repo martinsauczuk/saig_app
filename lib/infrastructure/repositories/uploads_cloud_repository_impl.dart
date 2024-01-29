@@ -10,8 +10,7 @@ class UploadsCloudRepositoryImpl implements UploadsCloudRepository {
 
   @override
   Future<String> uploadItem(UploadItem item) {
-    // TODO: implement uploadItem
-    throw UnimplementedError();
+    return datasource.uploadItem(item);
   }
   
 }

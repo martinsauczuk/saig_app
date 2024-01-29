@@ -8,10 +8,13 @@ import 'package:saig_app/infrastructure/cloudinary/datasources/cloudinary_upload
 import 'package:saig_app/infrastructure/device/uploads_local_memory_datasource.dart';
 import 'package:saig_app/infrastructure/repositories/uploads_cloud_repository_impl.dart';
 import 'package:saig_app/infrastructure/repositories/uploads_local_repository_impl.dart';
+import 'package:saig_app/infrastructure/sqlite/uploads_local_sqlite_datasource.dart';
 
 class UploadsProvider extends ChangeNotifier {
 
-  final _localRepository = UploadsLocalRepositoryImpl(datasource: UploadsLocalMemoryDatasource());
+  // final _localRepository = UploadsLocalRepositoryImpl(datasource: UploadsLocalMemoryDatasource());
+  final _localRepository = UploadsLocalRepositoryImpl(datasource: UploadsLocalSqliteDatasource.db );
+
   final cloudRepository = UploadsCloudRepositoryImpl(datasource: CloudinaryUploadsCloudDatasource());
 
 

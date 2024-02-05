@@ -7,21 +7,21 @@ class UploadItem {
 
   int? id;
   String? path;
-  double? lat;
-  double? lng;
-  double? accelerometerX;
-  double? accelerometerY;
-  double? accelerometerZ;
-  double? magnetometerX;
-  double? magnetometerY;
-  double? magnetometerZ;
+  double lat = 0;
+  double lng = 0;
+  double accelerometerX = 0;
+  double accelerometerY = 0;
+  double accelerometerZ = 0;
+  double magnetometerX = 0;
+  double magnetometerY = 0;
+  double magnetometerZ = 0;
 
-  double? accuracy;
-  double? heading;
-  double? altitude;
-  double? speed;
-  double? speedAccuracy;
-  String? timestamp;
+  double accuracy = 0;
+  double heading = 0;
+  double altitude = 0;
+  double speed = 0;
+  double speedAccuracy = 0;
+  String? timestamp = '';
 
   String? descripcion = 'sin descripcion';
   UploadStatus? status = UploadStatus.pending;

@@ -3,19 +3,18 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:saig_app/domain/entities/upload_item.dart';
 import 'package:saig_app/domain/enums/upload_status.dart';
-import 'package:saig_app/domain/repositories/uploads_local_repository.dart';
 import 'package:saig_app/infrastructure/cloudinary/datasources/cloudinary_uploads_cloud_datasource.dart';
-import 'package:saig_app/infrastructure/device/uploads_local_memory_datasource.dart';
 import 'package:saig_app/infrastructure/repositories/uploads_cloud_repository_impl.dart';
 import 'package:saig_app/infrastructure/repositories/uploads_local_repository_impl.dart';
 import 'package:saig_app/infrastructure/sqlite/uploads_local_sqlite_datasource.dart';
 
 class UploadsProvider extends ChangeNotifier {
 
-  // final _localRepository = UploadsLocalRepositoryImpl(datasource: UploadsLocalMemoryDatasource());
-  final _localRepository = UploadsLocalRepositoryImpl(datasource: UploadsLocalSqliteDatasource.db );
 
+  // final _localRepository = UploadsLocalRepositoryImpl(datasource: UploadsLocalMemoryDatasource());
+  final _localRepository = UploadsLocalRepositoryImpl(datasource: UploadsLocalSqliteDatasource.instance );
   final cloudRepository = UploadsCloudRepositoryImpl(datasource: CloudinaryUploadsCloudDatasource());
+  List<UploadItem>? _items;
 
 
   void newMockItem() async {
@@ -30,8 +29,15 @@ class UploadsProvider extends ChangeNotifier {
   }
 
   Future<List<UploadItem>> getVisibles() async {
-    // print('getVisibles');
-    return await _localRepository.getVisibles();
+    
+    if (_items == null) {
+      final items = await _localRepository.getVisibles();
+      _items = items;
+    }
+
+    // TODO
+    _cleanUploadsOk();
+    return _items!;
   }
 
 
@@ -41,10 +47,10 @@ class UploadsProvider extends ChangeNotifier {
   void addItem(UploadItem item) async {
     
     // print('add $item');
-
+    
     item.id = await _localRepository.insertItem(item);
-
-    // _items!.insert(0, item); TODO
+    
+    _items!.insert(0, item);
     notifyListeners();
   }
 
@@ -55,7 +61,7 @@ class UploadsProvider extends ChangeNotifier {
   void deleteItem(UploadItem item) async {
     
     await _localRepository.deleteItem(item);
-    // await DBProvider.db.deleteItem(item); // TODO
+    _items!.remove(item);
     // deleteFile(item); // TODO
     notifyListeners();
   }
@@ -73,12 +79,17 @@ class UploadsProvider extends ChangeNotifier {
       .then((value) {
         item.publicId = value;
         item.status = UploadStatus.done;
-        notifyListeners();
+        _localRepository.updateItem(item)
+          .then((value){
+            notifyListeners();
+          });
+
         // updateItemDB(item); // TODO
         // procesarSubidoOk(item); // TODO
       })
       .onError((error, stackTrace) {
         item.status = UploadStatus.error;
+          
         notifyListeners();
         // updateItemDB(item); // TODO
         // print(error); // TODO
@@ -87,6 +98,12 @@ class UploadsProvider extends ChangeNotifier {
     // return Future.delayed(const Duration(seconds: 3), () => 'Done');
   }
 
+  void _cleanUploadsOk() {
+    // _items!
+    //   .where( (item) => item.status! == UploadStatus.done )
+    //   .toList()
+    //   .forEach( (item) => procesarSubidoOk( item ) );
+  }
 
 
 }

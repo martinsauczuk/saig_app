@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/scheduler.dart';
 
-class CameraPlatgroundScreen extends StatefulWidget {
+class CameraPlaygroundScreen extends StatefulWidget {
 
   final List<CameraDescription> cameras;
-  const CameraPlatgroundScreen({
+  const CameraPlaygroundScreen({
     Key? key, 
     required this.cameras
   }) : super(key: key);
 
   @override
-  _CameraPlatgroundScreenState createState() => _CameraPlatgroundScreenState();
+  State<CameraPlaygroundScreen> createState() => _CameraPlaygroundScreenState();
   
 
 }
@@ -37,7 +37,7 @@ IconData getCameraLensIcon(CameraLensDirection direction) {
   return Icons.camera;
 }
 
-class _CameraPlatgroundScreenState extends State<CameraPlatgroundScreen>
+class _CameraPlaygroundScreenState extends State<CameraPlaygroundScreen>
     with WidgetsBindingObserver, TickerProviderStateMixin {
 
   late List<CameraDescription> cameras;

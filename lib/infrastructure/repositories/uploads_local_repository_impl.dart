@@ -31,8 +31,7 @@ class UploadsLocalRepositoryImpl implements UploadsLocalRepository {
 
   @override
   Future<int> updateItem(UploadItem itemToUpdate) {
-    // TODO: implement updateItem
-    throw UnimplementedError();
+    return datasource.updateItem(itemToUpdate);
   }
 
 

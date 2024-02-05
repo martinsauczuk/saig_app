@@ -1,6 +1,5 @@
-import 'dart:io';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:saig_app/config/sqlite/sqlite_config.dart';
 import 'package:saig_app/domain/datasources/uploads_local_datadource.dart';
 import 'package:saig_app/domain/entities/upload_item.dart';
 import 'package:saig_app/domain/enums/upload_status.dart';
@@ -8,29 +7,30 @@ import 'package:sqflite/sqflite.dart';
 
 class UploadsLocalSqliteDatasource implements UploadsLocalDatasource {
 
+  static final UploadsLocalSqliteDatasource instance = UploadsLocalSqliteDatasource._init();
   static Database? _database;
-  static final UploadsLocalSqliteDatasource db = UploadsLocalSqliteDatasource._();
 
-  UploadsLocalSqliteDatasource._();
+  UploadsLocalSqliteDatasource._init();
 
   Future<Database?> get database async {
     if (_database != null) return _database;
-    _database = await initDB();
+    _database = await _initDB( SqliteConfig.databaseName );
     return _database;
   }
 
   ///
   ///
   ///
-  Future<Database> initDB() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'PlantAr.db');
+  Future<Database> _initDB(String dbName ) async {
+
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, dbName);
 
     print('Path a DB: $path');
 
     return await openDatabase(
       path,
-      version: 6,
+      version: SqliteConfig.databaseVersion,
       onOpen: (db) {
         //
       },
@@ -62,9 +62,16 @@ class UploadsLocalSqliteDatasource implements UploadsLocalDatasource {
   }
 
   @override
-  Future<int> deleteItemById(int id) {
-    // TODO: implement deleteItemById
-    throw UnimplementedError();
+  Future<int> deleteItemById(int id) async {
+    
+    final db = await database;
+    final res = await db!
+        .delete('Items',
+          where: 'id = ?',
+          whereArgs: [id]
+        );
+    return res;
+
   }
 
   @override
@@ -102,9 +109,12 @@ class UploadsLocalSqliteDatasource implements UploadsLocalDatasource {
   }
 
   @override
-  Future<int> updateItem(UploadItem itemToUpdate) {
-    // TODO: implement updateItem
-    throw UnimplementedError();
+  Future<int> updateItem(UploadItem itemToUpdate) async {
+    final db = await database;
+    final res = await db!
+        .update('Items', itemToUpdate.toMap(), where: 'id = ?', whereArgs: [itemToUpdate.id]);
+
+    return res;
   }
 
 }

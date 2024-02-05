@@ -7,15 +7,10 @@ import 'package:saig_app/presentation/widgets/upload_item_list_tile.dart';
 
 class UploadsMainScreen extends StatelessWidget {
 
-
-  // final UploadsLocalRepository repository = UploadsLocalRepositoryImpl( datasource: UploadsLocalMemoryDatasource() );
-
   const UploadsMainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    print('>>>>>>>>>>building......');
 
     final UploadsProvider provider = context.watch<UploadsProvider>();
 

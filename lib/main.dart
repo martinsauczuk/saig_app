@@ -4,15 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:saig_app/config/theme/app_theme.dart';
+import 'package:saig_app/presentation/providers/sensors_provider.dart';
 import 'package:saig_app/presentation/providers/uploads_provider.dart';
-import 'package:saig_app/presentation/screens/cloud_gallery_screen.dart';
-import 'package:saig_app/presentation/screens/info_screen.dart';
-import 'package:saig_app/presentation/screens/playground_screens/location_playground_screen.dart';
-import 'package:saig_app/presentation/screens/playground_screens/sound_playground_screen.dart';
-import 'package:saig_app/presentation/screens/uploads/one_shoting_screen.dart';
-import 'package:saig_app/presentation/screens/uploads/uploads_main_screen.dart';
-
-import 'presentation/screens/playground_screens/camera_playground_screen.dart';
+import 'package:saig_app/presentation/screens/screens.dart';
 
 Future<void> main() async {
 
@@ -32,6 +26,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UploadsProvider()),
+        ChangeNotifierProvider(create: (_) => SensorsProvider()),
       ],
       child: MyApp(cameras: cameras),
     )
@@ -56,13 +51,13 @@ class MyApp extends StatelessWidget {
         'info'         : (BuildContext context) => const InfoScreen(),
         'one_shoting'  : (BuildContext context) => OneShotingScreen(camera: cameras.first),
         // 'multi'     : (BuildContext context) => MultipleShotingPage(cameras: cameras),
-        // 'sensors'   : (BuildContext context) => SensorsTestPage(),
+        'sensors'      : (BuildContext context) => const SensorsPlaygroundScreen(),
         'location'     : (BuildContext context) => const LocationPlaygroundScreen(),
         'sounds'       : (BuildContext context) => const SoundPlaygroundScreen(),
-        'camera'       : (BuildContext context) => CameraPlatgroundScreen(cameras: cameras),
+        'camera'       : (BuildContext context) => CameraPlaygroundScreen(cameras: cameras),
         // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
       },
-      initialRoute: 'upload',
+      initialRoute: 'sensors',
     );
   }
 }

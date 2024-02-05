@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+// TODO: do const where is necessary
 class CloudinaryConfig {
 
   static String basePath = dotenv.env['BASE_PATH']!;

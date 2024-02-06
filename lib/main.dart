@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
         'camera'       : (BuildContext context) => CameraPlaygroundScreen(cameras: cameras),
         // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
       },
-      initialRoute: 'sensors',
+      initialRoute: 'upload',
     );
   }
 }

@@ -44,7 +44,7 @@ class MenuWidget extends StatelessWidget {
                         ), 
           ),
           ListTile(
-            leading: const Icon(Icons.sync, color: Colors.cyan),
+            leading: const Icon(Icons.upload, color: Colors.cyan),
             title: const Text('Carga de imágenes'),
             onTap: () => Navigator.pushReplacementNamed(context, 'upload')
           ),

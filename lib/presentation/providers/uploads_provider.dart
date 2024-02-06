@@ -1,42 +1,32 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:saig_app/domain/entities/upload_item.dart';
 import 'package:saig_app/domain/enums/upload_status.dart';
 import 'package:saig_app/infrastructure/cloudinary/datasources/cloudinary_uploads_cloud_datasource.dart';
+import 'package:saig_app/infrastructure/device/filesystem_helper.dart';
 import 'package:saig_app/infrastructure/repositories/uploads_cloud_repository_impl.dart';
 import 'package:saig_app/infrastructure/repositories/uploads_local_repository_impl.dart';
 import 'package:saig_app/infrastructure/sqlite/uploads_local_sqlite_datasource.dart';
 
 class UploadsProvider extends ChangeNotifier {
 
-
-  // final _localRepository = UploadsLocalRepositoryImpl(datasource: UploadsLocalMemoryDatasource());
-  final _localRepository = UploadsLocalRepositoryImpl(datasource: UploadsLocalSqliteDatasource.instance );
-  final cloudRepository = UploadsCloudRepositoryImpl(datasource: CloudinaryUploadsCloudDatasource());
+  final _localRepository = UploadsLocalRepositoryImpl(datasource: UploadsLocalSqliteDatasource.instance ); // TODO: Implementar riverpod para mantener esta instancia
+  final _cloudRepository = UploadsCloudRepositoryImpl(datasource: CloudinaryUploadsCloudDatasource()); // TODO: Implementar riverpod para mantener esta instancia
   List<UploadItem>? _items;
 
 
-  void newMockItem() async {
-
-    final item = UploadItem();
-    item.id = Random().nextInt(1000);
-    item.descripcion = DateTime.now().toString();
-    item.status = UploadStatus.values[ Random().nextInt(UploadStatus.values.length)];
-
-    addItem(item);
-
-  }
-
+  ///
+  /// Visibles son todos los intems con estado
+  /// con estado distinto a Upload.status = archived
+  /// TODO: Colocar la regla de negocio en otro lado
+  ///
   Future<List<UploadItem>> getVisibles() async {
     
     if (_items == null) {
       final items = await _localRepository.getVisibles();
       _items = items;
+      _cleanUploadsOk();
     }
 
-    // TODO
-    _cleanUploadsOk();
     return _items!;
   }
 
@@ -44,65 +34,86 @@ class UploadsProvider extends ChangeNotifier {
   ///
   /// Agregar nuevo item con PENDING a la lista de precarga
   ///
-  void addItem(UploadItem item) async {
-    
-    // print('add $item');
-    
+  Future<void> addItem(UploadItem item) async {
+        
     item.id = await _localRepository.insertItem(item);
     
     _items!.insert(0, item);
     notifyListeners();
   }
 
-
   ///
-  /// Eliminar item de la lista y de la DB y notificar
+  /// Intentar subir a la nube, sino marcarlo como error
+  /// para dar la opcion de volver a intentar
   ///
-  void deleteItem(UploadItem item) async {
-    
-    await _localRepository.deleteItem(item);
-    _items!.remove(item);
-    // deleteFile(item); // TODO
-    notifyListeners();
-  }
-
-
-  ///
-  ///
-  ///
-  void uploadItem(UploadItem item) async {
+  Future<void> uploadItem(UploadItem item) async {
 
     item.status = UploadStatus.uploading;
     notifyListeners();
     
-    cloudRepository.uploadItem(item)
+    _cloudRepository.uploadItem(item)
       .then((value) {
         item.publicId = value;
         item.status = UploadStatus.done;
+        _proccessUploadOk(item);
+      })
+      .onError((error, stackTrace) {
+        item.status = UploadStatus.error;
+      })
+      .whenComplete(() {
         _localRepository.updateItem(item)
           .then((value){
             notifyListeners();
           });
-
-        // updateItemDB(item); // TODO
-        // procesarSubidoOk(item); // TODO
-      })
-      .onError((error, stackTrace) {
-        item.status = UploadStatus.error;
-          
-        notifyListeners();
-        // updateItemDB(item); // TODO
-        // print(error); // TODO
       });
-
-    // return Future.delayed(const Duration(seconds: 3), () => 'Done');
   }
 
+
+  ///
+  /// Eliminar item de la lista y notificar
+  /// Eliminar archivo del filesystem
+  ///
+  Future<void> deleteItem(UploadItem item) async {
+    
+    await _localRepository.deleteItem(item);
+    _items!.remove(item);
+    FilesHelper.deleteFile(item.path)
+      .then((value){
+        notifyListeners();
+      });
+  }
+
+
+  ///
+  /// Una vez subido esperar unos segundos para visualizar y luego pasar
+  /// a archived y eliminar el archivo de la cache
+  ///
+  void _proccessUploadOk(UploadItem item) async{
+
+    Future.delayed(const Duration(seconds: 3))
+      .then((value) { 
+        item.status = UploadStatus.archived;
+        FilesHelper.deleteFile(item.path)
+          .then((value){
+            _localRepository.updateItem(item)
+              .then((value) {
+                _items!.remove(item);
+                notifyListeners();
+              });
+          });
+      });
+  }
+
+
+
+  ///
+  /// Al inicializar la app
+  ///
   void _cleanUploadsOk() {
-    // _items!
-    //   .where( (item) => item.status! == UploadStatus.done )
-    //   .toList()
-    //   .forEach( (item) => procesarSubidoOk( item ) );
+    _items!
+      .where( (item) => item.status == UploadStatus.done )
+      .toList()
+      .forEach( (item) => _proccessUploadOk( item ) );
   }
 
 

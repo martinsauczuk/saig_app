@@ -3,10 +3,11 @@ import 'package:saig_app/domain/enums/upload_status.dart';
 
 class UploadItem {
 
-  UploadItem();
-
   int? id;
-  String? path;
+  
+  late final String path;
+  UploadStatus status = UploadStatus.pending;
+
   double lat = 0;
   double lng = 0;
   double accelerometerX = 0;
@@ -24,8 +25,9 @@ class UploadItem {
   String? timestamp = '';
 
   String? descripcion = 'sin descripcion';
-  UploadStatus? status = UploadStatus.pending;
   String? publicId = '';
+
+  UploadItem({required this.path, required this.status});
 
   @override
   String toString() {
@@ -78,7 +80,7 @@ class UploadItem {
         'speedAccuracy': speedAccuracy,
         'timestamp' : timestamp,
 
-        'status': status!.index,
+        'status': status.index,
         'path': path,
         'public_id': publicId!,
       };

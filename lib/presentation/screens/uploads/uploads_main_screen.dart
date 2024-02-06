@@ -41,30 +41,12 @@ class UploadsMainScreen extends StatelessWidget {
                 final item = items[index];
                 return Dismissible(
                   key: UniqueKey(),
-                    background: Container(
-                      color: Colors.red,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: const Row(
-                          children: <Widget>[
-                            Icon( Icons.delete_forever ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    direction: DismissDirection.startToEnd,
-                    onDismissed: (DismissDirection direction) => { // TODO
-                      provider.deleteItem(item),
-                      // ScaffoldMessenger.of(context)
-                      //   .showSnackBar(SnackBar(
-                      //     content: Text('${item.id} - ${item.descripcion} eliminado')
-                      //   ))
-                    }, 
+                  background: const _ItemBackground(),
+                  direction: DismissDirection.startToEnd,
+                  onDismissed: (DismissDirection direction) => onDismissed(context, item), 
                   child: UploadItemListTile(
                     item: item,
-                    onPress: () {
-                      onPressUploadButton(context, item);
-                    },
+                    onPress: () => onPressUploadButton(context, item),
                   )
                 );
               },
@@ -89,7 +71,30 @@ class UploadsMainScreen extends StatelessWidget {
 
 }
 
+class _ItemBackground extends StatelessWidget {
+  
+  const _ItemBackground();
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.red,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: const Row(
+          children: <Widget>[
+            Icon( Icons.delete_forever ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+///
+///
+///
 void onPressUploadButton(BuildContext context,  UploadItem item) {
   
   final UploadsProvider provider = context.read<UploadsProvider>();
@@ -98,6 +103,24 @@ void onPressUploadButton(BuildContext context,  UploadItem item) {
 }
 
 
+///
+///
+///
+void onDismissed(BuildContext context, UploadItem item) {
+
+  final UploadsProvider provider = context.read<UploadsProvider>();
+
+
+  provider.deleteItem(item)
+    .then( (onValue) { 
+        ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(
+            content: Text('${item.id} - ${item.descripcion} eliminado')
+          )
+        );
+      });
+
+}
 
 class _FlotingActionButtons extends StatelessWidget {
 

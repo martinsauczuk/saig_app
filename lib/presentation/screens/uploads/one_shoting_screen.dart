@@ -87,12 +87,12 @@ class _OneShotingScreenState extends State<OneShotingScreen> {
 
 
   Future<UploadItem> buildItem() async {
-    UploadItem item = UploadItem();
 
     final image = await captureImageItem();
-
-    item.path = image.path;
-    item.status = UploadStatus.pending;
+    UploadItem item = UploadItem(
+      path: image.path,
+      status: UploadStatus.pending,
+    );
 
     return item;
   }

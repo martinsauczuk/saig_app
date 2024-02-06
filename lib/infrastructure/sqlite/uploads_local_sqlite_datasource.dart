@@ -83,6 +83,7 @@ class UploadsLocalSqliteDatasource implements UploadsLocalDatasource {
   @override
   Future<List<UploadItem>> getVisibles() async {
     
+    // TODO: Esto es regla de negocio no debe ir en el datasource
     int index = UploadStatus.archived.index;
     final db = await database;
     final res = await db!.query(
@@ -94,6 +95,7 @@ class UploadsLocalSqliteDatasource implements UploadsLocalDatasource {
     List<UploadItem> list = res.isNotEmpty
         ? res.map((e) => UploadItem.fromMap(e)).toList()
         : [];
+
 
     return list;
   }

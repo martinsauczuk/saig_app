@@ -9,7 +9,7 @@ import 'package:saig_app/infrastructure/sqlite/uploads_local_sqlite_datasource.d
 
 class UploadsProvider extends ChangeNotifier {
 
-  final _localRepository = UploadsLocalRepositoryImpl(datasource: UploadsLocalSqliteDatasource.instance ); // TODO: Implementar riverpod para mantener esta instancia
+  final _localRepository = UploadsLocalRepositoryImpl(UploadsLocalSqliteDatasource.instance ); // TODO: Implementar riverpod para mantener esta instancia
   final _cloudRepository = UploadsCloudRepositoryImpl(datasource: CloudinaryUploadsCloudDatasource()); // TODO: Implementar riverpod para mantener esta instancia
   List<UploadItem>? _items;
 

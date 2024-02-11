@@ -92,12 +92,13 @@ class UploadsLocalSqliteDatasource implements UploadsLocalDatasource {
       orderBy: 'id desc'
     );
 
-    List<UploadItem> list = res.isNotEmpty
-        ? res.map((e) => UploadItem.fromMap(e)).toList()
-        : [];
+    // List<UploadItem> list = res.isNotEmpty
+        // ? res.map((e) => UploadItem.fromMap(e)).toList()
+        // : [];
 
+      // TODO
 
-    return list;
+    return [];
   }
 
 

@@ -74,9 +74,14 @@ class MenuWidget extends StatelessWidget {
             onTap: () => Navigator.pushReplacementNamed(context, 'sounds')
           ),
           ListTile(
+            leading: const Icon(Icons.tune, color: Colors.cyan),
+            title: const Text('Permisos'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'permissions')
+          ),
+          ListTile(
             leading: const Icon(Icons.info_outlined, color: Colors.cyan),
             title: const Text('Información'),
-            onTap: () => Navigator.pushReplacementNamed(context, 'info')
+            onTap: () => Navigator.pushReplacementNamed(context, 'about')
           ),
         ],
       )

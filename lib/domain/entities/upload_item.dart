@@ -5,7 +5,7 @@ class UploadItem {
 
   int? id;
   
-  late final String path;
+  final String path;
   UploadStatus status = UploadStatus.pending;
 
   double lat = 0;
@@ -29,59 +29,69 @@ class UploadItem {
 
   UploadItem({required this.path, required this.status});
 
+
+  UploadItem copyWith({
+    UploadStatus? status
+  }) => UploadItem( 
+    status: status ?? this.status,
+    path: path,
+  );
+  
+
+
   @override
   String toString() {
     return 'desc:$descripcion|lat:$lat|lng:$lng|accX:$accelerometerX|accY:$accelerometerY|accZ:$accelerometerZ|magX:$magnetometerX|magY:$magnetometerY|magZ:$magnetometerZ';
   }
 
-  UploadItem.fromMap(Map<String, Object?> map) {
-    id = map['id'] as int;
-    lat = map['lat'] as double;
-    lng = map['lng'] as double;
-    accelerometerX = map['accelerometerX'] as double;
-    accelerometerY = map['accelerometerY'] as double;
-    accelerometerZ = map['accelerometerZ'] as double;
-    magnetometerX = map['magnetometerX'] as double;
-    magnetometerY = map['magnetometerY'] as double;
-    magnetometerZ = map['magnetometerZ'] as double;
-    descripcion = map['descripcion'] as String;
+  // UploadItem.fromMap(Map<String, Object?> map) {
+  //   id = map['id'] as int;
+  //   lat = map['lat'] as double;
+  //   lng = map['lng'] as double;
+  //   accelerometerX = map['accelerometerX'] as double;
+  //   accelerometerY = map['accelerometerY'] as double;
+  //   accelerometerZ = map['accelerometerZ'] as double;
+  //   magnetometerX = map['magnetometerX'] as double;
+  //   magnetometerY = map['magnetometerY'] as double;
+  //   magnetometerZ = map['magnetometerZ'] as double;
+  //   descripcion = map['descripcion'] as String;
 
-    accuracy = map['accuracy'] as double;
-    heading = map['heading'] as double;
-    altitude = map['altitude'] as double;
-    speed = map['speed'] as double;
-    speedAccuracy = map['speedAccuracy'] as double;
-    timestamp = map['timestamp'] as String;
+  //   accuracy = map['accuracy'] as double;
+  //   heading = map['heading'] as double;
+  //   altitude = map['altitude'] as double;
+  //   speed = map['speed'] as double;
+  //   speedAccuracy = map['speedAccuracy'] as double;
+  //   timestamp = map['timestamp'] as String;
 
-    path = map['path'] as String;
-    publicId = map['public_id'] as String;
-    status = UploadStatus.values[map['status'] as int];
-  }
+  //   path = map['path'] as String;
+  //   publicId = map['public_id'] as String;
+  //   status = UploadStatus.values[map['status'] as int];
+  // }
 
   ///
   /// Convertir a map para usar en base de datos
   ///
   Map<String, Object?> toMap() => {
-        'id': id,
-        'lat': lat,
-        'lng': lng,
-        'accelerometerX': accelerometerX,
-        'accelerometerY': accelerometerY,
-        'accelerometerZ': accelerometerZ,
-        'magnetometerX': magnetometerX,
-        'magnetometerY': magnetometerY,
-        'magnetometerZ': magnetometerZ,
-        'descripcion': descripcion,
+    'id': id,
+    'lat': lat,
+    'lng': lng,
+    'accelerometerX': accelerometerX,
+    'accelerometerY': accelerometerY,
+    'accelerometerZ': accelerometerZ,
+    'magnetometerX': magnetometerX,
+    'magnetometerY': magnetometerY,
+    'magnetometerZ': magnetometerZ,
+    'descripcion': descripcion,
 
-        'accuracy': accuracy,
-        'heading' : heading,
-        'altitude': altitude,
-        'speed' : speed,
-        'speedAccuracy': speedAccuracy,
-        'timestamp' : timestamp,
+    'accuracy': accuracy,
+    'heading' : heading,
+    'altitude': altitude,
+    'speed' : speed,
+    'speedAccuracy': speedAccuracy,
+    'timestamp' : timestamp,
 
-        'status': status.index,
-        'path': path,
-        'public_id': publicId!,
-      };
+    'status': status.index,
+    'path': path,
+    'public_id': publicId!,
+  };
 }

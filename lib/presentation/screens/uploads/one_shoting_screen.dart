@@ -1,20 +1,20 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saig_app/domain/entities/upload_item.dart';
 import 'package:saig_app/domain/enums/upload_status.dart';
-import 'package:saig_app/presentation/providers/uploads_provider.dart';
+import 'package:saig_app/presentation/providers/providers.dart';
 
-class OneShotingScreen extends StatefulWidget {
+class OneShotingScreen extends ConsumerStatefulWidget {
 
   final CameraDescription camera;
   const OneShotingScreen({super.key, required this.camera});
 
   @override
-  State<OneShotingScreen> createState() => _OneShotingScreenState();
+  OneShotingScreenState createState() => OneShotingScreenState();
 }
 
-class _OneShotingScreenState extends State<OneShotingScreen> {
+class OneShotingScreenState extends ConsumerState<OneShotingScreen> {
 
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
@@ -37,14 +37,8 @@ class _OneShotingScreenState extends State<OneShotingScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    final UploadsProvider uploadsProvider = context.watch<UploadsProvider>();
-
-
+    
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Pre carga de imagen'),
-      // ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -63,7 +57,8 @@ class _OneShotingScreenState extends State<OneShotingScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           UploadItem item = await buildItem();
-          uploadsProvider.addItem(item);
+          ref.read(uploadItemsProvider.notifier).addItem(item);
+          
           Navigator.pop(context);
         },
         child: const Icon(Icons.camera, size: 50,),

@@ -3,14 +3,14 @@ import 'package:saig_app/presentation/menu_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 
-class InfoScreen extends StatefulWidget {
-  const InfoScreen({super.key});
+class AboutScreen extends StatefulWidget {
+  const AboutScreen({super.key});
 
   @override
-  State<InfoScreen> createState() => _InfoScreenState();
+  State<AboutScreen> createState() => _AboutScreenState();
 }
 
-class _InfoScreenState extends State<InfoScreen> {
+class _AboutScreenState extends State<AboutScreen> {
 
   PackageInfo _packageInfo = PackageInfo(
     appName: 'Unknown',

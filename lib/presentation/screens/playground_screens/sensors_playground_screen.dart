@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:saig_app/presentation/menu_widget.dart';
-import 'package:saig_app/presentation/providers/sensors_provider.dart';
+import 'package:saig_app/presentation/providers/old/sensors_provider.dart';
 
 class SensorsPlaygroundScreen extends StatelessWidget {
 

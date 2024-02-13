@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:saig_app/presentation/menu_widget.dart';
-import 'package:saig_app/presentation/providers/permissions_provider.dart';
-import 'package:saig_app/presentation/widgets/permission_status_indicator.dart';
+import 'package:saig_app/presentation/widgets/widgets.dart';
+import 'package:saig_app/presentation/providers/providers.dart';
 
 class PermissionsScreen extends StatelessWidget {
   const PermissionsScreen({super.key});

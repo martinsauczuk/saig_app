@@ -1,8 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:saig_app/presentation/menu_widget.dart';
+import 'package:saig_app/presentation/widgets/shared/menu_widget.dart';
 
 class LocationPlaygroundScreen extends StatefulWidget {
 

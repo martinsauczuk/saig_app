@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:saig_app/domain/entities/upload_item.dart';
-import 'package:saig_app/domain/enums/upload_status.dart';
-import 'package:saig_app/presentation/widgets/upload_button.dart';
+import 'package:saig_app/domain/domain.dart';
+import 'package:saig_app/presentation/widgets/widgets.dart';
 
 
 class UploadItemListTile extends StatelessWidget {
@@ -22,7 +20,7 @@ class UploadItemListTile extends StatelessWidget {
     
     return ListTile(
       leading: Image.file(
-        File(item.path!),
+        File(item.path),
         fit: BoxFit.cover,
       ),
       title: Text('${item.id.toString()} - ${item.descripcion!}'),
@@ -31,7 +29,7 @@ class UploadItemListTile extends StatelessWidget {
       trailing: SizedBox(
         width: 96.0,
         child: UploadButton(
-          uploadStatus: item.status!,
+          uploadStatus: item.status,
           onPending: onPress,
         ),
       ),

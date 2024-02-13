@@ -37,7 +37,7 @@ class UploadsLocalMemoryDatasource implements UploadsLocalDatasource {
 
   @override
   Future<int> insertItem(UploadItem newItem) {
-    newItem.id = Random().nextInt(1000);
+    // newItem.id = Random().nextInt(1000); // TODO
     items.add(newItem);
     return Future.value( newItem.id );
   }

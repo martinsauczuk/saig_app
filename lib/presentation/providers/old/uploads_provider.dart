@@ -36,7 +36,7 @@ class UploadsProvider extends ChangeNotifier {
   ///
   Future<void> addItem(UploadItem item) async {
         
-    item.id = await _localRepository.insertItem(item);
+    // item.id = await _localRepository.insertItem(item);
     
     _items!.insert(0, item);
     notifyListeners();
@@ -46,27 +46,27 @@ class UploadsProvider extends ChangeNotifier {
   /// Intentar subir a la nube, sino marcarlo como error
   /// para dar la opcion de volver a intentar
   ///
-  Future<void> uploadItem(UploadItem item) async {
+  // Future<void> uploadItem(UploadItem item) async {
 
-    item.status = UploadStatus.uploading;
-    notifyListeners();
+  //   item.status = UploadStatus.uploading;
+  //   notifyListeners();
     
-    _cloudRepository.uploadItem(item)
-      .then((value) {
-        item.publicId = value;
-        item.status = UploadStatus.done;
-        _proccessUploadOk(item);
-      })
-      .onError((error, stackTrace) {
-        item.status = UploadStatus.error;
-      })
-      .whenComplete(() {
-        _localRepository.updateItem(item)
-          .then((value){
-            notifyListeners();
-          });
-      });
-  }
+  //   _cloudRepository.uploadItem(item)
+  //     .then((value) {
+  //       item.publicId = value;
+  //       item.status = UploadStatus.done;
+  //       _proccessUploadOk(item);
+  //     })
+  //     .onError((error, stackTrace) {
+  //       item.status = UploadStatus.error;
+  //     })
+  //     .whenComplete(() {
+  //       _localRepository.updateItem(item)
+  //         .then((value){
+  //           notifyListeners();
+  //         });
+  //     });
+  // }
 
 
   ///
@@ -88,21 +88,21 @@ class UploadsProvider extends ChangeNotifier {
   /// Una vez subido esperar unos segundos para visualizar y luego pasar
   /// a archived y eliminar el archivo de la cache
   ///
-  void _proccessUploadOk(UploadItem item) async{
+  // void _proccessUploadOk(UploadItem item) async{
 
-    Future.delayed(const Duration(seconds: 3))
-      .then((value) { 
-        item.status = UploadStatus.archived;
-        FilesHelper.deleteFile(item.path)
-          .then((value){
-            _localRepository.updateItem(item)
-              .then((value) {
-                _items!.remove(item);
-                notifyListeners();
-              });
-          });
-      });
-  }
+  //   Future.delayed(const Duration(seconds: 3))
+  //     .then((value) { 
+  //       item.status = UploadStatus.archived;
+  //       FilesHelper.deleteFile(item.path)
+  //         .then((value){
+  //           _localRepository.updateItem(item)
+  //             .then((value) {
+  //               _items!.remove(item);
+  //               notifyListeners();
+  //             });
+  //         });
+  //     });
+  // }
 
 
 
@@ -110,10 +110,10 @@ class UploadsProvider extends ChangeNotifier {
   /// Al inicializar la app
   ///
   void _cleanUploadsOk() {
-    _items!
-      .where( (item) => item.status == UploadStatus.done )
-      .toList()
-      .forEach( (item) => _proccessUploadOk( item ) );
+    // _items!
+    //   .where( (item) => item.status == UploadStatus.done )
+    //   .toList()
+      // .forEach( (item) => _proccessUploadOk( item ) );
   }
 
 

@@ -11,9 +11,6 @@ Future<void> main() async {
   await dotenv.load(fileName: '.env');
 
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Obtain a list of the available cameras on the device.
-  final cameras = await availableCameras();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -21,24 +18,15 @@ Future<void> main() async {
   ]);
 
   runApp( 
-    // MultiProvider(
-      // providers: [
-        // ChangeNotifierProvider(create: (_) => UploadsProvider()),
-        // ChangeNotifierProvider(create: (_) => SensorsProvider()),
-      // ],
-      // child: MainApp(cameras: cameras),
-    // )
-    ProviderScope(
-      child: MainApp(cameras: cameras)
+    const ProviderScope(
+      child: MainApp()
     )
   );
 }
 
 class MainApp extends StatelessWidget {
 
-  final List<CameraDescription> cameras;
-  const MainApp({super.key, required this.cameras});
-
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +38,12 @@ class MainApp extends StatelessWidget {
         'upload'       : (BuildContext context) => const UploadsMainScreen(),
         'cloud'        : (BuildContext context) => CloudGalleryScreen(),
         'about'        : (BuildContext context) => const AboutScreen(),
-        'one_shoting'  : (BuildContext context) => OneShotingScreen(camera: cameras.first),
+        'one_shoting'  : (BuildContext context) => const OneShotingScreen(),
         // 'multi'     : (BuildContext context) => MultipleShotingPage(cameras: cameras),
         'sensors'      : (BuildContext context) => const SensorsPlaygroundScreen(),
         'location'     : (BuildContext context) => const LocationPlaygroundScreen(),
         'sounds'       : (BuildContext context) => const SoundPlaygroundScreen(),
-        'camera'       : (BuildContext context) => CameraPlaygroundScreen(cameras: cameras),
+        // 'camera'       : (BuildContext context) => CameraPlaygroundScreen(cameras: cameras),
         'permissions'  : (BuildContext context) => const PermissionsScreen(),
         // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
       },

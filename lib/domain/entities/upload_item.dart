@@ -1,42 +1,42 @@
 
+import 'package:flutter/material.dart';
 import 'package:saig_app/domain/enums/upload_status.dart';
 
+@immutable
 class UploadItem {
 
-  int? id;
-  
+  final int? id;
   final String path;
-  UploadStatus status = UploadStatus.pending;
+  final UploadStatus status;
 
-  double lat = 0;
-  double lng = 0;
-  double accelerometerX = 0;
-  double accelerometerY = 0;
-  double accelerometerZ = 0;
-  double magnetometerX = 0;
-  double magnetometerY = 0;
-  double magnetometerZ = 0;
+  final double lat = 0;
+  final double lng = 0;
+  final double accelerometerX = 0;
+  final double accelerometerY = 0;
+  final double accelerometerZ = 0;
+  final double magnetometerX = 0;
+  final double magnetometerY = 0;
+  final double magnetometerZ = 0;
 
-  double accuracy = 0;
-  double heading = 0;
-  double altitude = 0;
-  double speed = 0;
-  double speedAccuracy = 0;
-  String? timestamp = '';
+  final double accuracy = 0;
+  final double heading = 0;
+  final double altitude = 0;
+  final double speed = 0;
+  final double speedAccuracy = 0;
+  final String? timestamp = '';
 
-  String? descripcion = 'sin descripcion';
-  String? publicId = '';
+  final String? descripcion = 'sin descripcion';
+  final String? publicId = '';
 
-  UploadItem({required this.path, required this.status});
+  const UploadItem({this.id, required this.path, this.status = UploadStatus.pending });
 
-
-  UploadItem copyWith({
-    UploadStatus? status
-  }) => UploadItem( 
-    status: status ?? this.status,
-    path: path,
-  );
-  
+  UploadItem copyWith({int? id, UploadStatus? status}) {
+    return UploadItem(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      path: path,
+    );
+  }
 
 
   @override

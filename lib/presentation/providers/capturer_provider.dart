@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saig_app/domain/domain.dart';
@@ -52,13 +53,17 @@ class CapturerNotifier extends StateNotifier<CapturerState> {
 
   Future<void> takeOnePhoto() async {
 
+    //TODO FIXME
+    final faker = Faker();
+
+
     state = state.copyWith(isTakingPhoto: true);
     XFile file;    
     try {
       
-      const positionValue = PositionValue(
-        lat: 0.0,
-        lng: 0.0,
+      final positionValue = PositionValue(
+        lat: faker.geo.latitude(),
+        lng: faker.geo.longitude(),
         accuracy: 0.0,
         heading: 0.0,
         altitude: 0.0,
@@ -79,9 +84,6 @@ class CapturerNotifier extends StateNotifier<CapturerState> {
   }
 
 }
-
-
-
 
 
 

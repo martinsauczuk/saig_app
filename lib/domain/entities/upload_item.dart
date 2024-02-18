@@ -41,6 +41,7 @@ class UploadItem {
       path: map['path'],
       status: UploadStatus.values[map['status']],
       publicId: map['public_id'],
+      positionValue: PositionValue.fromMap(map),
     );
   
 

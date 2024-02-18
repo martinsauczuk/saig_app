@@ -24,4 +24,23 @@ class PositionValue {
     required this.timestamp,
   });
 
+  @override
+  String toString() {
+    return 'lat: $lat lng: $lng';
+  }
+
+  factory PositionValue.fromMap( Map<String, dynamic> map ) {
+    return PositionValue(
+      lat: map['lat'], 
+      lng: map['lng'], 
+      accuracy: map['accuracy'], 
+      heading: map['heading'], 
+      altitude: map['altitude'], 
+      speed: map['speed'], 
+      speedAccuracy: map['speedAccuracy'], 
+      timestamp: map['timestamp']
+    );
+  }
+
+
 }

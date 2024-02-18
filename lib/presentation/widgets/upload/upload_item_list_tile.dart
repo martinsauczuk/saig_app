@@ -24,12 +24,7 @@ class UploadItemListTile extends StatelessWidget {
         fit: BoxFit.cover,
       ),
       title: Text('${item.id.toString()} - ${item.descripcion!}'),
-      subtitle: Column(
-        children: [
-          Text('data'),
-          _buildSubtitle(),
-        ],
-      ),
+      subtitle: ItemInfo(item),
       isThreeLine: true,
       trailing: SizedBox(
         width: 96.0,
@@ -39,11 +34,30 @@ class UploadItemListTile extends StatelessWidget {
         ),
       ),
     );
-
   }
 
-  Widget _buildSubtitle() {
 
+
+}
+
+class ItemInfo extends StatelessWidget {
+  
+  final UploadItem item;
+  const ItemInfo(this.item, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSubtitle(),
+        Text('Path: ${item.path}'),
+        Text('Position: ${item.positionValue}'),
+      ],
+    );
+  }
+ 
+  Widget _buildSubtitle() {
     switch (item.status) {
       case UploadStatus.pending:
         return const Text('Subida pendiente');
@@ -57,6 +71,5 @@ class UploadItemListTile extends StatelessWidget {
         return const Text('Subido ok / eliminar de esta lista');
     }
   }
-
 
 }

@@ -24,7 +24,12 @@ class UploadItemListTile extends StatelessWidget {
         fit: BoxFit.cover,
       ),
       title: Text('${item.id.toString()} - ${item.descripcion!}'),
-      subtitle: _buildSubtitle(),
+      subtitle: Column(
+        children: [
+          Text('data'),
+          _buildSubtitle(),
+        ],
+      ),
       isThreeLine: true,
       trailing: SizedBox(
         width: 96.0,
@@ -39,15 +44,15 @@ class UploadItemListTile extends StatelessWidget {
 
   Widget _buildSubtitle() {
 
-    switch (item.status!) {
+    switch (item.status) {
       case UploadStatus.pending:
-        return Text('Subida pendiente - ${item.path}');
+        return const Text('Subida pendiente');
       case UploadStatus.uploading:
         return const Text('Subiendo a la nube...');
       case UploadStatus.error:
         return const Text('Error al subir - puede reintentar', style: TextStyle(color: Colors.red),);
       case UploadStatus.done:
-        return Text('${item.publicId} - ${item.path}');
+        return Text('${item.publicId}');
       case UploadStatus.archived:
         return const Text('Subido ok / eliminar de esta lista');
     }

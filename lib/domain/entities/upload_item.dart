@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:saig_app/domain/entities/positition_value.dart';
 import 'package:saig_app/domain/enums/upload_status.dart';
 
 @immutable
@@ -8,9 +9,10 @@ class UploadItem {
   final int? id;
   final String path;
   final UploadStatus status;
+  final String? publicId;
 
-  final double lat = 0;
-  final double lng = 0;
+  final PositionValue? positionValue;
+
   final double accelerometerX = 0;
   final double accelerometerY = 0;
   final double accelerometerZ = 0;
@@ -18,34 +20,30 @@ class UploadItem {
   final double magnetometerY = 0;
   final double magnetometerZ = 0;
 
-  final double accuracy = 0;
-  final double heading = 0;
-  final double altitude = 0;
-  final double speed = 0;
-  final double speedAccuracy = 0;
-  final String? timestamp = '';
 
   final String? descripcion = 'sin descripcion';
-  final String? publicId = '';
 
-  const UploadItem({this.id, required this.path, this.status = UploadStatus.pending });
+  const UploadItem({this.id, this.publicId, required this.path, this.status = UploadStatus.pending, this.positionValue });
 
-  UploadItem copyWith({int? id, UploadStatus? status}) {
+  UploadItem copyWith({int? id, UploadStatus? status, String? publicId}) {
     return UploadItem(
       id: id ?? this.id,
-      status: status ?? this.status,
       path: path,
+      status: status ?? this.status,
+      publicId: publicId ?? this.publicId,
+      positionValue: positionValue,
     );
   }
 
+  factory UploadItem.fromMap( Map<String, dynamic> map ) {
+    return UploadItem(
+      id: map['id'],
+      path: map['path'],
+      status: UploadStatus.values[map['status']],
+      publicId: map['public_id'],
+    );
+  
 
-  @override
-  String toString() {
-    return 'desc:$descripcion|lat:$lat|lng:$lng|accX:$accelerometerX|accY:$accelerometerY|accZ:$accelerometerZ|magX:$magnetometerX|magY:$magnetometerY|magZ:$magnetometerZ';
-  }
-
-  // UploadItem.fromMap(Map<String, Object?> map) {
-  //   id = map['id'] as int;
   //   lat = map['lat'] as double;
   //   lng = map['lng'] as double;
   //   accelerometerX = map['accelerometerX'] as double;
@@ -66,15 +64,30 @@ class UploadItem {
   //   path = map['path'] as String;
   //   publicId = map['public_id'] as String;
   //   status = UploadStatus.values[map['status'] as int];
-  // }
+  }
+
+
 
   ///
   /// Convertir a map para usar en base de datos
   ///
   Map<String, Object?> toMap() => {
+
     'id': id,
-    'lat': lat,
-    'lng': lng,
+    'path': path,
+    'status': status.index,
+    'public_id': publicId,
+    
+    // positionValue
+    'lat': positionValue!.lat,
+    'lng': positionValue!.lng,
+    'accuracy': positionValue!.accuracy,
+    'heading' : positionValue!.heading,
+    'altitude': positionValue!.altitude,
+    'speed' : positionValue!.speed,
+    'speedAccuracy': positionValue!.speedAccuracy,
+    'timestamp' : positionValue!.timestamp,
+
     'accelerometerX': accelerometerX,
     'accelerometerY': accelerometerY,
     'accelerometerZ': accelerometerZ,
@@ -83,15 +96,6 @@ class UploadItem {
     'magnetometerZ': magnetometerZ,
     'descripcion': descripcion,
 
-    'accuracy': accuracy,
-    'heading' : heading,
-    'altitude': altitude,
-    'speed' : speed,
-    'speedAccuracy': speedAccuracy,
-    'timestamp' : timestamp,
-
-    'status': status.index,
-    'path': path,
-    'public_id': publicId!,
   };
+
 }

@@ -6,7 +6,7 @@ class UploadsLocalRepositoryImpl implements UploadsLocalRepository {
 
   final UploadsLocalDatasource datasource;
 
-  UploadsLocalRepositoryImpl(this.datasource);
+  UploadsLocalRepositoryImpl({required this.datasource});
 
   @override
   Future<int> deleteItem(UploadItem itemToDelete) {

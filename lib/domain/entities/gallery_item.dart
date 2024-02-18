@@ -13,6 +13,5 @@ class GalleryItem {
     required this.thumbUrl, 
     required this.filename
   });
-
-
+  
 }

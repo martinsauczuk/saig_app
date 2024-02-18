@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:saig_app/presentation/widgets/shared/menu_widget.dart';
 import 'package:saig_app/presentation/providers/old/sensors_provider.dart';
 
@@ -26,7 +25,7 @@ class _SensorsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final SensorsProvider sensorsProvider = context.watch<SensorsProvider>();
+    // final SensorsProvider sensorsProvider = context.watch<SensorsProvider>();
 
 
     return Column(
@@ -34,7 +33,7 @@ class _SensorsView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Accelerometer'),
-        Text(sensorsProvider.magnetometerInstant.toString())
+        // Text(sensorsProvider.magnetometerInstant.toString())
       ]
     );
   }

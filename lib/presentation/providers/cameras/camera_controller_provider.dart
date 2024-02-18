@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final cameraControllerProvider = FutureProvider.autoDispose<CameraController>((ref) async {
+final cameraControllerProvider = FutureProvider<CameraController>((ref) async {
     
   Future<List<CameraDescription>> camerasFuture = availableCameras();
   List<CameraDescription> cameras = await camerasFuture;
@@ -11,7 +11,14 @@ final cameraControllerProvider = FutureProvider.autoDispose<CameraController>((r
     ResolutionPreset.max
   );
 
-  print('Provider/ Created controlller');
+  await Future.delayed(const Duration(seconds: 5), () {
+    print('future ready');
+  });
+
+  await controller.initialize();
+
+  print(controller);
+  print('Provider/ Created controller');
   return controller;
 
 });

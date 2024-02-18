@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:saig_app/presentation/screens/screens.dart';
 import 'package:saig_app/presentation/widgets/widgets.dart';
 
 class UploadsMainScreen extends StatelessWidget {
@@ -11,11 +12,11 @@ class UploadsMainScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Carga de imagen y coordenadas'),
+        title: const Text('Contenido'),
       ),
       drawer: const MenuWidget(),
-      body: const UploadItemsView(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+      body: const UploadMainView(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
       floatingActionButton: const _FlotingActionButtons(),
     );
   }
@@ -33,10 +34,10 @@ class _FlotingActionButtons extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         FloatingActionButton(
-          heroTag: 'precarga',
+          heroTag: 'one_shoting',
           child: const Icon(Icons.add),
-          onPressed: () { //TODO
-            Navigator.pushNamed(context, 'one_shoting'); //TODO
+          onPressed: () {
+            Navigator.pushNamed(context, 'one_shoting');
           },
         ),
       ],

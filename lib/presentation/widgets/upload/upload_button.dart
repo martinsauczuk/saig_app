@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:saig_app/domain/enums/upload_status.dart';
+import 'package:saig_app/domain/domain.dart';
 
 
 class UploadButton extends StatelessWidget {
   
-  UploadButton({
+  const UploadButton({
     Key? key,
     required this.uploadStatus,
     required this.onPending,

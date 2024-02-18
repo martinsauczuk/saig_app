@@ -41,12 +41,12 @@ class CloudinaryUploadsCloudDatasource implements UploadsCloudDatasource {
 
     final imageUploadRequest = http.MultipartRequest('POST', uri);
 
-    final file = await http.MultipartFile.fromPath('file', item.path!,
+    final file = await http.MultipartFile.fromPath('file', item.path,
         contentType: MediaType(mimeType[0], mimeType[1]));
     imageUploadRequest.fields['metadata'] =
         '''
-          coord_lat=${item.lat}|
-          coord_lng=${item.lng}|
+          coord_lat=${item.positionValue!.lat}|
+          coord_lng=${item.positionValue!.lng}|
           desc=$descripcion|
           accelerometerX=${item.accelerometerX}|
           accelerometerY=${item.accelerometerY}|
@@ -54,12 +54,12 @@ class CloudinaryUploadsCloudDatasource implements UploadsCloudDatasource {
           magnetometerX=${item.magnetometerX}|
           magnetometerY=${item.magnetometerY}|
           magnetometerZ=${item.magnetometerZ}|
-          accuracy=${item.accuracy}|
-          heading=${item.heading}|
-          altitude=${item.altitude}|
-          speed=${item.speed}|
-          speedAccuracy=${item.speedAccuracy}|
-          timestamp=${item.timestamp}
+          accuracy=${item.positionValue!.accuracy}|
+          heading=${item.positionValue!.heading}|
+          altitude=${item.positionValue!.altitude}|
+          speed=${item..positionValue!.speed}|
+          speedAccuracy=${item.positionValue!.speedAccuracy}|
+          timestamp=${item.positionValue!.timestamp}
         ''';
 
     imageUploadRequest.files.add(file);
@@ -68,8 +68,6 @@ class CloudinaryUploadsCloudDatasource implements UploadsCloudDatasource {
     final resp = await http.Response.fromStream(streamResponse);
 
     if (resp.statusCode != 200 && resp.statusCode != 201) {
-      print("Error al subir imagen");
-      print(resp.body);
 
       // return "Algo salio mal";
       throw Exception('error al subir');

@@ -4,20 +4,51 @@ import 'package:saig_app/presentation/providers/providers.dart';
 import 'package:saig_app/presentation/widgets/widgets.dart';
 
 
-class UploadItemsView extends ConsumerWidget {
+class UploadMainView extends ConsumerWidget {
   
-  const UploadItemsView({super.key});
+  const UploadMainView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final items = ref.watch(uploadItemsProvider);
-    print('/M Lengh: ${items.length}');
-    print('/M Building');
+    final items = ref.watch(filteredItemsProvider);
+    final currentFilter = ref.watch(uploadsFilterProvider);
+
+    final pendingCount = ref.watch(uploadsPendingCountProvider);
+    final completedCount = ref.watch(uploadsCompletedCountProvider);
+    final errorCount = ref.watch(uploadsErrorCountProvider);
+
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        SegmentedButton(
+          showSelectedIcon: false,
+          segments: [
+            ButtonSegment(
+              value: UploadsFilter.pending,
+              label: Text('Pendientes ($pendingCount)'), 
+              icon: const Icon(Icons.upload),
+            ),
+            ButtonSegment(
+              value: UploadsFilter.completed,
+              label: Text('Completos ($completedCount)'),  
+              icon: const Icon(Icons.check)
+            ),
+            ButtonSegment(
+              value: UploadsFilter.error, 
+              label: Text('Error ($errorCount)'),
+              icon: const Icon(Icons.warning)
+            ),
+          ], 
+          selected: <UploadsFilter>{ currentFilter },
+          onSelectionChanged: (value) {
+            ref.read( uploadsFilterProvider.notifier).update((state) => value.first );
+          },
+        ),
+        const SizedBox(
+          height: 10
+        ),
         Expanded(
           child: ListView.separated(
             separatorBuilder: (context, index) => const Divider(),

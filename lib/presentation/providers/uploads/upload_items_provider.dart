@@ -6,15 +6,23 @@ import 'package:saig_app/infrastructure/repositories/uploads_cloud_repository_im
 import 'package:saig_app/infrastructure/repositories/uploads_local_repository_impl.dart';
 import 'package:saig_app/infrastructure/sqlite/uploads_local_sqlite_datasource.dart';
 
-final uploadscloudRepository = Provider<UploadsCloudRepository>((ref) 
+
+final uploadsLocalRepository = Provider<UploadsLocalRepositoryImpl>((ref) 
+  => UploadsLocalRepositoryImpl(datasource: UploadsLocalSqliteDatasource.instance)
+);
+
+
+final uploadsCloudRepository = Provider<UploadsCloudRepository>((ref) 
   => UploadsCloudRepositoryImpl(datasource: CloudinaryUploadsCloudDatasource())
 );
+
+
 
 final uploadItemsProvider = StateNotifierProvider<UploadItemsProvider, List<UploadItem>>((ref) {
 
   return UploadItemsProvider( 
-    localRepository: UploadsLocalRepositoryImpl(UploadsLocalSqliteDatasource.instance ), 
-    cloudRepository: ref.watch(uploadscloudRepository) 
+    localRepository: ref.watch(uploadsLocalRepository),
+    cloudRepository: ref.watch(uploadsCloudRepository)
   );
 
 });
@@ -34,11 +42,10 @@ class UploadItemsProvider extends StateNotifier<List<UploadItem>> {
 
   Future<void> initUploadItems() async {
 
+    // TODO: Modify getVisibles business rule
     final items = await localRepository.getVisibles();
     state = items;
     
-      // _cleanUploadsOk();
-
   }
 
 
@@ -53,67 +60,61 @@ class UploadItemsProvider extends StateNotifier<List<UploadItem>> {
       itemSaved,
       ...state
     ];
-
-      // state = [
-      //   item,
-      //   ...state
-      // ];
-
-      // Future.delayed(const Duration(seconds: 3), () {
-      //   final newitem = item.copyWith( status: UploadStatus.uploading );
-      //   state = [
-      //     ...state,
-      //     newitem
-      //   ];
-
-      // });
-    // _items!.insert(0, item);
     
   }
 
 
-  Future<void> uploadItem(UploadItem toUpload) async {
+  Future<void> uploadItem(UploadItem item) async {
+
+    final toUpload = item.copyWith( status: UploadStatus.uploading );
 
     state = [
       for (final item in state)
         if (item.id == toUpload.id) 
-          item.copyWith(status: UploadStatus.uploading)
+          toUpload
         else
           item
     ];
 
-    Future.delayed(const Duration(seconds: 3), () {
-      state = [
-        for (final item in state)
-          if (item.id == toUpload.id) 
-            item.copyWith(status: UploadStatus.done)
-          else
-            item
-      ];
-    });
-    
-    // cloudRepository.uploadItem(item)
-    //   .then((value) {
-    //     item.publicId = value;
-    //     item.status = UploadStatus.done;
-    //     // _proccessUploadOk(item); TODO
-    //   })
-    //   .onError((error, stackTrace) {
-    //     item.status = UploadStatus.error;
-    //   })
-    //   .whenComplete(() {
-    //     localRepository.updateItem(item)
-    //       .then((value){
-    //         // notifyListeners();
-    //       });
-    //   });
+    cloudRepository.uploadItem(toUpload)
+      .then((publicId) async {
+        final uplodaded = toUpload.copyWith(
+          status: UploadStatus.done,
+          publicId: publicId, 
+        );
+        await localRepository.updateItem(uplodaded);
+        state = [
+          for (final item in state)
+            if (item.id == toUpload.id) 
+              uplodaded
+            else
+              item
+        ];
+      })
+      .onError((error, stackTrace) async { // TODO: Implement error message
+        print(error);
+        final withError = toUpload.copyWith(
+          status: UploadStatus.error, 
+        );
+        await localRepository.updateItem(withError);
+
+        state = [
+          for (final item in state)
+            if (item.id == toUpload.id) 
+              withError
+            else
+              item
+        ];
+
+      });
+
   }
 
 
   Future<void> deleteItem(UploadItem toDelete) async {
     
     await localRepository.deleteItem(toDelete);
-    // await FilesHelper.deleteFile(item.path);
+    await FilesHelper.deleteFile(toDelete.path);
 
     state = [
       for (final item in state)
@@ -121,18 +122,7 @@ class UploadItemsProvider extends StateNotifier<List<UploadItem>> {
           item,
     ];
     
-    // _items!.remove(item);
-    // FilesHelper.deleteFile(item.path)
-    //   .then((value){
-    //     notifyListeners();
-    //   });
   }
-
-
-
-
-
-
 
 }
 

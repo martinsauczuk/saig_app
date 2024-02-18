@@ -1,82 +1,52 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:provider/provider.dart';
-import 'package:saig_app/src/pages/multiple_shoting_page.dart';
-import 'package:saig_app/src/providers/sensors_provider.dart';
-import 'package:saig_app/src/test_pages/camera_test.dart';
-import 'package:saig_app/src/pages/cloud_gallery_page.dart';
-import 'package:saig_app/src/pages/info_page.dart';
-import 'package:saig_app/src/test_pages/location_test.dart';
-import 'package:saig_app/src/pages/routing_shooting.dart';
-import 'package:saig_app/src/pages/one_shoting_page.dart';
-import 'package:saig_app/src/test_pages/play_sound_test.dart';
-import 'package:saig_app/src/test_pages/sensors_test.dart';
-import 'package:saig_app/src/pages/upload_page.dart';
-import 'package:saig_app/src/providers/uploads_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:saig_app/config/theme/app_theme.dart';
+import 'package:saig_app/presentation/screens/screens.dart';
 
-void main() async {
-  
-  await dotenv.load(fileName: ".env");
+Future<void> main() async {
 
-  // Ensure that plugin services are initialized so that `availableCameras()`
-  // can be called before `runApp()`
+  await dotenv.load(fileName: '.env');
+
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Obtain a list of the available cameras on the device.
-  final cameras = await availableCameras();
-  
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => UploadsProvider()),
-        ChangeNotifierProvider(create: (_) => SensorsProvider()),
-      ],
-      child: MyApp(cameras: cameras),
-    ),
+  runApp( 
+    const ProviderScope(
+      child: MainApp()
+    )
   );
 }
 
-class MyApp extends StatelessWidget {
+class MainApp extends StatelessWidget {
 
-  final List<CameraDescription> cameras;
+  const MainApp({super.key});
 
-  const MyApp({Key? key, required this.cameras}) : super(key: key);
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => UploadsProvider())
-      ],
-      child: MaterialApp(
-        title: 'PlantAr',
-        debugShowCheckedModeBanner: true,
-        theme: Theme.of(context).copyWith(
-          primaryColor: Colors.teal,
-          accentColor: Colors.deepOrange,
-        ),
-        routes: {
-          'upload'    : (BuildContext context) => UploadPage(),
-          'cloud'     : (BuildContext context) => CloudGalleryPage(),
-          'info'      : (BuildContext context) => InfoPage(),
-          'precarga'  : (BuildContext context) => OneShotingPage(cameras: cameras),
-          'multi'     : (BuildContext context) => MultipleShotingPage(cameras: cameras),
-          'sensors'   : (BuildContext context) => SensorsTestPage(),
-          'location'  : (BuildContext context) => LocationTestPage(),
-          'sounds'    : (BuildContext context) => PlaySoundTest(),
-          'camera'    : (BuildContext context) => CameraTestPage(cameras: cameras),
-          'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
-        },
-        initialRoute: 'upload',
-      ),
+    return MaterialApp(
+      title: 'PlantAr',
+      debugShowCheckedModeBanner: true,
+      theme: AppTheme().getTheme(),
+      routes: {
+        'upload'       : (BuildContext context) => const UploadsMainScreen(),
+        'cloud'        : (BuildContext context) => CloudGalleryScreen(),
+        'about'        : (BuildContext context) => const AboutScreen(),
+        'one_shoting'  : (BuildContext context) => const OneShotingScreen(),
+        // 'multi'     : (BuildContext context) => MultipleShotingPage(cameras: cameras),
+        'sensors'      : (BuildContext context) => const SensorsPlaygroundScreen(),
+        'location'     : (BuildContext context) => const LocationPlaygroundScreen(),
+        'sounds'       : (BuildContext context) => const SoundPlaygroundScreen(),
+        // 'camera'       : (BuildContext context) => CameraPlaygroundScreen(cameras: cameras),
+        'permissions'  : (BuildContext context) => const PermissionsScreen(),
+        // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
+      },
+      initialRoute: 'upload',
     );
   }
 }

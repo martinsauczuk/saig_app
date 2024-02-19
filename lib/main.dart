@@ -42,7 +42,7 @@ class MainApp extends StatelessWidget {
         'sensors'      : (BuildContext context) => const SensorsPlaygroundScreen(),
         'location'     : (BuildContext context) => const LocationPlaygroundScreen(),
         'sounds'       : (BuildContext context) => const SoundPlaygroundScreen(),
-        // 'camera'       : (BuildContext context) => CameraPlaygroundScreen(cameras: cameras),
+        'camera'       : (BuildContext context) => const CameraPlaygroundScreen(),
         'permissions'  : (BuildContext context) => const PermissionsScreen(),
         // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
       },

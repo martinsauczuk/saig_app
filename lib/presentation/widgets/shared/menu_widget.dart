@@ -63,11 +63,11 @@ class MenuWidget extends StatelessWidget {
           //   title: const Text('Prueba de ubicación GPS'),
           //   onTap: () => Navigator.pushReplacementNamed(context, 'location')
           // ),
-          // ListTile(
-          //   leading: const Icon(Icons.camera_alt, color: Colors.cyan),
-          //   title: const Text('Prueba de cámara'),
-          //   onTap: () => Navigator.pushReplacementNamed(context, 'camera')
-          // ),
+          ListTile(
+            leading: const Icon(Icons.camera_alt, color: Colors.cyan),
+            title: const Text('Prueba de cámara'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'camera')
+          ),
           ListTile(
             leading: const Icon(Icons.volume_down_alt, color: Colors.cyan),
             title: const Text('Prueba de sonidos'),

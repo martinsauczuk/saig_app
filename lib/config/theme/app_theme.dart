@@ -8,7 +8,7 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       centerTitle: true,
       backgroundColor: Colors.blueAccent,
-    )
+    ),
   );
 
 }

@@ -10,12 +10,11 @@ class MenuItem {
 }
 
 final menuItems = <MenuItem> [
-  MenuItem('Gyroscope', Icons.downloading, '/gyroscope'),
-  MenuItem('Accelerometer', Icons.speed, '/accelerometer'),
-  MenuItem('Magnetometer', Icons.explore_outlined, '/magnetometer'),
-
-  MenuItem('Gyroscope Ball', Icons.sports_baseball_outlined, '/gyroscope-ball'),
-  MenuItem('Compass', Icons.explore, '/compass')
+  MenuItem('Gyroscope', Icons.downloading, 'gyroscope'),
+  // MenuItem('Accelerometer', Icons.speed, 'accelerometer'),
+  // MenuItem('Magnetometer', Icons.explore_outlined, 'magnetometer'),
+  // MenuItem('Gyroscope Ball', Icons.sports_baseball_outlined, 'gyroscope-ball'),
+  // MenuItem('Compass', Icons.explore, 'compass')
 ];
 
 class SensorsPlaygroundScreen extends StatelessWidget {
@@ -26,7 +25,7 @@ class SensorsPlaygroundScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Prueba de sonidos')),
+      appBar: AppBar(title: const Text('Prueba de sensores')),
       drawer: const MenuWidget(),
       body: GridView.count(
         crossAxisCount: 2,
@@ -60,29 +59,36 @@ class HomeMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      // height: 100,
-      // width: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          colors: bgColors,
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, route),
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        // height: 100,
+        // width: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+            colors: bgColors,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter
+          ),
         ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: Colors.white, size: 40),
-          const SizedBox(height: 10),
-          Text(
-            title, 
-            textAlign: TextAlign.center, 
-            style: const TextStyle(color: Colors.white, fontSize: 20)
-          )
-        ]
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon, 
+              color: Colors.white, 
+              size: 40,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title, 
+              textAlign: TextAlign.center, 
+              style: const TextStyle(color: Colors.white, fontSize: 20)
+            )
+          ]
+        ),
       ),
     );
   }

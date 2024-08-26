@@ -44,6 +44,7 @@ class MainApp extends StatelessWidget {
         'sounds'       : (BuildContext context) => const SoundPlaygroundScreen(),
         'camera'       : (BuildContext context) => const CameraPlaygroundScreen(),
         'permissions'  : (BuildContext context) => const PermissionsScreen(),
+        'gyroscope'    : (BuildContext context) => const GyroscopeScreen(),
         // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
       },
       initialRoute: 'upload',

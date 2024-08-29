@@ -7,3 +7,4 @@ export './capturer_provider.dart';
 
 // sensors
 export './sensors/gyrospcope_provider.dart';
+export './sensors/accelerometer_providers.dart';

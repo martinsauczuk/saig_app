@@ -39,12 +39,14 @@ class MainApp extends StatelessWidget {
         'about'        : (BuildContext context) => const AboutScreen(),
         'one_shoting'  : (BuildContext context) => const OneShotingScreen(),
         // 'multi'     : (BuildContext context) => MultipleShotingPage(cameras: cameras),
-        'sensors'      : (BuildContext context) => const SensorsPlaygroundScreen(),
         'location'     : (BuildContext context) => const LocationPlaygroundScreen(),
         'sounds'       : (BuildContext context) => const SoundPlaygroundScreen(),
         'camera'       : (BuildContext context) => const CameraPlaygroundScreen(),
         'permissions'  : (BuildContext context) => const PermissionsScreen(),
+        // Sensors
+        'sensors'      : (BuildContext context) => const SensorsPlaygroundScreen(),
         'gyroscope'    : (BuildContext context) => const GyroscopeScreen(),
+        'accelerometer': (BuildContext context) => const AccelerometerScreen(),
         // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
       },
       initialRoute: 'upload',

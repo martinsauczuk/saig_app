@@ -18,9 +18,9 @@ class GyroscopeScreen extends ConsumerWidget {
         child: gyroscope$.when(
           data: (value) => Column(
             children: [
-              Text(value.x.toString()),
-              Text(value.y.toString()),
-              Text(value.z.toString())
+              Text(value.x.toStringAsFixed(2)),
+              Text(value.y.toStringAsFixed(2)),
+              Text(value.z.toStringAsFixed(2))
             ]
           ), 
           error: (error, stackTrace) => Text('$error'), 

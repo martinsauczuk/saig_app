@@ -5,5 +5,10 @@ export './uploads/upload_filter_providers.dart';
 
 export './capturer_provider.dart';
 
+// Compass
+export './compass/compass_provider.dart';
+
 // sensors
 export './sensors/gyrospcope_provider.dart';
+export './sensors/magnetometer_provider.dart';
+export './sensors/accelerometer_providers.dart';

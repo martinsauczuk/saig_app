@@ -26,34 +26,39 @@ class _PermissionsView extends ConsumerWidget {
     final permissions = ref.watch(permissionsProvider);
 
     return ListView(
-      children: [
-        ListTile(
-          title: const Text('Camera'),
-          subtitle: Text('$permissions.camera'),
-          trailing: PermissionStatusIndicator(
-            status: permissions.camera
-          ),
-        ),
-        ListTile(
-          title: const Text('Location'),
-          subtitle: Text('${permissions.location}'),
-          trailing: PermissionStatusIndicator(
-            status: permissions.location
-          ),
-        ),
-        ListTile(
-          title: const Text('Location always'),
-          subtitle: Text('${permissions.locationAlways}'),
-          trailing: PermissionStatusIndicator(
-            status: permissions.locationAlways
-          ),
-        ),
-        ListTile(
-          title: const Text('Location when is in use'),
-          subtitle: Text('${permissions.locationWhenInUse}'),
-          trailing: PermissionStatusIndicator(
-            status: permissions.locationWhenInUse
-          ),
+          children: [
+            ListTile(
+              title: const Text('Camera'),
+              subtitle: Text('$permissions.camera'),
+              trailing: PermissionStatusIndicator(
+                status: permissions.camera
+              ),
+              onTap: () => ref.read(permissionsProvider.notifier).requestLocationCamera(),
+            ),
+            ListTile(
+              title: const Text('Location'),
+              subtitle: Text('${permissions.location}'),
+              trailing: PermissionStatusIndicator(
+                status: permissions.location
+              ),
+              onTap: () => ref.read(permissionsProvider.notifier).requestLocationAccess(),
+            ),
+            ListTile(
+              title: const Text('Location always'),
+              subtitle: Text('${permissions.locationAlways}'),
+              trailing: PermissionStatusIndicator(
+                status: permissions.locationAlways
+              ),
+              onTap: () => ref.read(permissionsProvider.notifier).requestLocationAlwaysAccess(),
+            ),
+            ListTile(
+              title: const Text('Location when is in use'),
+              subtitle: Text('${permissions.locationWhenInUse}'),
+              trailing: PermissionStatusIndicator(
+                status: permissions.locationWhenInUse
+              ),
+              onTap: () => ref.read(permissionsProvider.notifier).requestLocationWhenInUseAccess(),
+
         ),
       ],
     );

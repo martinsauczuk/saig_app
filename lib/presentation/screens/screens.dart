@@ -3,7 +3,6 @@ export 'cloud_gallery/cloud_gallery_screen.dart';
 
 // Permissions
 export 'permissions/permissions_screen.dart';
-export 'permissions/ask_location_screen.dart';
 
 // Playground screns
 export 'playground_screens/camera_playground_screen.dart';

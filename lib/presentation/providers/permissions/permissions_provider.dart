@@ -19,12 +19,33 @@ class PermissionNotifier extends StateNotifier<PermissionState> {
       Permission.locationAlways.status,
       Permission.locationWhenInUse.status,
     ]);
-    state = PermissionState( 
+    state = state.copyWith( 
       camera                : statusArray[0],
       location              : statusArray[1],
       locationAlways        : statusArray[2],
       locationWhenInUse     : statusArray[3],
     );
+    
+  }
+
+  Future<void> requestLocationCamera() async{
+    await Permission.camera.request();
+    await checkPermissions();
+  }
+
+  Future<void> requestLocationAccess() async{
+    await Permission.location.request();
+    await checkPermissions();
+  }
+  
+  Future<void> requestLocationAlwaysAccess() async{
+    await Permission.locationAlways.request();
+    await checkPermissions();
+  }
+
+  Future<void> requestLocationWhenInUseAccess() async{
+    await Permission.locationWhenInUse.request();
+    await checkPermissions();
   }
 
 
@@ -44,5 +65,16 @@ class PermissionState {
     this.locationWhenInUse  = PermissionStatus.denied,
   });
 
+  PermissionState copyWith({
+    PermissionStatus? camera,
+    PermissionStatus? location,
+    PermissionStatus? locationAlways,
+    PermissionStatus? locationWhenInUse
+  }) => PermissionState(
+    camera:             camera ?? this.camera,
+    location:           location ?? this.location,            
+    locationAlways:     locationAlways ?? this.locationAlways,
+    locationWhenInUse:  locationWhenInUse ?? this.locationWhenInUse,
+  );
 
 }

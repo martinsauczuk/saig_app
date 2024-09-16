@@ -18,24 +18,24 @@ final uploadsCloudRepository = Provider<UploadsCloudRepository>((ref)
 
 
 
-final uploadItemsProvider = StateNotifierProvider<UploadItemsProvider, List<UploadItem>>((ref) {
+final uploadGalleryProvider = StateNotifierProvider<UploadGalleryProvider, List<UploadItem>>((ref) {
 
-  return UploadItemsProvider( 
+  return UploadGalleryProvider( 
     localRepository: ref.watch(uploadsLocalRepository),
-    cloudRepository: ref.watch(uploadsCloudRepository)
+    cloudRepository: ref.watch(uploadsCloudRepository),
   );
 
 });
 
 
-class UploadItemsProvider extends StateNotifier<List<UploadItem>> {
+class UploadGalleryProvider extends StateNotifier<List<UploadItem>> {
 
   final UploadsLocalRepository localRepository;
   final UploadsCloudRepository cloudRepository;
 
-  UploadItemsProvider({
+  UploadGalleryProvider({
     required this.localRepository, 
-    required this.cloudRepository
+    required this.cloudRepository,
   }): super([]) {
     initUploadItems();
   }

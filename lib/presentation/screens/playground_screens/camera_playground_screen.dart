@@ -1,8 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:saig_app/presentation/providers/capturer_provider.dart';
 import 'package:saig_app/presentation/widgets/shared/menu_widget.dart';
+import 'package:saig_app/presentation/providers/providers.dart';
 
 class CameraPlaygroundScreen extends ConsumerWidget {
   
@@ -30,7 +30,7 @@ class _CameraPlaygroundView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final capturerState = ref.watch(capturerProvider);
+    final capturerState = ref.watch(cameraProvider);
 
     return Column(
       children: [
@@ -51,9 +51,10 @@ class _CameraPlaygroundView extends ConsumerWidget {
           children: [
             ElevatedButton.icon(
               label: const Text('TakeOnePhoto'),
-              onPressed: capturerState.isTakingPhoto
-                ? null 
-                : () => ref.read(capturerProvider.notifier).takeOnePhoto(), 
+              onPressed: null,
+              // onPressed: capturerState.isTakingPhoto
+                // ? null 
+                // : () => ref.read(cameraProvider.notifier).takeOnePhoto(), 
               icon: const Icon(Icons.camera, size: 30)
             ),
           ],

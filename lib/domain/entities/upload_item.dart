@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:saig_app/domain/entities/positition_value.dart';
-import 'package:saig_app/domain/enums/upload_status.dart';
+import 'package:saig_app/domain/domain.dart';
+// import 'package:saig_app/domain/entities/positition_value.dart';
 
 @immutable
 class UploadItem {
@@ -12,26 +12,46 @@ class UploadItem {
   final String? publicId;
 
   final PositionValue? positionValue;
+  
+  final SensorValue? accelerometer;
+  final SensorValue? magnetometer;
 
-  final double accelerometerX = 0;
-  final double accelerometerY = 0;
-  final double accelerometerZ = 0;
-  final double magnetometerX = 0;
-  final double magnetometerY = 0;
-  final double magnetometerZ = 0;
+  // final double accelerometerX = 0;
+  // final double accelerometerY = 0;
+  // final double accelerometerZ = 0;
+  // final double magnetometerX = 0;
+  // final double magnetometerY = 0;
+  // final double magnetometerZ = 0;
 
 
   final String? descripcion = 'sin descripcion';
 
-  const UploadItem({this.id, this.publicId, required this.path, this.status = UploadStatus.pending, this.positionValue });
+  const UploadItem({
+    this.id, 
+    this.publicId, 
+    required this.path, 
+    this.status = UploadStatus.pending, 
+    this.positionValue,
+    this.accelerometer,
+    this.magnetometer,
+  });
 
-  UploadItem copyWith({int? id, UploadStatus? status, String? publicId}) {
+  UploadItem copyWith({
+    int? id, 
+    UploadStatus? status, 
+    String? publicId,
+    PositionValue? positionValue,
+    SensorValue? accelerometer,
+    SensorValue? magnetometer,
+  }) {
     return UploadItem(
       id: id ?? this.id,
       path: path,
       status: status ?? this.status,
       publicId: publicId ?? this.publicId,
-      positionValue: positionValue,
+      positionValue: positionValue ?? this.positionValue,
+      accelerometer: accelerometer ?? this.accelerometer,
+      magnetometer: magnetometer ?? this.magnetometer,
     );
   }
 
@@ -89,12 +109,12 @@ class UploadItem {
     'speedAccuracy': positionValue!.speedAccuracy,
     'timestamp' : positionValue!.timestamp,
 
-    'accelerometerX': accelerometerX,
-    'accelerometerY': accelerometerY,
-    'accelerometerZ': accelerometerZ,
-    'magnetometerX': magnetometerX,
-    'magnetometerY': magnetometerY,
-    'magnetometerZ': magnetometerZ,
+    'accelerometerX': accelerometer!.x,
+    'accelerometerY': accelerometer!.y,
+    'accelerometerZ': accelerometer!.z,
+    'magnetometerX': magnetometer!.x,
+    'magnetometerY': magnetometer!.y,
+    'magnetometerZ': magnetometer!.z,
     'descripcion': descripcion,
 
   };

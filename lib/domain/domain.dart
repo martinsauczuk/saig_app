@@ -1,4 +1,5 @@
 export './entities/gallery_item.dart';
+export './entities/positition_value.dart';
 export './entities/sensor_value.dart';
 export './entities/upload_item.dart';
 

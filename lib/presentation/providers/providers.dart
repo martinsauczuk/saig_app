@@ -1,5 +1,5 @@
 // Camera
-export 'cameras/camera_provider.dart';
+export 'camera/camera_provider.dart';
 
 // Permissions
 export './permissions/permissions_provider.dart';
@@ -7,9 +7,6 @@ export './permissions/permissions_provider.dart';
 // Uploads Gallery
 export './uploads/upload_gallery_provider.dart';
 export './uploads/upload_filter_providers.dart';
-
-// Shoting
-export 'shoting/shoting_provider.dart';
 
 // Compass
 export './compass/compass_provider.dart';

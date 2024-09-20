@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saig_app/domain/domain.dart';
+import 'package:saig_app/presentation/widgets/widgets.dart';
 
 class SensorXYZWidget extends StatelessWidget {
   
@@ -22,14 +23,10 @@ class SensorXYZWidget extends StatelessWidget {
 
     return asyncValue.when(
       data: (data) => (
-        Column(
-          children: [
-            Icon(icon),
-            Text(caption),
-            Text('x: ${data.x.toStringAsFixed(2)}'),
-            Text('y: ${data.y.toStringAsFixed(2)}'),
-            Text('z: ${data.z.toStringAsFixed(2)}'),
-          ],
+        ValueXYZWidget(
+          value: data,
+          icon: icon, 
+          caption: caption
         )
       ), 
       error: (error, stackTrace) => Column(
@@ -43,3 +40,4 @@ class SensorXYZWidget extends StatelessWidget {
     ); 
   }
 }
+

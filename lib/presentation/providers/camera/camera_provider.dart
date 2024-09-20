@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saig_app/presentation/providers/providers.dart';
 
-final cameraProvider = StateNotifierProvider.autoDispose<CameraNotifier, CameraState>((ref) {
+final cameraProvider = StateNotifierProvider<CameraNotifier, CameraState>((ref) {
   
   final itemsProvider = ref.watch(uploadGalleryProvider.notifier);
   
@@ -52,7 +52,6 @@ class CameraNotifier extends StateNotifier<CameraState> {
 
     state = state.copyWith(
       isTakingPhoto: true,
-      // isReadyToCapture: true,
     );
     
     final XFile file;
@@ -65,13 +64,13 @@ class CameraNotifier extends StateNotifier<CameraState> {
     //   print(e);
     // }
 
-    await Future.delayed(const Duration(milliseconds: 1000));
+    // await Future.delayed(const Duration(milliseconds: 1000));
 
     // state = state.copyWith(lastFile: file);
     state = state.copyWith(
       isTakingPhoto: false,
-      // isReadyToCapture: true
     );
+
     return file;
 
   }

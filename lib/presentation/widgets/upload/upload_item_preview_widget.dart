@@ -45,39 +45,46 @@ class UploadItemPreviewWidget extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Row(
-                      children: [
-                        ValueXYZWidget(
-                          icon: Icons.threesixty, 
-                          caption: 'Gyroscope', 
-                          value: item.accelerometer!
-                        ),
-                        ValueXYZWidget(
-                          icon: Icons.speed, 
-                          caption: 'Accelerometer', 
-                          value: item.accelerometer!
-                        ),
-                        ValueXYZWidget(
-                          icon: Icons.person, 
-                          caption: 'User accelerometer', 
-                          value: item.accelerometer!
-                        )
-                      ],
+                    Container(
+                      decoration: const BoxDecoration(color: Colors.blueAccent),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ValueXYZWidget(
+                            icon: Icons.threesixty, 
+                            caption: 'Gyroscope', 
+                            value: item.accelerometer!
+                          ),
+                          ValueXYZWidget(
+                            icon: Icons.speed, 
+                            caption: 'Accelerometer', 
+                            value: item.accelerometer!
+                          ),
+                          ValueXYZWidget(
+                            icon: Icons.person, 
+                            caption: 'User accelerometer', 
+                            value: item.accelerometer!
+                          )
+                        ],
+                      ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ElevatedButton.icon( 
-                          icon: const Icon(Icons.save), 
-                          onPressed: onPressOk, 
-                          label: const Text('Guardar')
-                        ),
-                        ElevatedButton.icon( 
-                          icon: const Icon(Icons.delete), 
-                          onPressed: onPressOk, 
-                          label: const Text('Descartar')
-                        ),
-                      ],
+                    Container(
+                      decoration: const BoxDecoration(color: Colors.blueAccent),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton.icon( 
+                            icon: const Icon(Icons.save), 
+                            onPressed: onPressOk, 
+                            label: const Text('Guardar')
+                          ),
+                          ElevatedButton.icon( 
+                            icon: const Icon(Icons.delete), 
+                            onPressed: onPressOk, 
+                            label: const Text('Descartar')
+                          ),
+                        ],
+                      ),
                     )
                     ,
                   ]

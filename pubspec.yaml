@@ -28,8 +28,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  audioplayers: ^5.2.1
-  camera: ^0.10.5+9
+  audioplayers: ^6.1.0
+  camera: ^0.11.0+2
   cupertino_icons: ^1.0.2
   faker: ^2.1.0
   flutter:
@@ -37,19 +37,19 @@ dependencies:
   flutter_compass: ^0.8.0
   flutter_dotenv: ^5.1.0
   flutter_riverpod: ^2.4.10
-  geolocator: ^10.1.0
+  geolocator: ^13.0.1
   http: ^1.2.0
   mime_type: ^1.0.0
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.0.2
   path: ^1.8.3
   permission_handler: ^11.2.1
-  sensors_plus: ^4.0.2
+  sensors_plus: ^6.0.1
   sqflite: ^2.3.2
 
 dev_dependencies:
   change_app_package_name: ^1.1.0
-  flutter_launcher_icons: ^0.13.1
-  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.14.1
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
 

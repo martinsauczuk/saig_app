@@ -15,9 +15,7 @@ class OneShotingScreen extends ConsumerStatefulWidget {
 
 class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
   
-  // XFile? _photoFile;
   UploadItem? _uploadItem;
-
 
   ///
   /// Button to capture the image and build a UploadItem
@@ -30,21 +28,52 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
       path: file.path,
       accelerometer: await ref.read(accelerometerUserProvider.future),
       magnetometer: await ref.read(magnetometerProvider.future),
+      positionValue: const PositionValue( //TODO: Reemplazar
+        lat: 12, 
+        lng: 12, 
+        accuracy: 0, 
+        heading: 324, 
+        altitude: 324, 
+        speed: 34, 
+        speedAccuracy: 352, 
+        timestamp: '2234234'
+      )
     );
-
-    
-    print(_uploadItem);
     setState(() {});
   }
 
   ///
   /// To close preview Widget
   ///
-  void _onTapFilePreview() {
+  void _onPressDiscardItemPreview() {
     
     setState(() {
       _uploadItem = null;
     });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Borrador descartado')
+      )
+    );
+
+  }
+
+
+  ///
+  /// Ok Button
+  ///
+  void _onPressConfirmItemPreview() {
+
+    final galleryProvider = ref.read(uploadGalleryProvider.notifier);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Item cargado ok')
+      )
+    );
+
+    galleryProvider.addItem(_uploadItem!);
+
+    Navigator.pop(context);
 
   }
 
@@ -60,6 +89,7 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
 
     final cameraState = ref.watch(cameraProvider);
     final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
@@ -91,10 +121,11 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
           ),
           if (_uploadItem != null)  
             UploadItemPreviewWidget(
-              onTapFilePreview: _onTapFilePreview,
-              onPressOk: _onTapFilePreview,
+              onPressDiscard: _onPressDiscardItemPreview,
+              onPressOk: _onPressConfirmItemPreview,
               item: _uploadItem!, 
-              height: screenHeight * 0.6
+              height: screenHeight * 0.6,
+              width: screenWidth * 0.9,
             )
         ],
       ),

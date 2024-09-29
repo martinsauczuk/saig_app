@@ -38,8 +38,6 @@ class MainApp extends StatelessWidget {
         'cloud'        : (BuildContext context) => CloudGalleryScreen(),
         'about'        : (BuildContext context) => const AboutScreen(),
         'one_shoting'  : (BuildContext context) => const OneShotingScreen(),
-        // 'multi'     : (BuildContext context) => MultipleShotingPage(cameras: cameras),
-        'location'     : (BuildContext context) => const LocationPlaygroundScreen(),
         'sounds'       : (BuildContext context) => const SoundPlaygroundScreen(),
         'camera'       : (BuildContext context) => const CameraPlaygroundScreen(),
         'permissions'  : (BuildContext context) => const PermissionsScreen(),
@@ -52,7 +50,10 @@ class MainApp extends StatelessWidget {
         'gyroscope-ball': (BuildContext context) => const GyroscopeBallScreen(),
         'compass'       : (BuildContext context) => const CompassScreen(),
 
-        // 'routing'   : (BuildContext context) => RoutingShootingPage(cameras: cameras)
+        // Location
+        'location'      : (BuildContext context) => const LocationScreen(),
+        'maps'          : (BuildContext context) => const MapScreen(),
+        'controlled-map': (BuildContext context) => const ControlledMapScreen(),
       },
       initialRoute: 'upload',
     );

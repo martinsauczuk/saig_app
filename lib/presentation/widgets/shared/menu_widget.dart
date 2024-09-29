@@ -53,16 +53,12 @@ class MenuWidget extends StatelessWidget {
             title: const Text('Contenido de la nube'),
             onTap: () => Navigator.pushReplacementNamed(context, 'cloud')
           ),
+          Divider(),
           ListTile(
             leading: const Icon(Icons.settings_remote, color: Colors.cyan),
             title: const Text('Prueba de sensores'),
             onTap: () => Navigator.pushReplacementNamed(context, 'sensors')
           ),
-          // ListTile(
-          //   leading: const Icon(Icons.satellite, color: Colors.cyan),
-          //   title: const Text('Prueba de ubicación GPS'),
-          //   onTap: () => Navigator.pushReplacementNamed(context, 'location')
-          // ),
           ListTile(
             leading: const Icon(Icons.camera_alt, color: Colors.cyan),
             title: const Text('Prueba de cámara'),
@@ -73,6 +69,23 @@ class MenuWidget extends StatelessWidget {
             title: const Text('Prueba de sonidos'),
             onTap: () => Navigator.pushReplacementNamed(context, 'sounds')
           ),
+          Divider(),
+          ListTile(
+            leading: const Icon(Icons.pin_drop, color: Colors.cyan),
+            title: const Text('Prueba de ubicación GPS'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'location')
+          ),
+          ListTile(
+            leading: const Icon(Icons.map_outlined, color: Colors.cyan),
+            title: const Text('Prueba de ubicación Mapa'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'maps')
+          ),
+          ListTile(
+            leading: const Icon(Icons.gamepad_outlined, color: Colors.cyan),
+            title: const Text('Prueba de ubicación controlado'),
+            onTap: () => Navigator.pushReplacementNamed(context, 'controlled-map')
+          ),
+          Divider(),
           ListTile(
             leading: const Icon(Icons.tune, color: Colors.cyan),
             title: const Text('Permisos'),

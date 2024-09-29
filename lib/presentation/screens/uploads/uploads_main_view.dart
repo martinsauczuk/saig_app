@@ -60,12 +60,12 @@ class UploadMainView extends ConsumerWidget {
                 background: const _ItemBackground(),
                 direction: DismissDirection.startToEnd,
                 onDismissed: (DismissDirection direction) {
-                  ref.read(uploadItemsProvider.notifier).deleteItem(item);
+                  ref.read(uploadGalleryProvider.notifier).deleteItem(item);
                 }, 
                 child: UploadItemListTile(
                   item: item,
                   onPress: () {
-                    ref.read(uploadItemsProvider.notifier).uploadItem(item);
+                    ref.read(uploadGalleryProvider.notifier).uploadItem(item);
                   },
                 )
               );

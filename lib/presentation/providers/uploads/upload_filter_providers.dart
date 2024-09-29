@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saig_app/domain/domain.dart';
-import 'package:saig_app/presentation/providers/uploads/upload_items_provider.dart';
+import 'package:saig_app/presentation/providers/uploads/upload_gallery_provider.dart';
 
 enum UploadsFilter {
   all,
@@ -15,7 +15,7 @@ final uploadsFilterProvider = StateProvider<UploadsFilter>((ref){
 
 
 final uploadsPendingCountProvider = Provider<int>((ref) {
-  final items = ref.watch(uploadItemsProvider);
+  final items = ref.watch(uploadGalleryProvider);
 
   return items
     .where((item) => item.status == UploadStatus.pending || item.status == UploadStatus.uploading )
@@ -24,7 +24,7 @@ final uploadsPendingCountProvider = Provider<int>((ref) {
 });
 
 final uploadsCompletedCountProvider = Provider<int>((ref) {
-  final items = ref.watch(uploadItemsProvider);
+  final items = ref.watch(uploadGalleryProvider);
 
   return items
     .where((item) => item.status == UploadStatus.done )
@@ -33,7 +33,7 @@ final uploadsCompletedCountProvider = Provider<int>((ref) {
 });
 
 final uploadsErrorCountProvider = Provider<int>((ref) {
-  final items = ref.watch(uploadItemsProvider);
+  final items = ref.watch(uploadGalleryProvider);
 
   return items
     .where((item) => item.status == UploadStatus.error )
@@ -45,7 +45,7 @@ final uploadsErrorCountProvider = Provider<int>((ref) {
 final filteredItemsProvider = Provider<List<UploadItem>>((ref) {
   
   final selectedFilter = ref.watch(uploadsFilterProvider);
-  final uploadItems = ref.watch(uploadItemsProvider);
+  final uploadItems = ref.watch(uploadGalleryProvider);
 
   switch (selectedFilter) {
     case UploadsFilter.all:

@@ -1,9 +1,12 @@
-export './cameras/camera_controller_provider.dart';
-export './permissions/permissions_provider.dart';
-export './uploads/upload_items_provider.dart';
-export './uploads/upload_filter_providers.dart';
+// Camera
+export 'camera/camera_provider.dart';
 
-export './capturer_provider.dart';
+// Permissions
+export './permissions/permissions_provider.dart';
+
+// Uploads Gallery
+export './uploads/upload_gallery_provider.dart';
+export './uploads/upload_filter_providers.dart';
 
 // Compass
 export './compass/compass_provider.dart';

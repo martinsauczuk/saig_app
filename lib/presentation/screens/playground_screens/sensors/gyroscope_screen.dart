@@ -8,7 +8,7 @@ class GyroscopeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
 
-    final gyroscope$ = ref.watch(gysroscopeProvider);
+    final gyroscope$ = ref.watch(gyroscopeProvider);
 
     return Scaffold(
       appBar: AppBar(

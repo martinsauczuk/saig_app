@@ -100,23 +100,24 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
         children: [
           Column(
             children: [
-              CameraPreviewConsumerWidget(
-                height: screenHeight * 0.6,
-              ),
+              const CameraPreviewConsumerWidget(),
               const SensorsConsumerWidget(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton.filledTonal(
-                    iconSize: 40,
-                    onPressed: (cameraState.isReadyToCapture && !cameraState.isTakingPhoto)
-                      ? _onPressedCaptureButton
-                      : null
-                    ,
-                    icon: const Icon(Icons.camera)
-                  )
-              ])
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton.filledTonal(
+                      iconSize: 50,
+                      onPressed: (cameraState.isReadyToCapture && !cameraState.isTakingPhoto)
+                        ? _onPressedCaptureButton
+                        : null
+                      ,
+                      icon: const Icon(Icons.camera)
+                    )
+                ]),
+              )
             ],
           ),
           if (_uploadItem != null)  

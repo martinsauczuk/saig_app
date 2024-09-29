@@ -5,16 +5,14 @@ import 'package:saig_app/presentation/providers/providers.dart';
 
 class CameraPreviewConsumerWidget extends ConsumerWidget {
   
-  const CameraPreviewConsumerWidget({super.key, required this.height});
-
-  final double height;
+  const CameraPreviewConsumerWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     final capturerState = ref.watch(cameraProvider);
 
-    return Center(
+    return Expanded(
       child: Container(
         decoration: capturerState.isTakingPhoto 
           ? BoxDecoration(
@@ -30,14 +28,11 @@ class CameraPreviewConsumerWidget extends ConsumerWidget {
               )
           ),
         child: (
-          SizedBox(
-            height: height,
-            child: capturerState.isReadyToCapture
-              ? CameraPreview( capturerState.cameraController!)
-              : const Center(
-                child: CircularProgressIndicator()
-              )
-          )
+          capturerState.isReadyToCapture
+            ? CameraPreview( capturerState.cameraController!)
+            : const Center(
+              child: CircularProgressIndicator()
+            )
         ),
       ),
     );

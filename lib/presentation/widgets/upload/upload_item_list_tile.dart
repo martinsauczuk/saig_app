@@ -52,7 +52,9 @@ class ItemInfo extends StatelessWidget {
       children: [
         _buildSubtitle(),
         Text('Path: ${item.path}'),
-        Text('Position: ${item.positionValue}'),
+        (item.positionValue != null)
+          ? Text('Lat: ${item.positionValue!.lat.toStringAsFixed(2)} Lng: ${item.positionValue!.lng.toStringAsFixed(2)}')
+          : Text('Sin ubicación')
       ],
     );
   }

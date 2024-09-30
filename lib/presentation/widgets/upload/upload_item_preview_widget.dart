@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saig_app/domain/domain.dart';
 import 'package:saig_app/presentation/widgets/widgets.dart';
 
@@ -62,6 +63,9 @@ class UploadItemPreviewWidget extends StatelessWidget {
                   icon: Icons.person, 
                   caption: 'User accelerometer', 
                   value: item.accelerometer!
+              ),
+                PositionValueWidget(
+                  positionAsyncValue: AsyncData(item.positionValue!)
                 )
               ],
             ),

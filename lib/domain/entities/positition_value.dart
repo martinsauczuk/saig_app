@@ -26,8 +26,20 @@ class PositionValue {
 
   @override
   String toString() {
-    return 'lat: $lat lng: $lng';
+    return '''
+      PositionValue
+        lat: $lat
+        lng: $lng
+        accuracy: $accuracy
+        heading: $heading
+        altitude: $altitude
+        speed: $speed
+        speedAccuracy: $speedAccuracy
+        timestamp: $timestamp
+    ''';
   }
+
+  
 
   factory PositionValue.fromMap( Map<String, dynamic> map ) {
     return PositionValue(

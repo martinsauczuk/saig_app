@@ -13,9 +13,11 @@ class SensorsConsumerWidget extends ConsumerWidget {
     final gyroscope$ = ref.watch(gyroscopeProvider);
     final acceleromenterGravity$ = ref.watch(accelerometerGravityProvider);
     final acceleromenterUser$ = ref.watch(accelerometerUserProvider);
+    final positionValue$ = ref.watch(positionValueProvider);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SensorXYZWidget(
           asyncValue: gyroscope$,
@@ -31,6 +33,9 @@ class SensorsConsumerWidget extends ConsumerWidget {
           asyncValue: acceleromenterUser$,
           caption: 'User accelerometer',
           icon: Icons.person,
+        ),
+        PositionValueWidget(
+          positionAsyncValue: positionValue$
         )
       ],
     );

@@ -13,13 +13,8 @@ class CloudinaryUploadsCloudDatasource implements UploadsCloudDatasource {
   final String _uploadPreset = CloudinaryConfig.uploadPreset;
 
 
-
   @override
   Future<String> uploadItem(UploadItem item) async {
-     // Future<String> uploadItem(
-  //     File imagen, double lat, double lng, String descripcion, double accelerometerX, double accelerometerY, double accelerometerZ) async {
-    // String coordLat = lat.toString();
-    // String coordLng = lng.toString();
 
     // Validacion a mejorar con form
     String descripcion;
@@ -57,7 +52,7 @@ class CloudinaryUploadsCloudDatasource implements UploadsCloudDatasource {
           accuracy=${item.positionValue!.accuracy}|
           heading=${item.positionValue!.heading}|
           altitude=${item.positionValue!.altitude}|
-          speed=${item..positionValue!.speed}|
+          speed=${item.positionValue!.speed}|
           speedAccuracy=${item.positionValue!.speedAccuracy}|
           timestamp=${item.positionValue!.timestamp}
         ''';
@@ -68,14 +63,10 @@ class CloudinaryUploadsCloudDatasource implements UploadsCloudDatasource {
     final resp = await http.Response.fromStream(streamResponse);
 
     if (resp.statusCode != 200 && resp.statusCode != 201) {
-
-      // return "Algo salio mal";
       throw Exception('error al subir');
     }
 
     final respData = json.decode(resp.body);
-
-    print('upload ok');
     final publicId = respData['public_id'];
 
     return publicId;

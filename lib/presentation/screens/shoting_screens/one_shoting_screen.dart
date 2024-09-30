@@ -28,16 +28,7 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
       path: file.path,
       accelerometer: await ref.read(accelerometerUserProvider.future),
       magnetometer: await ref.read(magnetometerProvider.future),
-      positionValue: const PositionValue( //TODO: Reemplazar
-        lat: 12, 
-        lng: 12, 
-        accuracy: 0, 
-        heading: 324, 
-        altitude: 324, 
-        speed: 34, 
-        speedAccuracy: 352, 
-        timestamp: '2234234'
-      )
+      positionValue: await ref.read(positionValueProvider.future),
     );
     setState(() {});
   }

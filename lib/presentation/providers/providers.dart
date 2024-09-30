@@ -15,3 +15,6 @@ export './compass/compass_provider.dart';
 export './sensors/gyrospcope_provider.dart';
 export './sensors/magnetometer_provider.dart';
 export './sensors/accelerometer_providers.dart';
+
+// Location
+export './location/position_value_provider.dart';

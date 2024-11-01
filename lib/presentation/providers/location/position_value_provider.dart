@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:saig_app/domain/domain.dart';
 
-final positionValueProvider = StreamProvider.autoDispose<PositionValue>((ref) async* {
+final positionValueProvider = StreamProvider<PositionValue>((ref) async* {
   
 
   /// Determine the current position of the device.
@@ -42,7 +42,7 @@ final positionValueProvider = StreamProvider.autoDispose<PositionValue>((ref) as
 
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
-   await for( final Position position in Geolocator.getPositionStream() ){
+  await for( final Position position in Geolocator.getPositionStream() ){
     yield(
       PositionValue(
         lat: position.latitude, 

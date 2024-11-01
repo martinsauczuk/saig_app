@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:saig_app/config/theme/app_theme.dart';
 import 'package:saig_app/presentation/screens/screens.dart';
 
@@ -10,6 +11,8 @@ Future<void> main() async {
   await dotenv.load(fileName: '.env');
 
   WidgetsFlutterBinding.ensureInitialized();
+  MapboxOptions.setAccessToken('sk.eyJ1IjoibXNhdWN6dWsiLCJhIjoiY20xemtxZWRrMDkwODJscHF2dHJvYzV1ayJ9.zbKVW9ZruX77hHabu6GcKg');
+
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -37,7 +40,12 @@ class MainApp extends StatelessWidget {
         'upload'       : (BuildContext context) => const UploadsMainScreen(),
         'cloud'        : (BuildContext context) => CloudGalleryScreen(),
         'about'        : (BuildContext context) => const AboutScreen(),
-        'one_shoting'  : (BuildContext context) => const OneShotingScreen(),
+
+
+        'one_shoting'      : (BuildContext context) => const OneShotingScreen(),
+        'distance_shoting' : (BuildContext context) => const DistanceShotingScreen(),
+
+
         'sounds'       : (BuildContext context) => const SoundPlaygroundScreen(),
         'camera'       : (BuildContext context) => const CameraPlaygroundScreen(),
         'permissions'  : (BuildContext context) => const PermissionsScreen(),

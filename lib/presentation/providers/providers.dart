@@ -18,3 +18,6 @@ export './sensors/accelerometer_providers.dart';
 
 // Location
 export './location/position_value_provider.dart';
+
+// Geo features
+export './geo/geo_providers.dart';

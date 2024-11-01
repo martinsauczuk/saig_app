@@ -19,6 +19,7 @@ export 'uploads/uploads_main_screen.dart';
 export 'uploads/uploads_main_view.dart';
 
 export 'shoting_screens/one_shoting_screen.dart';
+export 'shoting_screens/distance_shoting_screen.dart';
 
 
 // Maps and location

@@ -21,7 +21,7 @@ final circleRadiusProvider = StateProvider<double>((ref) {
 });
 
 
-final circleCenterProvider = StreamProvider.autoDispose<Feature>((ref) async* {
+final locationBufferFeatureProvider = StreamProvider.autoDispose<Feature>((ref) async* {
 
   /// Determine the current position of the device.
   ///
@@ -88,7 +88,7 @@ final circleCenterProvider = StreamProvider.autoDispose<Feature>((ref) async* {
     // return Polygon(coordinates: [coordinates]);
     // return lineString;
     yield Feature(
-      id: 'reference',
+      id: 'location_buffer',
       geometry: Polygon(coordinates: [coordinates])
     );
 

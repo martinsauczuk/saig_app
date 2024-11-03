@@ -13,7 +13,9 @@ class DistanceShotingScreen extends ConsumerStatefulWidget {
 }
 
 class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
+
   MapboxMap? mapboxMap;
+  String _textFieldValue = '';
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
@@ -21,6 +23,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
 
   _onStyleLoaded(StyleLoadedEventData data) async {
     await mapboxMap?.style.addSource(GeoJsonSource(id: 'location_source'));
+    await mapboxMap!.style.addSource(GeoJsonSource(id: 'target_points_source'));
     // await mapboxMap?.style.addGeoJSONSourceFeatures('buffer', 'bufferDataId', [featureCenter] );
     await mapboxMap?.style.addLayer(FillLayer(
       id: 'line_layer',
@@ -28,13 +31,29 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
       fillColor: Colors.blueAccent.value,
       fillOpacity: 0.4,
     ));
-    mapboxMap?.location
+    await mapboxMap?.location
         .updateSettings(LocationComponentSettings(enabled: true));
 
-    final geojsonRepository = ref.watch(geojsonGithubRepositoryProvider);
-    String geojson =
-        await geojsonRepository.getFeatureCollectionById('autopista.json');
-    print(geojson);
+    // _loadTargetPoints();
+
+    
+  }
+
+  _loadTargetPoints(String data) async {
+    // final geojsonRepository = ref.watch(geojsonGithubRepositoryProvider);
+    // String geojson =
+    //     await geojsonRepository.getFeatureCollectionById('carloskeen.geojson');
+    print(data);
+    await mapboxMap!.style.removeStyleSource('target_points_source');
+    await mapboxMap!.style.addSource(
+        GeoJsonSource(id: 'target_points_source', data: data));
+    await mapboxMap!.style.addLayer(
+      CircleLayer(
+        id: "target_points_layer",
+        sourceId: "target_points_source",
+        circleColor: Colors.deepOrange.value
+      )
+    );
   }
 
   _updateReferenceCenter(Feature featureCenter) async {
@@ -56,13 +75,21 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final featureCenter = ref.watch(locationBufferFeatureProvider);
     final currentSliderValue = ref.watch(circleRadiusProvider);
+    final currentTargetIdValue = ref.watch(geojsonTargetIdProvider);
+    final geojson = ref.watch(geojsonStringProvider);
+
+    geojson.whenData((data) {
+      _loadTargetPoints(data);
+    });
+
 
     featureCenter.when(
       data: (data) {
         _updateReferenceCenter(data);
-        _updateCamera();
+        // _updateCamera();
       },
       error: (error, stackTrace) => print('error'),
       loading: () => {},
@@ -70,7 +97,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Captura por distancia ${currentSliderValue.toString()}'),
+          title: Text('Captura por distancia ${currentSliderValue.toString()}: $currentTargetIdValue'),
         ),
         body: Column(
           children: [
@@ -81,12 +108,38 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
               divisions: 20,
               label: currentSliderValue.toString(),
               onChanged: (double value) {
-                setState(() {
                   ref
-                      .read(circleRadiusProvider.notifier)
-                      .update((state) => value);
-                });
+                    .read(circleRadiusProvider.notifier)
+                    .update((state) => value);
               },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'nombre del archivo',
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _textFieldValue = value;
+                        });
+                      }
+                    ),
+                  ),
+                  IconButton.filled(
+                    onPressed: (){
+                        ref
+                          .read(geojsonTargetIdProvider.notifier)
+                          .update((state) => _textFieldValue);
+                    }, 
+                    icon: Icon(Icons.download)
+                  )
+                ],
+              ),
             ),
             Expanded(
               child: MapWidget(

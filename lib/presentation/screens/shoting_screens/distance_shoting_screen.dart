@@ -15,16 +15,36 @@ class DistanceShotingScreen extends ConsumerStatefulWidget {
 class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
 
   MapboxMap? mapboxMap;
+  CircleAnnotationManager? circleAnnotationManager;
+  final _geoProvider = GeojsonProvider();
   String _textFieldValue = '';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
   }
 
   _onStyleLoaded(StyleLoadedEventData data) async {
+    
+    // target_points
+    await mapboxMap?.style.addSource(GeoJsonSource(id: 'target_points_source'));
+    await mapboxMap?.style.addLayer(
+      CircleLayer(
+        id: "target_points_layer",
+        sourceId: "target_points_source",
+        circleColor: Colors.deepOrange.value
+       )
+    );
+    
+    // location
     await mapboxMap?.style.addSource(GeoJsonSource(id: 'location_source'));
-    await mapboxMap!.style.addSource(GeoJsonSource(id: 'target_points_source'));
-    // await mapboxMap?.style.addGeoJSONSourceFeatures('buffer', 'bufferDataId', [featureCenter] );
     await mapboxMap?.style.addLayer(FillLayer(
       id: 'line_layer',
       sourceId: 'location_source',
@@ -34,26 +54,23 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
     await mapboxMap?.location
         .updateSettings(LocationComponentSettings(enabled: true));
 
-    // _loadTargetPoints();
+    _loadCirclePoints();
 
-    
   }
 
-  _loadTargetPoints(String data) async {
-    // final geojsonRepository = ref.watch(geojsonGithubRepositoryProvider);
-    // String geojson =
-    //     await geojsonRepository.getFeatureCollectionById('carloskeen.geojson');
-    print(data);
-    await mapboxMap!.style.removeStyleSource('target_points_source');
-    await mapboxMap!.style.addSource(
-        GeoJsonSource(id: 'target_points_source', data: data));
-    await mapboxMap!.style.addLayer(
-      CircleLayer(
-        id: "target_points_layer",
-        sourceId: "target_points_source",
-        circleColor: Colors.deepOrange.value
-      )
-    );
+  _loadCirclePoints() {
+    
+    mapboxMap?.annotations.createCircleAnnotationManager().then((value) {
+      print(value);
+      circleAnnotationManager = value;
+    });
+  
+  }
+
+
+  _loadTargetPoints(List<Feature> features) async {
+    print('[Screen] Loaded: ${features.length}');
+    await mapboxMap?.style.addGeoJSONSourceFeatures('target_points_source', 'target_points_features', features);
   }
 
   _updateReferenceCenter(Feature featureCenter) async {
@@ -79,84 +96,78 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
     final featureCenter = ref.watch(locationBufferFeatureProvider);
     final currentSliderValue = ref.watch(circleRadiusProvider);
     final currentTargetIdValue = ref.watch(geojsonTargetIdProvider);
-    final geojson = ref.watch(geojsonStringProvider);
-
-    geojson.whenData((data) {
-      _loadTargetPoints(data);
-    });
-
 
     featureCenter.when(
       data: (data) {
         _updateReferenceCenter(data);
         // _updateCamera();
       },
-      error: (error, stackTrace) => print('error'),
+      error: (error, stackTrace) => print('$error'),
       loading: () => {},
     );
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Captura por distancia ${currentSliderValue.toString()}: $currentTargetIdValue'),
+      appBar: AppBar(
+        title: Text('Captura por distancia ${currentSliderValue.toString()}: $currentTargetIdValue'),
+      ),
+      body: Column(
+      children: [
+        Slider(
+          value: currentSliderValue,
+          min: 0,
+          max: 300,
+          divisions: 20,
+          label: currentSliderValue.toString(),
+          onChanged: (double value) {
+              ref
+                .read(circleRadiusProvider.notifier)
+                .update((state) => value);
+          },
         ),
-        body: Column(
-          children: [
-            Slider(
-              value: currentSliderValue,
-              min: 0,
-              max: 300,
-              divisions: 20,
-              label: currentSliderValue.toString(),
-              onChanged: (double value) {
-                  ref
-                    .read(circleRadiusProvider.notifier)
-                    .update((state) => value);
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'nombre del archivo',
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          _textFieldValue = value;
-                        });
-                      }
-                    ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'nombre del archivo',
                   ),
-                  IconButton.filled(
-                    onPressed: (){
-                        ref
-                          .read(geojsonTargetIdProvider.notifier)
-                          .update((state) => _textFieldValue);
-                    }, 
-                    icon: Icon(Icons.download)
-                  )
-                ],
+                  onChanged: (value) {
+                    setState(() {
+                      _textFieldValue = value;
+                    });
+                  }
+                ),
               ),
-            ),
-            Expanded(
-              child: MapWidget(
-                styleUri: MapboxStyles.LIGHT,
-                cameraOptions: CameraOptions(
-                    center: Point(
-                      coordinates: Position(
-                        -58.35055075717234,
-                        -34.645330358739,
-                      ),
-                    ),
-                    zoom: 14.0),
-                onMapCreated: _onMapCreated,
-                onStyleLoadedListener: _onStyleLoaded,
-              ),
-            ),
-          ],
-        ));
+              IconButton.filled(
+                onPressed: (){
+                    ref
+                      .read(geojsonTargetIdProvider.notifier)
+                      .update((state) => _textFieldValue);
+                }, 
+                icon: Icon(Icons.download)
+              )
+            ],
+          ),
+        ),
+        Expanded(
+          child: MapWidget(
+            styleUri: MapboxStyles.LIGHT,
+            cameraOptions: CameraOptions(
+                center: Point(
+                  coordinates: Position(
+                    -58.35055075717234,
+                    -34.645330358739,
+                  ),
+                ),
+                zoom: 14.0),
+            onMapCreated: _onMapCreated,
+            onStyleLoadedListener: _onStyleLoaded,
+          ),
+        ),
+      ],
+    ));
   }
 }

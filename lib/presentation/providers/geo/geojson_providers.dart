@@ -19,7 +19,16 @@ class GeojsonProvider {
 
   Future<String> getHelloWorld() async{
 
-    await Future.delayed(Duration(milliseconds: 2000));
+    print('getHelloWorld');
+
+    // await Future.delayed(Duration(milliseconds: 2000));
+
+
+    // final id = ref.watch(geojsonTargetIdProvider);
+    // final repository = ref.watch(geojsonGithubRepositoryProvider);
+
+    // String data = await repository.getFeatureCollectionById(id);
+
 
     return "HolaMundo";
 
@@ -30,26 +39,25 @@ class GeojsonProvider {
 }
 
 
-// final geojsonStringProvider = FutureProvider.autoDispose<List<Feature>>( (ref) async {
+final geojsonStringProvider = FutureProvider.autoDispose<String>( (ref) async {
 
-//   final id = ref.watch(geojsonTargetIdProvider);
-//   final repository = ref.watch(geojsonGithubRepositoryProvider);
+  final id = ref.watch(geojsonTargetIdProvider);
+  final repository = ref.watch(geojsonGithubRepositoryProvider);
 
-//   String data = await repository.getFeatureCollectionById(id);
+  String data = await repository.getFeatureCollectionById(id);
+  print('[geojsonStringProvider] $data');
+
 
 //   // distance(from, to)
-//   final parsedJson = jsonDecode(data);
-//   print(parsedJson);
-//   FeatureCollection fc =  FeatureCollection.fromJson(parsedJson);
+  // final parsedJson = jsonDecode(data);
+  // print(parsedJson);
+  // FeatureCollection fc =  FeatureCollection.fromJson(parsedJson);
 
-//   List<Feature> features = parsedJson['features'];
+  // List<Feature> features = parsedJson['features'];
   
 //   // List<Feature<Point>> features = fc.features;
 //   // print('[Provider] - Se obtuvieron: ${features.length}');
-
 //   print(features);
 
-//   return features;
-
-//   // return fc.features;
-// });
+  return data;
+});

@@ -16,8 +16,9 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
 
   MapboxMap? mapboxMap;
   CircleAnnotationManager? circleAnnotationManager;
-  final _geoProvider = GeojsonProvider();
+  // final _geoProvider = GeojsonProvider();
   String _textFieldValue = '';
+  bool _loaded = false;
 
   @override
   void initState() {
@@ -96,6 +97,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
     final featureCenter = ref.watch(locationBufferFeatureProvider);
     final currentSliderValue = ref.watch(circleRadiusProvider);
     final currentTargetIdValue = ref.watch(geojsonTargetIdProvider);
+    final geoJsonString = ref.watch(geojsonStringProvider);
 
     featureCenter.when(
       data: (data) {
@@ -105,6 +107,23 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
       error: (error, stackTrace) => print('$error'),
       loading: () => {},
     );
+
+    geoJsonString.whenData((value) async {
+      print('[geoJsonString]: $value');
+      // await mapboxMap?.style.addSource(source)
+      if(!_loaded) {
+        await mapboxMap?.style.addSource(GeoJsonSource(id: "target_source", data: value));
+        
+        await mapboxMap?.style.addLayer(CircleLayer(
+          id: 'target_style',
+          sourceId: 'target_source',
+        ));
+        _loaded = true;
+      }
+
+
+
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -125,7 +144,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
           },
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8), 
           child: Row(
             children: [
               Expanded(
@@ -142,10 +161,11 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
                 ),
               ),
               IconButton.filled(
-                onPressed: (){
-                    ref
-                      .read(geojsonTargetIdProvider.notifier)
-                      .update((state) => _textFieldValue);
+                onPressed: () {
+                  // _geoProvider.getHelloWorld();
+                  ref
+                    .read(geojsonTargetIdProvider.notifier)
+                    .update((state) => _textFieldValue);
                 }, 
                 icon: Icon(Icons.download)
               )

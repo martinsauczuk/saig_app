@@ -84,6 +84,8 @@ final locationBufferFeatureProvider = StreamProvider.autoDispose<Feature>((ref) 
       y = distanceY * sin(theta);
       coordinates.add(Position( positionCenter.lng + x, positionCenter.lat + y) );
     }
+    coordinates.add(coordinates[0]);
+
 
     // return Polygon(coordinates: [coordinates]);
     // return lineString;

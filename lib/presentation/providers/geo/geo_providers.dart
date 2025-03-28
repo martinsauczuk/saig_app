@@ -2,25 +2,29 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:saig_app/domain/repositories/features_repository.dart';
+import 'package:saig_app/infrastructure/githubcontent/github_rawcontent_datasource.dart';
+import 'package:saig_app/infrastructure/repositories/features_repository_impl.dart';
 
-
-final geoPointsProvider = FutureProvider<List<Point>>((ref) async {
-  
-  await Future.delayed(Duration(milliseconds: 300));
-  
-  return [
-    Point( coordinates: Position(-34.70678595493514,-58.279141706953254) )
-  ];
-
-
-});
-
-
+///
+/// Circle radio
+///
 final circleRadiusProvider = StateProvider<double>((ref) {
   return 20.0;
 });
 
 
+///
+/// FeaturesRepository
+///
+final featureProvider = Provider<FeaturesRepository> ((ref) {
+  return FeaturesRepositoryImpl(datasource: GithubRawcontentDatasource());
+});
+
+
+///
+/// Circle buffer
+///
 final locationBufferFeatureProvider = StreamProvider.autoDispose<Feature>((ref) async* {
 
   /// Determine the current position of the device.

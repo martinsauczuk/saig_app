@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:saig_app/presentation/providers/geo/features_providers.dart';
-import 'package:saig_app/presentation/providers/geo/geo_providers.dart';
+import 'package:saig_app/presentation/providers/providers.dart';
 
 
 class DistanceShotingScreen extends ConsumerStatefulWidget {
@@ -17,6 +16,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
 
   MapboxMap? mapboxMap;
   CircleAnnotationManager? circleAnnotationManager;
+  final List<Feature> _featurePoints = [];
   String _textFieldValue = '';
   ViewportState _viewport = CameraViewportState(center: Point(
                   coordinates: Position(
@@ -52,7 +52,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
       fillOpacity: 0.4,
     ));
     await mapboxMap?.location
-        .updateSettings(LocationComponentSettings(enabled: true, pulsingEnabled: true, ));
+        .updateSettings(LocationComponentSettings(enabled: true, pulsingEnabled: false, ));
 
   }
 
@@ -82,6 +82,15 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
         'location_source', 'bufferDataId', [featureCenter]);
   }
 
+
+  _searchFeaturesInRadio(Feature featureCenter) async {
+    print('searching...');
+    
+
+
+  }
+
+
   ///
   /// Load features from FeatureRepository
   ///
@@ -101,15 +110,22 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
     ScaffoldMessenger.of(context)
       .showSnackBar( SnackBar(content: Text('${featurePoints.length} puntos cargados')) );
     
+    setState(() {
+      _featurePoints.addAll(featurePoints);
+    });
+
   }
 
   ///
   /// Delete all features
   ///
-  void _deleteAllFeatures() {
-    circleAnnotationManager?.deleteAll().then((onValue) {
+  void _deleteAllFeatures() async {
+    await circleAnnotationManager?.deleteAll().then((onValue) {
       ScaffoldMessenger
         .of(context).showSnackBar( SnackBar(content: Text('Puntos eliminados')) );
+    });
+    setState(() {
+      _featurePoints.clear();
     });
   }
 
@@ -120,8 +136,9 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
     final currentSliderValue = ref.watch(circleRadiusProvider);
 
     featureCenter.when(
-      data: (data) {
+      data: (data) async{
         _updateReferenceCenter(data);
+        _searchFeaturesInRadio(data);
       },
       error: (error, stackTrace) => print('$error'),
       loading: () => {},
@@ -147,23 +164,41 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8), 
-          child: Row(
+          child: Column(
             children: [
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'nombre del archivo',
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'nombre del archivo',
+                      ),
+                      onChanged: (value) {
+                        _textFieldValue = value;
+                      }
+                    ),
                   ),
-                  onChanged: (value) {
-                    _textFieldValue = value;
-                  }
-                ),
+                  IconButton.filled(
+                    onPressed: _loadTargetFeatures,
+                    icon: Icon(Icons.download)
+                  )
+                ],
               ),
-              IconButton.filled(
-                onPressed: _loadTargetFeatures,
-                icon: Icon(Icons.download)
-              )
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Puntos total: ${_featurePoints.length}'),
+                        Text('Puntos en radio: 0')
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

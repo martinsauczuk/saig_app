@@ -35,9 +35,16 @@ class _FlotingActionButtons extends ConsumerWidget {
       children: [
         FloatingActionButton(
           heroTag: 'one_shoting',
-          child: const Icon(Icons.add),
+          child: const Icon(Icons.camera_sharp),
           onPressed: () {
             Navigator.pushNamed(context, 'one_shoting');
+          },
+        ),
+        FloatingActionButton(
+          heroTag: 'distance_shoting',
+          child: const Icon(Icons.polyline_outlined),
+          onPressed: () {
+            Navigator.pushNamed(context, 'distance_shoting');
           },
         ),
       ],

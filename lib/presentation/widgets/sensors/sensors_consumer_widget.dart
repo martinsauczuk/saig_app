@@ -31,7 +31,7 @@ class SensorsConsumerWidget extends ConsumerWidget {
         ),
         SensorXYZWidget(
           asyncValue: acceleromenterUser$,
-          caption: 'User accelerometer',
+          caption: 'Accelerometer',
           icon: Icons.person,
         ),
         PositionValueWidget(

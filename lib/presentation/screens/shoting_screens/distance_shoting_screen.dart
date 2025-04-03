@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:saig_app/domain/entities/sensor_value.dart';
 import 'package:saig_app/domain/entities/upload_item.dart';
 import 'package:saig_app/presentation/providers/providers.dart';
 
@@ -131,8 +132,8 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
     
     UploadItem item = UploadItem(
       path: file.path,
-      accelerometer: await ref.read(accelerometerUserProvider.future),
-      magnetometer: await ref.read(magnetometerProvider.future),
+      accelerometer: await ref.read(accelerometerGravityProvider.future),
+      magnetometer: SensorValue(0, 0, 0), //TODO: Add magnetometer
       positionValue: await ref.read(positionValueProvider.future),
     );
 

@@ -59,11 +59,6 @@ class UploadItemPreviewWidget extends StatelessWidget {
                   caption: 'Accelerometer', 
                   value: item.accelerometer!
                 ),
-                ValueXYZWidget(
-                  icon: Icons.person, 
-                  caption: 'User accelerometer', 
-                  value: item.accelerometer!
-              ),
                 PositionValueWidget(
                   positionAsyncValue: AsyncData(item.positionValue!)
                 )

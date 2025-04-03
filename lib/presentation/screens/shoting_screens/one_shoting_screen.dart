@@ -26,8 +26,8 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
     
     _uploadItem = UploadItem(
       path: file.path,
-      accelerometer: await ref.read(accelerometerUserProvider.future),
-      magnetometer: await ref.read(magnetometerProvider.future),
+      accelerometer: await ref.read(accelerometerGravityProvider.future),
+      magnetometer: SensorValue(0, 0, 0), //TODO: Add magnetometer
       positionValue: await ref.read(positionValueProvider.future),
     );
     setState(() {});

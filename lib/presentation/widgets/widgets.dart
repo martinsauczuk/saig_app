@@ -1,5 +1,7 @@
 export './shared/menu_widget.dart';
 export './shared/error_indicator_widget.dart';
+export './shared/icon_text_indicator_widget.dart';
+export './shared/custom_slider_widget.dart';
 
 export './permissions/permission_status_indicator.dart';
 
@@ -15,3 +17,4 @@ export './upload/upload_item_preview_widget.dart';
 export './camera/camera_preview_consumer_widget.dart';
 
 export './location/position_value_widget.dart';
+

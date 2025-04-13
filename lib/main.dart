@@ -11,8 +11,7 @@ Future<void> main() async {
   await dotenv.load(fileName: '.env');
 
   WidgetsFlutterBinding.ensureInitialized();
-  MapboxOptions.setAccessToken('sk.eyJ1IjoibXNhdWN6dWsiLCJhIjoiY20xemtxZWRrMDkwODJscHF2dHJvYzV1ayJ9.zbKVW9ZruX77hHabu6GcKg');
-
+  MapboxOptions.setAccessToken(dotenv.env['MAPBOX_ACCESS_TOKEN']!);
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

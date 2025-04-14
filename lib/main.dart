@@ -36,31 +36,28 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: true,
       theme: AppTheme().getTheme(),
       routes: {
-        'upload'       : (BuildContext context) => const UploadsMainScreen(),
-        'cloud'        : (BuildContext context) => CloudGalleryScreen(),
-        'about'        : (BuildContext context) => const AboutScreen(),
-
+        'upload'           : (BuildContext context) => const UploadsMainScreen(),
+        'cloud'            : (BuildContext context) => CloudGalleryScreen(),
+        'about'            : (BuildContext context) => const AboutScreen(),
 
         'one_shoting'      : (BuildContext context) => const OneShotingScreen(),
         'distance_shoting' : (BuildContext context) => const DistanceShotingScreen(),
 
-
-        'sounds'       : (BuildContext context) => const SoundPlaygroundScreen(),
-        'camera'       : (BuildContext context) => const CameraPlaygroundScreen(),
-        'permissions'  : (BuildContext context) => const PermissionsScreen(),
+        'sounds'           : (BuildContext context) => const SoundPlaygroundScreen(),
+        'camera'           : (BuildContext context) => const CameraPlaygroundScreen(),
+        'permissions'      : (BuildContext context) => const PermissionsScreen(),
 
         // Sensors
-        'sensors'       : (BuildContext context) => const SensorsPlaygroundScreen(),
-        'gyroscope'     : (BuildContext context) => const GyroscopeScreen(),
-        'accelerometer' : (BuildContext context) => const AccelerometerScreen(),
-        'magnetometer'  : (BuildContext context) => const MagnetometerScreen(),
-        'gyroscope-ball': (BuildContext context) => const GyroscopeBallScreen(),
-        'compass'       : (BuildContext context) => const CompassScreen(),
+        'sensors'          : (BuildContext context) => const SensorsPlaygroundScreen(),
+        'gyroscope'        : (BuildContext context) => const GyroscopeScreen(),
+        'accelerometer'    : (BuildContext context) => const AccelerometerScreen(),
+        'magnetometer'     : (BuildContext context) => const MagnetometerScreen(),
+        'gyroscope-ball'   : (BuildContext context) => const GyroscopeBallScreen(),
 
         // Location
-        'location'      : (BuildContext context) => const LocationScreen(),
-        'maps'          : (BuildContext context) => const MapScreen(),
-        'controlled-map': (BuildContext context) => const ControlledMapScreen(),
+        'location'         : (BuildContext context) => const LocationScreen(),
+        'maps'             : (BuildContext context) => const MapScreen(),
+        'controlled-map'   : (BuildContext context) => const ControlledMapScreen(),
       },
       initialRoute: 'upload',
     );

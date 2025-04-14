@@ -75,16 +75,11 @@ class MenuWidget extends StatelessWidget {
             title: const Text('Prueba de ubicación GPS'),
             onTap: () => Navigator.pushReplacementNamed(context, 'location')
           ),
-          ListTile(
-            leading: const Icon(Icons.map_outlined, color: Colors.cyan),
-            title: const Text('Prueba de ubicación Mapa'),
-            onTap: () => Navigator.pushReplacementNamed(context, 'maps')
-          ),
-          ListTile(
-            leading: const Icon(Icons.gamepad_outlined, color: Colors.cyan),
-            title: const Text('Prueba de ubicación controlado'),
-            onTap: () => Navigator.pushReplacementNamed(context, 'controlled-map')
-          ),
+          // ListTile(
+          //   leading: const Icon(Icons.map_outlined, color: Colors.cyan),
+          //   title: const Text('Prueba de ubicación Mapa'),
+          //   onTap: () => Navigator.pushReplacementNamed(context, 'maps')
+          // ),
           Divider(),
           ListTile(
             leading: const Icon(Icons.tune, color: Colors.cyan),

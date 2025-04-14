@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:saig_app/domain/domain.dart';
 import 'package:saig_app/domain/entities/sensor_value.dart';
 import 'package:saig_app/domain/entities/upload_item.dart';
 import 'package:saig_app/presentation/providers/providers.dart';
+import 'package:turf/turf.dart' hide Point, Feature;
 
 import '../../widgets/widgets.dart';
 
@@ -22,7 +24,8 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
 
   MapboxMap? mapboxMap;
   CircleAnnotationManager? circleAnnotationManager;
-  final List<Feature> _featurePoints = [];
+  // final List<Feature> _featurePoints = [];
+  final List<CircleAnnotation> _targetCircleAnnotation = [];
   String _textFieldValue = '';
   ViewportState _viewport = CameraViewportState(center: Point(
                   coordinates: Position(
@@ -103,20 +106,62 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
   ///
   ///
   ///
-  void _onTimerCapture(Timer timer) {
+  void _onTimerCapture(Timer timer) async {
 
     final galleryProvider = ref.read(uploadGalleryProvider.notifier);
 
     setState(() {
       //
     });
-    Future<UploadItem> itemFuture =_captureUploadItem();
 
-    itemFuture.then((item){
-      print(item.path);
-      galleryProvider.addItem(item);
-      _captureCounter ++;
-    });
+
+    PositionValue? positionValue = await ref.read(positionValueProvider.future);
+
+    for (CircleAnnotation circleAnnotation in _targetCircleAnnotation) {
+      print('>>>feature.geometry ${circleAnnotation.circleColor}');
+
+      final distance = distanceRaw(
+        Position(positionValue!.lng as num, positionValue.lat as num),
+        circleAnnotation.geometry.coordinates,
+        Unit.meters
+      );
+
+      // print('>>Distance $distance');
+
+      if(distance < 300) {
+        circleAnnotation.circleColor = Colors.blue.toARGB32();
+
+        circleAnnotationManager!.update(circleAnnotation);
+      }
+
+
+      
+      
+    }
+    
+
+    // final from = Point(coordinates: Position(
+    //       -58.35197796959112,
+    //       -34.65073974255485
+    // ));
+    // final to = Point(coordinates: Position(
+    //       -58.35392336093798,
+    //       -34.65328629812141
+    // ));
+    // var options = Unit.meters;
+
+
+    // final distance = distanceRaw(from.coordinates, to.coordinates, options);
+    // print('>> distance $distance');
+
+
+
+    // CAPTURE
+    // Future<UploadItem> itemFuture =_captureUploadItem();
+    // itemFuture.then((item){
+    //   galleryProvider.addItem(item);
+    //   _captureCounter ++;
+    // });
 
 
   }
@@ -180,18 +225,22 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
     List<Feature> featurePoints =  await featureRepository.getTargetFeaturePointsById(_textFieldValue);
 
     for (final featurePoint in featurePoints) {
-      circleAnnotationManager
-        ?.create(CircleAnnotationOptions(
+      CircleAnnotation circleAnnotation = await circleAnnotationManager!.create(CircleAnnotationOptions(
           geometry: featurePoint.geometry as Point,
           circleColor: Colors.green.value,
           circleRadius: 12.0,
         ));
+      _targetCircleAnnotation.add(circleAnnotation);
+      // print('>> circleAnnotation ${circleAnnotation.geometry}');
     }
+
+    // circleAnnotationManager?.update(annotation)
+
     ScaffoldMessenger.of(context)
       .showSnackBar( SnackBar(content: Text('${featurePoints.length} puntos cargados')) );
     
     setState(() {
-      _featurePoints.addAll(featurePoints);
+      // _featurePoints.addAll(featurePoints);
     });
 
   }
@@ -205,7 +254,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
         .of(context).showSnackBar( SnackBar(content: Text('Puntos eliminados')) );
     });
     setState(() {
-      _featurePoints.clear();
+      _targetCircleAnnotation.clear();
     });
   }
 
@@ -278,7 +327,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
                         ),
                         IconTextIndicatorWidget(
                           icon: Icons.circle , 
-                          caption: _featurePoints.length.toString()
+                          caption: _targetCircleAnnotation.length.toString()
                         ),
                         IconTextIndicatorWidget(
                           icon: Icons.adjust_outlined , 

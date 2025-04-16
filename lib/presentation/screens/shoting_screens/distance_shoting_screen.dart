@@ -126,13 +126,16 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
   void _captureIfTargetsInRadio() {
     
     final galleryProvider = ref.read(uploadGalleryProvider.notifier);
-    if(ref.read(targetsInRadioCounterProvider) >= 0) {
+    final cameraState = ref.read(cameraProvider);
+    
+    if(ref.read(targetsInRadioCounterProvider) > 0 && cameraState.isReadyToCapture && !cameraState.isTakingPhoto) {
       Future<UploadItem> itemFuture =_captureUploadItem();
       itemFuture.then((item){
         galleryProvider.addItem(item);
         _captureCounter ++;
       });
     }
+
     setState(() {});
 
   }

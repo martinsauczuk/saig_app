@@ -262,14 +262,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_compass:
-    dependency: "direct main"
-    description:
-      name: flutter_compass
-      sha256: "1b4d7e6c95a675ec8482b5c9c9ccf1ebf0ced3dbec59dce28ad609da953de850"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.1"
   flutter_dotenv:
     dependency: "direct main"
     description:
@@ -806,7 +798,7 @@ packages:
     source: hosted
     version: "0.7.4"
   turf:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: turf
       sha256: "75347c45a5c1de805db7cb182286f05a3770e01546626c4dc292709d15cbe436"

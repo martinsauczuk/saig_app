@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:saig_app/domain/entities/sensor_value.dart';
-import 'package:saig_app/domain/entities/upload_item.dart';
+import 'package:saig_app/domain/domain.dart';
 import 'package:saig_app/presentation/providers/providers.dart';
+import 'package:turf/turf.dart' hide Point, Feature;
 
 import '../../widgets/widgets.dart';
 
@@ -22,7 +22,17 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
 
   MapboxMap? mapboxMap;
   CircleAnnotationManager? circleAnnotationManager;
-  final List<Feature> _featurePoints = [];
+  final List<CircleAnnotation> _targetCircleAnnotationList = [];
+
+  int buildCounter = 0;
+
+  // Constants
+  static final int _colorCircleInRadio = Colors.blue.toARGB32();
+  static final int _colorCircleOutRadio = Colors.green.toARGB32();
+  static final int _colorCircleLocation = Colors.tealAccent.toARGB32();
+
+  static final double _circleRadius = 10.0;
+
   String _textFieldValue = '';
   ViewportState _viewport = CameraViewportState(center: Point(
                   coordinates: Position(
@@ -33,6 +43,8 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
                 zoom: 14.0);
   bool _started = false;
   double _timerDuration = 3;
+
+  // Counters
   int _gpsCounter = 0;
   int _captureCounter = 0;
   late Timer _timerCapture;
@@ -72,7 +84,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
     await mapboxMap?.style.addLayer(FillLayer(
       id: 'line_layer',
       sourceId: 'location_source',
-      fillColor: const Color.fromARGB(255, 113, 43, 90).value,
+      fillColor: _colorCircleLocation,
       fillOpacity: 0.4,
     ));
     await mapboxMap?.location
@@ -87,7 +99,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
   _onPressedStart() {
     setState(() {
       _viewport = FollowPuckViewportState(
-        zoom: 16.0,
+        zoom: 14.0,
         pitch: 0,
       );
       _started = true;
@@ -99,28 +111,75 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
   }
 
 
-
   ///
-  ///
+  /// Timer interval
   ///
   void _onTimerCapture(Timer timer) {
-
-    final galleryProvider = ref.read(uploadGalleryProvider.notifier);
-
-    setState(() {
-      //
-    });
-    Future<UploadItem> itemFuture =_captureUploadItem();
-
-    itemFuture.then((item){
-      print(item.path);
-      galleryProvider.addItem(item);
-      _captureCounter ++;
-    });
-
+    
+    _captureIfTargetsInRadio();
 
   }
 
+  ///
+  ///
+  ///
+  void _captureIfTargetsInRadio() {
+    
+    final galleryProvider = ref.read(uploadGalleryProvider.notifier);
+    final cameraState = ref.read(cameraProvider);
+    
+    if(ref.read(targetsInRadioCounterProvider) > 0 && cameraState.isReadyToCapture && !cameraState.isTakingPhoto) {
+      Future<UploadItem> itemFuture =_captureUploadItem();
+      itemFuture.then((item){
+        galleryProvider.addItem(item);
+        _captureCounter ++;
+      });
+    }
+
+    setState(() {});
+
+  }
+
+  ///
+  ///
+  ///
+  void _updateTargetCircleDistanceList() async {
+    
+    final currentRadioValue = ref.read(circleRadiusProvider);
+    PositionValue? positionValue = await ref.read(positionValueProvider.future); // FIXME
+    
+    int counterInRadio = 0;
+    for (CircleAnnotation circleAnnotation in _targetCircleAnnotationList) {
+      counterInRadio += _updateCircleDistance(circleAnnotation, Position(positionValue!.lng as num, positionValue.lat as num), currentRadioValue, counterInRadio);
+      circleAnnotationManager!.update(circleAnnotation);
+    }
+
+    ref.read(targetsInRadioCounterProvider.notifier)
+       .update((state) => counterInRadio);
+     
+  }
+
+
+
+  ///
+  /// Update  circleAnnotation comparing distance
+  ///
+  int _updateCircleDistance(CircleAnnotation circleAnnotation, Position position, double distance, int counter) {
+
+    int value = 0;
+    final calculatedDistance = distanceRaw(
+      position,
+      circleAnnotation.geometry.coordinates,
+      Unit.meters
+    );
+    if (calculatedDistance < distance) {
+      circleAnnotation.circleColor = _colorCircleInRadio;
+      value = 1;
+    } else {
+      circleAnnotation.circleColor = _colorCircleOutRadio;
+    }
+    return value;
+  }
 
 
   ///
@@ -139,7 +198,6 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
 
     return item;
   }
-
 
 
   ///
@@ -171,6 +229,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
         'location_source', 'bufferDataId', [featureCenter]);
   }
 
+
   ///
   /// Load features from FeatureRepository
   ///
@@ -180,19 +239,18 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
     List<Feature> featurePoints =  await featureRepository.getTargetFeaturePointsById(_textFieldValue);
 
     for (final featurePoint in featurePoints) {
-      circleAnnotationManager
-        ?.create(CircleAnnotationOptions(
+      CircleAnnotation circleAnnotation = await circleAnnotationManager!.create(CircleAnnotationOptions(
           geometry: featurePoint.geometry as Point,
-          circleColor: Colors.green.value,
-          circleRadius: 12.0,
+          circleColor: _colorCircleOutRadio,
+          circleRadius: _circleRadius,
         ));
+      _targetCircleAnnotationList.add(circleAnnotation);
     }
+
     ScaffoldMessenger.of(context)
       .showSnackBar( SnackBar(content: Text('${featurePoints.length} puntos cargados')) );
     
-    setState(() {
-      _featurePoints.addAll(featurePoints);
-    });
+    setState(() { });
 
   }
 
@@ -205,21 +263,29 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
         .of(context).showSnackBar( SnackBar(content: Text('Puntos eliminados')) );
     });
     setState(() {
-      _featurePoints.clear();
+      _targetCircleAnnotationList.clear();
     });
+  }
+
+
+  ///
+  ///
+  ///
+  void _onFeatureCenterData(Feature data) {
+    _updateReferenceCenter(data);
+    _gpsCounter ++;
+    _updateTargetCircleDistanceList();
   }
 
   @override
   Widget build(BuildContext context) {
 
     final featureCenterAsync = ref.watch(locationBufferFeatureProvider);
-    final currentSliderValue = ref.watch(circleRadiusProvider);
+    final currentRadioValue = ref.watch(circleRadiusProvider);
+    final targetsInRadioCounter = ref.watch(targetsInRadioCounterProvider);
 
     featureCenterAsync.when(
-      data: (data) async {  
-          _updateReferenceCenter(data);
-          _gpsCounter ++;
-      },
+      data: _onFeatureCenterData,
       error: (error, stackTrace) => print('$error'),
       loading: () => {},
     );
@@ -234,7 +300,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 8), 
             child: Column(
               children: [
-                _DistanceSlider(currentSliderValue: currentSliderValue, ref: ref),
+                _DistanceSlider(currentSliderValue: currentRadioValue, ref: ref),
                 CustomSliderWidget(
                   enabled: !_started,
                   currentValue: _timerDuration,
@@ -278,11 +344,11 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
                         ),
                         IconTextIndicatorWidget(
                           icon: Icons.circle , 
-                          caption: _featurePoints.length.toString()
+                          caption: _targetCircleAnnotationList.length.toString()
                         ),
                         IconTextIndicatorWidget(
                           icon: Icons.adjust_outlined , 
-                          caption: '0'
+                          caption: '$targetsInRadioCounter'
                         ),
                         IconTextIndicatorWidget(
                           icon: Icons.timer_outlined , 

@@ -14,7 +14,7 @@ class OneShotingScreen extends ConsumerStatefulWidget {
   
 }
 
-class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
+class _OneShotingScreenState extends ConsumerState<OneShotingScreen> with WidgetsBindingObserver{
   
   UploadItem? _uploadItem;
   CameraController? _cameraController;
@@ -78,6 +78,7 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _initializeCameraController();
   }
 
@@ -150,8 +151,29 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    
+     // App state changed before we got the chance to initialize.
+    if (_cameraController == null || !_cameraController!.value.isInitialized) {
+      return;
+    }
+
+    if (state == AppLifecycleState.inactive) {
+      disposeCameraController();
+      // _stopCapture();
+
+    } else if (state == AppLifecycleState.resumed) {
+      _initializeCameraController();
+    }
+
+
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
   void dispose() {
     disposeCameraController();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

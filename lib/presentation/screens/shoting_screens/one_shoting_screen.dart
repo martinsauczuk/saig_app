@@ -25,13 +25,13 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
   ///
   void _onPressedCaptureButton() async {
     
-    // final file = await ref.read(cameraProvider.notifier).getPictureFile();
     setState(() {});
     final file = await _cameraController!.takePicture();
     setState(() {});
-    
+
     _uploadItem = UploadItem(
       path: file.path,
+      description: 'One Shoting',
       accelerometer: await ref.read(accelerometerGravityProvider.future),
       magnetometer: SensorValue(0, 0, 0), //TODO: Add magnetometer
       positionValue: await ref.read(positionValueProvider.future),
@@ -78,7 +78,7 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
   @override
   void initState() {
     super.initState();
-    this._initializeCameraController();
+    _initializeCameraController();
   }
 
   Future<void> _initializeCameraController() async {
@@ -90,8 +90,6 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
       ResolutionPreset.max
     );
     await cameraController.initialize();
-    // return cameraController;
-    print('cameraController done $cameraController');
 
     setState(() {
       _cameraController = cameraController;
@@ -102,7 +100,6 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
   @override
   Widget build(BuildContext context) {
 
-    // final cameraState = ref.watch(cameraProvider);
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
 
@@ -154,10 +151,14 @@ class _OneShotingScreenState extends ConsumerState<OneShotingScreen> {
 
   @override
   void dispose() {
+    disposeCameraController();
+    super.dispose();
+  }
+
+  void disposeCameraController() {
     if (_cameraController != null) {
       _cameraController!.dispose();
     }
-    super.dispose();
   }
 
 }

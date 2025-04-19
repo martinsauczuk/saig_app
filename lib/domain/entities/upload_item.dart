@@ -16,19 +16,12 @@ class UploadItem {
   final SensorValue? accelerometer;
   final SensorValue? magnetometer;
 
-  // final double accelerometerX = 0;
-  // final double accelerometerY = 0;
-  // final double accelerometerZ = 0;
-  // final double magnetometerX = 0;
-  // final double magnetometerY = 0;
-  // final double magnetometerZ = 0;
-
-
-  final String? descripcion = 'sin descripcion';
+  final String description;
 
   const UploadItem({
     this.id, 
-    this.publicId, 
+    this.publicId,
+    this.description = 'sin descripcion',
     required this.path, 
     this.status = UploadStatus.pending, 
     this.positionValue,
@@ -43,6 +36,7 @@ class UploadItem {
     PositionValue? positionValue,
     SensorValue? accelerometer,
     SensorValue? magnetometer,
+    String? description,
   }) {
     return UploadItem(
       id: id ?? this.id,
@@ -52,6 +46,7 @@ class UploadItem {
       positionValue: positionValue ?? this.positionValue,
       accelerometer: accelerometer ?? this.accelerometer,
       magnetometer: magnetometer ?? this.magnetometer,
+      description: description ?? this.description,
     );
   }
 
@@ -62,29 +57,9 @@ class UploadItem {
       status: UploadStatus.values[map['status']],
       publicId: map['public_id'],
       positionValue: PositionValue.fromMap(map),
+      description: map['description'],
     );
   
-
-  //   lat = map['lat'] as double;
-  //   lng = map['lng'] as double;
-  //   accelerometerX = map['accelerometerX'] as double;
-  //   accelerometerY = map['accelerometerY'] as double;
-  //   accelerometerZ = map['accelerometerZ'] as double;
-  //   magnetometerX = map['magnetometerX'] as double;
-  //   magnetometerY = map['magnetometerY'] as double;
-  //   magnetometerZ = map['magnetometerZ'] as double;
-  //   descripcion = map['descripcion'] as String;
-
-  //   accuracy = map['accuracy'] as double;
-  //   heading = map['heading'] as double;
-  //   altitude = map['altitude'] as double;
-  //   speed = map['speed'] as double;
-  //   speedAccuracy = map['speedAccuracy'] as double;
-  //   timestamp = map['timestamp'] as String;
-
-  //   path = map['path'] as String;
-  //   publicId = map['public_id'] as String;
-  //   status = UploadStatus.values[map['status'] as int];
   }
 
 
@@ -115,7 +90,7 @@ class UploadItem {
     'magnetometerX': magnetometer!.x,
     'magnetometerY': magnetometer!.y,
     'magnetometerZ': magnetometer!.z,
-    'descripcion': descripcion,
+    'description': description,
 
   };
 

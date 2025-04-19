@@ -16,14 +16,6 @@ class CloudinaryUploadsCloudDatasource implements UploadsCloudDatasource {
   @override
   Future<String> uploadItem(UploadItem item) async {
 
-    // Validacion a mejorar con form
-    String descripcion;
-    if (item.descripcion!.isEmpty) {
-      descripcion = 'Imagen sin descripción';
-    } else {
-      descripcion = item.descripcion!;
-    }
-
     final Uri uri = Uri.https( 
       _basePath, 
       '/v1_1/$_cloudName/image/upload',
@@ -42,7 +34,7 @@ class CloudinaryUploadsCloudDatasource implements UploadsCloudDatasource {
         '''
           coord_lat=${item.positionValue!.lat}|
           coord_lng=${item.positionValue!.lng}|
-          desc=$descripcion|
+          desc=${item.description}|
           accelerometerX=${item.accelerometer!.x}|
           accelerometerY=${item.accelerometer!.y}|
           accelerometerZ=${item.accelerometer!.z}|

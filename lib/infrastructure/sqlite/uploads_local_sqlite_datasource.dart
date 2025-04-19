@@ -39,7 +39,7 @@ class UploadsLocalSqliteDatasource implements UploadsLocalDatasource {
           CREATE TABLE Items (
             id INTEGER PRIMARY KEY,
             status INTEGER,
-            descripcion TEXT,
+            description TEXT,
             path TEXT,
             lat REAL,
             lng REAL,

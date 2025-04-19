@@ -116,7 +116,6 @@ class _CameraPlaygroundViewState extends State<_CameraPlaygroundView> {
   void takePicture() async {
 
     if (_cameraController!.value.isTakingPicture) {
-      // A capture is already pending, do nothing.
       return null;
     }
 
@@ -133,9 +132,13 @@ class _CameraPlaygroundViewState extends State<_CameraPlaygroundView> {
 
   @override
   void dispose() {
+    disposeCameraController();
+    super.dispose();
+  }
+
+  void disposeCameraController() {
     if (_cameraController != null) {
       _cameraController!.dispose();
     }
-    super.dispose();
   }
 }

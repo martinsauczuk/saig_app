@@ -41,7 +41,7 @@ class MainApp extends StatelessWidget {
         'about'            : (BuildContext context) => const AboutScreen(),
 
         'one_shoting'      : (BuildContext context) => const OneShotingScreen(),
-        // 'distance_shoting' : (BuildContext context) => const DistanceShotingScreen(),
+        'distance_shoting' : (BuildContext context) => const DistanceShotingScreen(),
 
         'sounds'           : (BuildContext context) => const SoundPlaygroundScreen(),
         'camera'           : (BuildContext context) => const CameraPlaygroundScreen(),

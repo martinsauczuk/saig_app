@@ -14,7 +14,6 @@ final menuItems = <MenuItem> [
   MenuItem('Accelerometer', Icons.speed, 'accelerometer'),
   MenuItem('Magnetometer', Icons.explore_outlined, 'magnetometer'),
   MenuItem('Gyroscope Ball', Icons.sports_baseball_outlined, 'gyroscope-ball'),
-  MenuItem('Compass', Icons.explore, 'compass')
 ];
 
 class SensorsPlaygroundScreen extends StatelessWidget {

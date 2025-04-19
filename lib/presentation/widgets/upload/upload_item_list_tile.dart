@@ -23,7 +23,7 @@ class UploadItemListTile extends StatelessWidget {
         File(item.path),
         fit: BoxFit.cover,
       ),
-      title: Text('${item.id.toString()} - ${item.descripcion!}'),
+      title: Text('${item.id.toString()} - ${item.description}'),
       subtitle: ItemInfo(item),
       isThreeLine: true,
       trailing: SizedBox(

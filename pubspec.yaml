@@ -29,7 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   audioplayers: ^6.1.0
-  camera: ^0.11.0+2
+  camera: ^0.11.1
   cupertino_icons: ^1.0.2
   faker: ^2.1.0
   flutter:
@@ -38,7 +38,7 @@ dependencies:
   flutter_riverpod: ^2.4.10
   geolocator: ^13.0.1
   http: ^1.2.0
-  mapbox_maps_flutter: ^2.6.2
+  mapbox_maps_flutter: ^2.7.0
   mime_type: ^1.0.0
   package_info_plus: ^8.0.2
   path: ^1.8.3

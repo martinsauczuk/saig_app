@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -19,6 +20,9 @@ class DistanceShotingScreen extends ConsumerStatefulWidget {
 }
 
 class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
+
+  CameraController? _cameraController;
+
 
   MapboxMap? mapboxMap;
   CircleAnnotationManager? circleAnnotationManager;
@@ -52,14 +56,11 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
   @override
   void initState() {
     super.initState();
+    _initializeCameraController();
     _initTimer();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _timerCapture.cancel();
-  }
+
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
@@ -105,7 +106,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
       _started = true;
     });
 
-    _timerCapture = Timer.periodic(Duration(seconds: 2), _onTimerCapture );
+    _timerCapture = Timer.periodic(Duration(seconds: _timerDuration.toInt()), _onTimerCapture );
 
 
   }
@@ -125,16 +126,25 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
   ///
   void _captureIfTargetsInRadio() {
     
-    final galleryProvider = ref.read(uploadGalleryProvider.notifier);
-    final cameraState = ref.read(cameraProvider);
-    
-    if(ref.read(targetsInRadioCounterProvider) > 0 && cameraState.isReadyToCapture && !cameraState.isTakingPhoto) {
-      Future<UploadItem> itemFuture =_captureUploadItem();
-      itemFuture.then((item){
-        galleryProvider.addItem(item);
-        _captureCounter ++;
-      });
-    }
+    final localRepository = ref.read(uploadsLocalRepository);
+
+    if(ref.read(targetsInRadioCounterProvider) > 0 
+        && _cameraController!.value.isInitialized
+        && !_cameraController!.value.isTakingPicture
+      ) {
+        setState(() {});
+        final Future<UploadItem> itemFuture =_captureUploadItem();
+        itemFuture.then((item){
+          localRepository.insertItem(item).then((id) {
+            print('>>>Item: $id');
+            _captureCounter ++;
+          });
+          
+        }).onError((error, stackTrace) {
+         print(error);
+         _onPressedStop();
+        });
+      }
 
     setState(() {});
 
@@ -187,16 +197,25 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
   ///
   Future<UploadItem> _captureUploadItem() async {
     
-    final file = await ref.read(cameraProvider.notifier).getPictureFile();
-    
-    UploadItem item = UploadItem(
-      path: file.path,
-      accelerometer: await ref.read(accelerometerGravityProvider.future),
-      magnetometer: SensorValue(0, 0, 0), //TODO: Add magnetometer
-      positionValue: await ref.read(positionValueProvider.future),
-    );
-
-    return item;
+    UploadItem? item;
+    XFile imageFile;
+      try {
+        imageFile = await _cameraController!.takePicture();
+        setState(() {});
+        print('>>File: ${imageFile.path}');
+        
+        item = UploadItem(
+          path: imageFile.path,
+          description: 'DistanceShoting_$_captureCounter',
+          accelerometer: await ref.read(accelerometerGravityProvider.future),
+          magnetometer: SensorValue(0, 0, 0), //TODO: Add magnetometer
+          positionValue: await ref.read(positionValueProvider.future),
+        );
+        return item;
+    } on CameraException catch (e) {
+      print(e);
+      return Future.error(e);
+    }
   }
 
 
@@ -214,7 +233,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
       _captureCounter = 0;
     });
     _timerCapture.cancel();
-
+    ref.invalidate(uploadGalleryProvider); //TODO: Buscar una mejor opcion que invalidate aca
   }
 
 
@@ -277,6 +296,22 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
     _updateTargetCircleDistanceList();
   }
 
+
+  Future<void> _initializeCameraController() async {
+    
+    List<CameraDescription> cameras = await availableCameras();
+    
+    CameraController cameraController = CameraController(
+      cameras.first, 
+      ResolutionPreset.max
+    );
+    await cameraController.initialize();
+
+    setState(() {
+      _cameraController = cameraController;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -300,7 +335,19 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 8), 
             child: Column(
               children: [
-                _DistanceSlider(currentSliderValue: currentRadioValue, ref: ref),
+                CustomSliderWidget(
+                  enabled: true,
+                  currentValue: currentRadioValue,
+                  minValue: 0,
+                  maxValue: 300,
+                  divisions: 20,
+                  unitLabel: 'm',
+                  onChanged: (double value) {
+                    ref
+                      .read(circleRadiusProvider.notifier)
+                      .update((state) => value);
+                  },
+                ),
                 CustomSliderWidget(
                   enabled: !_started,
                   currentValue: _timerDuration,
@@ -362,7 +409,9 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
                         ),
                       ],
                     ),
-                    const CameraPreviewConsumerWidget(),
+                    _cameraController != null
+                      ? CameraPreviewWidget(controller: _cameraController!)
+                      : CircularProgressIndicator()
                   ],
                 ),
               ],
@@ -406,40 +455,19 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
         ],
       ),
     );
-
   }
-}
 
-class _DistanceSlider extends StatelessWidget {
-  const _DistanceSlider({
-    required this.currentSliderValue,
-    required this.ref,
-  });
-
-  final double currentSliderValue;
-  final WidgetRef ref;
-
+  
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Text('${currentSliderValue.toString()}m'),
-        Expanded(
-          child: Slider(
-            value: currentSliderValue,
-            min: 0,
-            max: 300,
-            divisions: 20,
-            label: currentSliderValue.toString(),
-            onChanged: (double value) {
-                ref
-                  .read(circleRadiusProvider.notifier)
-                  .update((state) => value);
-            },
-          ),
-        ),
-      ],
-    );
+  void dispose() {
+    _timerCapture.cancel();
+    disposeCameraController();
+    super.dispose();
+  }
+
+  void disposeCameraController() {
+    if (_cameraController != null) {
+      _cameraController!.dispose();
+    }
   }
 }

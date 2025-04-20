@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:saig_app/config/theme/app_theme.dart';
 import 'package:saig_app/presentation/screens/screens.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 Future<void> main() async {
 
@@ -12,6 +13,8 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   MapboxOptions.setAccessToken(dotenv.env['MAPBOX_ACCESS_TOKEN']!);
+
+  WakelockPlus.enable();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

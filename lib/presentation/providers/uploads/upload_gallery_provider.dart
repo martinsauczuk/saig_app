@@ -51,7 +51,6 @@ class UploadGalleryProvider extends StateNotifier<List<UploadItem>> {
 
   Future<void> addItem(UploadItem item) async {
       
-    print('Adding Item $item');
     final generatedId = await localRepository.insertItem(item);
 
     final itemSaved = item.copyWith(id: generatedId);

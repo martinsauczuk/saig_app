@@ -14,7 +14,7 @@ export './sensors/sensors_consumer_widget.dart';
 
 export './upload/upload_item_preview_widget.dart';
 
-export './camera/camera_preview_consumer_widget.dart';
+export 'camera/camera_preview_widget.dart';
 
 export './location/position_value_widget.dart';
 

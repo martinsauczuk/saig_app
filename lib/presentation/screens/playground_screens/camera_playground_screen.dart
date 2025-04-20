@@ -1,15 +1,15 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:saig_app/presentation/widgets/shared/menu_widget.dart';
-import 'package:saig_app/presentation/providers/providers.dart';
+import 'package:saig_app/presentation/widgets/widgets.dart';
 
-class CameraPlaygroundScreen extends ConsumerWidget {
+class CameraPlaygroundScreen extends StatelessWidget {
   
   const CameraPlaygroundScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
         
     return Scaffold(
       appBar: AppBar(
@@ -23,43 +23,122 @@ class CameraPlaygroundScreen extends ConsumerWidget {
 }
 
 
-class _CameraPlaygroundView extends ConsumerWidget {
+class _CameraPlaygroundView extends StatefulWidget {
   
   const _CameraPlaygroundView();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<_CameraPlaygroundView> createState() => _CameraPlaygroundViewState();
+}
 
-    final capturerState = ref.watch(cameraProvider);
+class _CameraPlaygroundViewState extends State<_CameraPlaygroundView> {
+  
+  CameraController? _cameraController;
+  XFile? _imageFile;
 
-    return Column(
-      children: [
-        CheckboxListTile(
-          title: const Text('capturerState.isReadyToCapture'),
-          value: capturerState.isReadyToCapture, 
-          onChanged: null
-        ),
-        CheckboxListTile(
-          title: const Text('capturerState.isTakingPhoto'),
-          value: capturerState.isTakingPhoto, 
-          onChanged: null
-        ),
-        capturerState.isReadyToCapture
-          ? Expanded(child: CameraPreview(capturerState.cameraController!))
-          : const CircularProgressIndicator(),
-        Row(
+  int counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeCameraController();
+  }
+
+  Future<void> _initializeCameraController() async {
+    
+    List<CameraDescription> cameras = await availableCameras();
+    
+    CameraController cameraController = CameraController(
+      cameras.first, 
+      ResolutionPreset.max
+    );
+    await cameraController.initialize();
+    // return cameraController;
+    print('cameraController done $cameraController');
+
+    setState(() {
+      _cameraController = cameraController;
+    });
+  }
+  
+  
+  @override
+  Widget build(BuildContext context) {
+
+    return _cameraController != null
+      ? Column(
           children: [
-            ElevatedButton.icon(
-              label: const Text('TakeOnePhoto'),
-              onPressed: null,
-              // onPressed: capturerState.isTakingPhoto
-                // ? null 
-                // : () => ref.read(cameraProvider.notifier).takeOnePhoto(), 
-              icon: const Icon(Icons.camera, size: 30)
+            CheckboxListTile(
+              title: Text('isInitialized'),
+              value: _cameraController!.value.isInitialized,
+              onChanged: (value) {
+                setState(() {
+                  counter ++;
+                });
+              },
+            ),
+            CheckboxListTile(
+              title: const Text('isTakingPicture'),
+              value: _cameraController!.value.isTakingPicture, 
+              onChanged: null
+            ),
+            Text(_cameraController!.value.toString()),
+            // capturerState.isReadyToCapture
+            Expanded(
+              child: CameraPreviewWidget(controller: _cameraController!)
+            ),
+            Row(
+              children: [
+                ElevatedButton.icon(
+                  label: const Text('TakeOnePhoto'),
+                  // onPressed: null,
+                  onPressed: _cameraController != null && !_cameraController!.value.isTakingPicture
+                    ? takePicture
+                    : null,  
+                  icon: const Icon(Icons.camera, size: 50)
+                ),
+                _imageFile != null
+                  ? SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: Image.file(File(_imageFile!.path)),
+                    )
+                  : Container()
+              ],
             ),
           ],
-        ),
-      ],
-    );
+        )
+      : Center(
+          child: CircularProgressIndicator()
+        );
+  }
+
+  void takePicture() async {
+
+    if (_cameraController!.value.isTakingPicture) {
+      return null;
+    }
+
+    setState(() {});
+    try {
+      _imageFile = await _cameraController!.takePicture();
+      setState(() {});
+      print('>>File: ${_imageFile!.path}');
+    } on CameraException catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  @override
+  void dispose() {
+    disposeCameraController();
+    super.dispose();
+  }
+
+  void disposeCameraController() {
+    if (_cameraController != null) {
+      _cameraController!.dispose();
+    }
   }
 }

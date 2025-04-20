@@ -126,16 +126,23 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
   ///
   void _captureIfTargetsInRadio() {
     
-    final galleryProvider = ref.read(uploadGalleryProvider.notifier);
+    final localRepository = ref.read(uploadsLocalRepository);
 
     if(ref.read(targetsInRadioCounterProvider) > 0 
         && _cameraController!.value.isInitialized
         && !_cameraController!.value.isTakingPicture
       ) {
-        Future<UploadItem> itemFuture =_captureUploadItem();
+        setState(() {});
+        final Future<UploadItem> itemFuture =_captureUploadItem();
         itemFuture.then((item){
-          galleryProvider.addItem(item);
-          _captureCounter ++;
+          localRepository.insertItem(item).then((id) {
+            print('>>>Item: $id');
+            _captureCounter ++;
+          });
+          
+        }).onError((error, stackTrace) {
+         print(error);
+         _onPressedStop();
         });
       }
 
@@ -190,19 +197,25 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
   ///
   Future<UploadItem> _captureUploadItem() async {
     
-    setState(() {});
-    final file = await _cameraController!.takePicture();
-    setState(() {});
-
-    UploadItem item = UploadItem(
-      path: file.path,
-      description: 'DistanceShoting_$_captureCounter',
-      accelerometer: await ref.read(accelerometerGravityProvider.future),
-      magnetometer: SensorValue(0, 0, 0), //TODO: Add magnetometer
-      positionValue: await ref.read(positionValueProvider.future),
-    );
-
-    return item;
+    UploadItem? item;
+    XFile imageFile;
+      try {
+        imageFile = await _cameraController!.takePicture();
+        setState(() {});
+        print('>>File: ${imageFile.path}');
+        
+        item = UploadItem(
+          path: imageFile.path,
+          description: 'DistanceShoting_$_captureCounter',
+          accelerometer: await ref.read(accelerometerGravityProvider.future),
+          magnetometer: SensorValue(0, 0, 0), //TODO: Add magnetometer
+          positionValue: await ref.read(positionValueProvider.future),
+        );
+        return item;
+    } on CameraException catch (e) {
+      print(e);
+      return Future.error(e);
+    }
   }
 
 
@@ -220,7 +233,7 @@ class _DistaceShotingScreenState extends ConsumerState<DistanceShotingScreen> {
       _captureCounter = 0;
     });
     _timerCapture.cancel();
-
+    ref.invalidate(uploadGalleryProvider); //TODO: Buscar una mejor opcion que invalidate aca
   }
 
 

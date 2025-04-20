@@ -58,6 +58,16 @@ class UploadItem {
       publicId: map['public_id'],
       positionValue: PositionValue.fromMap(map),
       description: map['description'],
+      accelerometer: SensorValue(
+                        map['accelerometerX'], 
+                        map['accelerometerY'], 
+                        map['accelerometerZ']
+                      ),
+      magnetometer: SensorValue(
+                        map['magnetometerX'], 
+                        map['magnetometerY'], 
+                        map['magnetometerZ']
+                      ),
     );
   
   }
